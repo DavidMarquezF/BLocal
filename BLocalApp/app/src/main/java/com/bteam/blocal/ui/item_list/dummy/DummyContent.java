@@ -40,7 +40,7 @@ public class DummyContent {
     }
 
     private static ItemModel createDummyItem(int position) {
-        return new ItemModel(String.valueOf(position), "Item " + position, null, position, position);
+        return new ItemModel(String.valueOf(position), "Item " + position, null, position, position, "Store " + position);
     }
 
 

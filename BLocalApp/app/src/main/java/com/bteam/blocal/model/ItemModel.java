@@ -6,13 +6,15 @@ public class ItemModel {
     private String imageUrl;
     private float price;
     private int stock;
+    private String store;
 
-    public ItemModel(String uid, String name, String imageUrl, float price, int stock){
+    public ItemModel(String uid, String name, String imageUrl, float price, int stock, String store){
         this.price = price;
         this.uid = uid;
         this.name = name;
         this. imageUrl = imageUrl;
         this.stock = stock;
+        this.store = store;
     }
 
     public boolean isInStock(){
@@ -56,5 +58,13 @@ public class ItemModel {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public String getStore() {
+        return store;
+    }
+
+    public void setStore(String store) {
+        this.store = store;
     }
 }

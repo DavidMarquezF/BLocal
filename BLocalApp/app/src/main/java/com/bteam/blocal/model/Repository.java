@@ -70,7 +70,7 @@ public class Repository {
     //CREATE
     public void addItem(ItemModel item){
         itemCollection
-                .add(new ItemModel(item.getUid(), item.getName(), item.getImageUrl(), item.getPrice(), item.getStock()))
+                .add(new ItemModel(item.getUid(), item.getName(), item.getImageUrl(), item.getPrice(), item.getStock(), item.getStore()))
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
