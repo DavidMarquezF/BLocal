@@ -1,5 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/user_navigation">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/user_navigation"
+    app:startDestination="@id/user_nav_dashboard">
+
+    <fragment
+        android:id="@+id/user_nav_dashboard"
+        android:name="com.bteam.blocal.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_user_nav_dashboard_to_user_nav_maps"
+            app:destination="@id/user_nav_maps" />
+        <action
+            android:id="@+id/action_user_nav_dashboard_to_user_nav_item_list"
+            app:destination="@id/user_nav_item_list" />
+        <action
+            android:id="@+id/action_user_nav_dashboard_to_user_nav_shopping_lists"
+            app:destination="@id/user_nav_shopping_lists" />
+        <action
+            android:id="@+id/action_user_nav_dashboard_to_user_nav_store_list"
+            app:destination="@id/user_nav_store_list" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/user_nav_maps"
+        android:name="com.bteam.blocal.ui.map.MapsFragment"
+        android:label="Map"
+        tools:layout="@layout/fragment_maps" />
+
+    <fragment
+        android:id="@+id/user_nav_store_list"
+        android:name="com.bteam.blocal.ui.store_list.StoreListFragment"
+        android:label="Stores"
+        tools:layout="" >
+        <action
+            android:id="@+id/action_user_nav_store_list_to_user_nav_maps"
+            app:destination="@id/user_nav_maps" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/user_nav_item_list"
+        android:name="com.bteam.blocal.ui.item_list.ItemListFragment"
+        android:label="@string/title_list"
+        tools:layout="@layout/fragment_item_list" />
+
+    <fragment
+        android:id="@+id/user_nav_shopping_lists"
+        android:name="com.bteam.blocal.ui.shopping_lists.ShoppingListsFragment"
+        android:label="Shopping lists"
+        tools:layout="" />
 
 </navigation>

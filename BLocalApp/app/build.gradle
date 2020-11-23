@@ -9,7 +9,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.example.finalassignment"
+        applicationId "com.bteam.blocal"
         minSdkVersion 16
         targetSdkVersion 30
         multiDexEnabled true
@@ -49,7 +49,8 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-firestore:22.0.0'
-    testImplementation 'junit:junit:4.+'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
