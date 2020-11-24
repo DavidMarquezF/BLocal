@@ -89,7 +89,7 @@ public class Repository {
             itemCollection = db.collection("items");
         }
         itemCollection
-                .add(new ItemModel(item.getUid(), item.getName(), item.getImageUrl(), item.getPrice(), item.getStock(), item.getStore()))
+                .add(new ItemModel(item.getName(), item.getImageUrl(), item.getPrice(), item.getStock(), item.getStore()))
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -168,7 +168,7 @@ public class Repository {
         if(itemCollection == null){
             itemCollection = db.collection("items");
         }
-        itemCollection.document(item.getUid()).set(item);
+        itemCollection.document("uid here").set(item);
     }
 
     //DELETE
@@ -191,7 +191,7 @@ public class Repository {
         if(itemCollection == null){
             itemCollection = db.collection("items");
         }
-        itemCollection.document(item.getUid()).delete()
+        itemCollection.document("uid here").delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
