@@ -26,27 +26,31 @@ public class Repository {
     private static final String TAG = "REPOSITORY";
     private FirebaseAuth auth;
     private FirebaseFirestore db;
-    private CollectionReference itemCollection = db.collection("items");
+    private CollectionReference itemCollection;
+    private static Repository repository;
     //Persisted items
     private MutableLiveData<ArrayList<ItemModel>> items;
-    private MutableLiveData<DocumentSnapshot> selectedItem;
+    private MutableLiveData<ItemModel> selectedItem;
+    private MutableLiveData<ArrayList<ItemModel>> storeItems;
     //Search functionality
     Boolean found = false;
 
-    //Auth - is this even needed?
-    public FirebaseAuth auth(){
-        return this.auth;
-    }
-
     // Repository methods
     public Repository() {
+        Log.d(TAG, "Repository: ");
         db = FirebaseFirestore.getInstance();
-        if(itemCollection == null){
-            itemCollection = db.collection("items");
+        if(this.auth == null){
+            auth = FirebaseAuth.getInstance();
         }
         //Items initialisation
         if(items==null){
             items = new MutableLiveData<ArrayList<ItemModel>>();
+        }
+        if(storeItems == null){
+            storeItems = new MutableLiveData<ArrayList<ItemModel>>();
+        }
+        if(itemCollection == null){
+            itemCollection = db.collection("items");
         }
         itemCollection
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -66,9 +70,24 @@ public class Repository {
                 });
     }
 
+    //Auth
+    public FirebaseAuth auth(){
+        return this.auth;
+    }
+
+    public static Repository getInstance(){
+        if(repository == null){
+            repository = new Repository();
+        }
+        return repository;
+    }
+
     //Database CRUD methods
     //CREATE
     public void addItem(ItemModel item){
+        if(itemCollection == null){
+            itemCollection = db.collection("items");
+        }
         itemCollection
                 .add(new ItemModel(item.getUid(), item.getName(), item.getImageUrl(), item.getPrice(), item.getStock(), item.getStore()))
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -87,6 +106,9 @@ public class Repository {
 
     //READ
     public MutableLiveData<ArrayList<ItemModel>> getItems(){
+        if(itemCollection == null){
+            itemCollection = db.collection("items");
+        }
         itemCollection
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -106,8 +128,11 @@ public class Repository {
         return items;
     }
 
-    public MutableLiveData<DocumentSnapshot> getItem(String uid){
+    public MutableLiveData<ItemModel> getItem(String uid){
         found = false;
+        if(itemCollection == null){
+            itemCollection = db.collection("items");
+        }
         itemCollection.document(uid).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -117,9 +142,9 @@ public class Repository {
                             if (document.exists()) {
                                 Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                 if(selectedItem == null){
-                                    selectedItem = new MutableLiveData<DocumentSnapshot>();
+                                    selectedItem = new MutableLiveData<ItemModel>();
                                 }
-                                selectedItem.setValue(document);
+                                selectedItem.setValue(document.toObject(ItemModel.class));
                                 found = true;
                             } else {
                                 Log.d(TAG, "No such document");
@@ -140,11 +165,17 @@ public class Repository {
     //UPDATE
     //Note that if a document with corresponding name isn't found, it will be created
     public void updateItem(ItemModel item){
+        if(itemCollection == null){
+            itemCollection = db.collection("items");
+        }
         itemCollection.document(item.getUid()).set(item);
     }
 
     //DELETE
     public void deleteAll(){
+        if(itemCollection == null){
+            itemCollection = db.collection("items");
+        }
         itemCollection.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -157,6 +188,9 @@ public class Repository {
     }
 
     public void deleteItem(ItemModel item){
+        if(itemCollection == null){
+            itemCollection = db.collection("items");
+        }
         itemCollection.document(item.getUid()).delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
