@@ -1,16 +1,22 @@
 package com.bteam.blocal.model;
 
+import com.google.firebase.firestore.DocumentId;
+
 public class ItemModel {
+    //Turn object key into value
+    @DocumentId
     private String uid;
+
     private String name;
     private String imageUrl;
     private float price;
     private int stock;
     private String store;
 
-    public ItemModel(String uid, String name, String imageUrl, float price, int stock, String store){
+    public ItemModel(){}
+
+    public ItemModel(String name, String imageUrl, float price, int stock, String store){
         this.price = price;
-        this.uid = uid;
         this.name = name;
         this. imageUrl = imageUrl;
         this.stock = stock;
@@ -44,14 +50,6 @@ public class ItemModel {
         this.name = name;
     }
 
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
     public int getStock() {
         return stock;
     }
@@ -66,5 +64,13 @@ public class ItemModel {
 
     public void setStore(String store) {
         this.store = store;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }
