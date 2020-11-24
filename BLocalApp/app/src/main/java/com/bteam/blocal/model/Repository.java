@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Repository {
     private static final String TAG = "REPOSITORY";
@@ -29,9 +30,9 @@ public class Repository {
     private CollectionReference itemCollection;
     private static Repository repository;
     //Persisted items
-    private MutableLiveData<ArrayList<ItemModel>> items;
+    private MutableLiveData<List<ItemModel>> items;
     private MutableLiveData<ItemModel> selectedItem;
-    private MutableLiveData<ArrayList<ItemModel>> storeItems;
+    private MutableLiveData<List<ItemModel>> storeItems;
     //Search functionality
     Boolean found = false;
 
@@ -44,10 +45,10 @@ public class Repository {
         }
         //Items initialisation
         if(items==null){
-            items = new MutableLiveData<ArrayList<ItemModel>>();
+            items = new MutableLiveData<List<ItemModel>>();
         }
         if(storeItems == null){
-            storeItems = new MutableLiveData<ArrayList<ItemModel>>();
+            storeItems = new MutableLiveData<List<ItemModel>>();
         }
         if(itemCollection == null){
             itemCollection = db.collection("items");
@@ -105,7 +106,7 @@ public class Repository {
     }
 
     //READ
-    public MutableLiveData<ArrayList<ItemModel>> getItems(){
+    public MutableLiveData<List<ItemModel>> getItems(){
         if(itemCollection == null){
             itemCollection = db.collection("items");
         }
@@ -113,15 +114,8 @@ public class Repository {
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot snapshot, @Nullable FirebaseFirestoreException error) {
-                        ArrayList<ItemModel> updatedItems = new ArrayList<>();
                         if(snapshot!=null && !snapshot.isEmpty()){
-                            for(DocumentSnapshot doc : snapshot.getDocuments()){
-                                ItemModel im = doc.toObject(ItemModel.class);
-                                if (im != null){
-                                    updatedItems.add(im);
-                                }
-                            }
-                            items.setValue(updatedItems);
+                            items.setValue(snapshot.toObjects(ItemModel.class));
                         }
                     }
                 });
@@ -168,7 +162,7 @@ public class Repository {
         if(itemCollection == null){
             itemCollection = db.collection("items");
         }
-        itemCollection.document("uid here").set(item);
+        itemCollection.document(item.getUid()).set(item);
     }
 
     //DELETE
@@ -191,7 +185,7 @@ public class Repository {
         if(itemCollection == null){
             itemCollection = db.collection("items");
         }
-        itemCollection.document("uid here").delete()
+        itemCollection.document(item.getUid()).delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
