@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bteam.blocal.R;
-import com.bteam.blocal.model.ItemModel;
+import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.utility.Constants;
 
 import java.util.List;
@@ -55,7 +55,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         ItemModel item = items.get(position);
-        holder.name.setText(item.getName());
+        holder.name.setText(item.getUid());
         holder.price.setText(String.format("%s", item.getPrice()));
         holder.itemImage.setImageResource(R.drawable.ic_baseline_shopping_basket_24);
         holder.inStock.setText(item.isInStock() ? R.string.lbl_in_stock : R.string.lbl_out_stock);

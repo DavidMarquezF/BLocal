@@ -20,7 +20,8 @@ import com.bteam.blocal.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 // Navigation inspired by https://github.com/SmartToolFactory/NavigationComponents-Tutorials/blob/master/Tutorial1-3Navigation-NestedNavHost/src/main/java/com/smarttoolfactory/tutorial1_3navigation_nestednavhost/navhost/HomeNavHostFragment.kt
-
+// and by https://proandroiddev.com/handle-complex-navigation-flow-with-single-activity-and-android-jetpacks-navigation-component-6ad988602902
+// https://stackoverflow.com/questions/50730494/new-navigation-component-from-arch-with-nested-navigation-graph
 public class MainStoreFragment extends Fragment {
 
     public MainStoreFragment() {

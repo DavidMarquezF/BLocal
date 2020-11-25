@@ -1,6 +1,6 @@
 package com.bteam.blocal.ui.item_list.dummy;
 
-import com.bteam.blocal.model.ItemModel;
+import com.bteam.blocal.data.model.ItemModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;

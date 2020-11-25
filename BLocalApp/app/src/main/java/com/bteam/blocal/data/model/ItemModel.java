@@ -1,4 +1,4 @@
-package com.bteam.blocal.model;
+package com.bteam.blocal.data.model;
 
 public class ItemModel {
     private String uid;
@@ -7,6 +7,9 @@ public class ItemModel {
     private float price;
     private int stock;
 
+    public ItemModel(){
+
+    }
     public ItemModel(String uid, String name, String imageUrl, float price, int stock){
         this.price = price;
         this.uid = uid;
