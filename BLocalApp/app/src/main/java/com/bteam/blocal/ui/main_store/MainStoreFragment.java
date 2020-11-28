@@ -43,13 +43,7 @@ public class MainStoreFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         BottomNavigationView navView = view.findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_list, R.id.navigation_dashboard, R.id.navigation_notifications)
-                .build();
         _navController = ((NavHostFragment)getChildFragmentManager().findFragmentById(R.id.nav_store_host_fragment)).getNavController();
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, _navController);
 
         listenToBackStack();

@@ -1,6 +1,9 @@
 package com.bteam.blocal.data.model;
 
+import com.google.firebase.firestore.DocumentId;
+
 public class ItemModel {
+    @DocumentId
     private String uid;
     private String name;
     private String imageUrl;

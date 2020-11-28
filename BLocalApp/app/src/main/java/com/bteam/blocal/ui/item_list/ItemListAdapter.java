@@ -9,28 +9,29 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bteam.blocal.utility.InStockText;
 import com.bumptech.glide.Glide;
 import com.bteam.blocal.R;
 import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.utility.Constants;
+import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.firebase.ui.firestore.paging.LoadingState;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
 
-public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemViewHolder> {
+public class ItemListAdapter extends FirestorePagingAdapter<ItemModel, ItemListAdapter.ItemViewHolder> {
 
     private IItemClickListener listener;
-    private List<ItemModel> items;
-
     private Context context;
+    private SwipeRefreshLayout _swipeRefreshLayout;
 
-    public ItemListAdapter(IItemClickListener listener) {
+    public ItemListAdapter(IItemClickListener listener, @NonNull FirestorePagingOptions<ItemModel> options) {
+        super(options);
         this.listener = listener;
-    }
-
-    public void updateItemsList(List<ItemModel> list) {
-        items = list;
-        notifyDataSetChanged();
     }
 
     @Override
@@ -53,29 +54,53 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        ItemModel item = items.get(position);
-        holder.name.setText(item.getUid());
-        holder.price.setText(String.format("%s", item.getPrice()));
-        holder.itemImage.setImageResource(R.drawable.ic_baseline_shopping_basket_24);
-        holder.inStock.setText(item.isInStock() ? R.string.lbl_in_stock : R.string.lbl_out_stock);
-        Glide.with(context).load(item.getImageUrl()).apply(Constants.getItemDefaultOptions()).into(holder.itemImage);
+    protected void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int i, @NonNull ItemModel itemModel) {
+        itemViewHolder.name.setText(itemModel.getName());
+        itemViewHolder.price.setText(String.format("%s", itemModel.getPrice()));
+        itemViewHolder.itemImage.setImageResource(R.drawable.ic_baseline_shopping_basket_24);
+        itemViewHolder.inStock.setText(InStockText.isInStockText(itemModel.isInStock()));
+        Glide.with(context).load(itemModel.getImageUrl()).apply(Constants.getItemDefaultOptions()).into(itemViewHolder.itemImage);
     }
 
+    @Override
+    protected void onError(@NonNull Exception e) {
+        super.onError(e);
+        //TODO: Handle error with callback so that snackbar can be shown
+    }
 
     @Override
-    public int getItemCount() {
-        if (items != null)
-            return items.size();
-        else
-            return 0;
+    protected void onLoadingStateChanged(@NonNull LoadingState state) {
+        switch (state){
+            case LOADING_INITIAL:
+            case LOADING_MORE:
+                swipeRefreshIsReloading(true);
+                break;
+            case LOADED:
+            case FINISHED:
+                swipeRefreshIsReloading(false);
+                break;
+            case ERROR:
+                //TODO: Handle error
+                swipeRefreshIsReloading(false);
+                break;
+        }
+    }
+
+    public void bindSwipeRefresh(SwipeRefreshLayout swipeRefreshLayout){
+        _swipeRefreshLayout = swipeRefreshLayout;
+    }
+
+    private void swipeRefreshIsReloading(boolean isRefreshing){
+        if(_swipeRefreshLayout != null){
+            _swipeRefreshLayout.setRefreshing(isRefreshing);
+        }
     }
 
     public interface IItemClickListener {
-        void onItemClick(int index);
+        void onItemClick(DocumentSnapshot document, int index);
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView itemImage;
         TextView name;
         TextView price;
@@ -90,13 +115,16 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             name = itemView.findViewById(R.id.txt_title);
             price = itemView.findViewById(R.id.txt_price);
             inStock = itemView.findViewById(R.id.txt_in_stock);
-
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            listener.onItemClick(getAdapterPosition());
+            int position = getAdapterPosition();
+            if(position != RecyclerView.NO_POSITION && listener != null){
+                listener.onItemClick(getItem(position),position);
+            }
+
         }
     }
 }
