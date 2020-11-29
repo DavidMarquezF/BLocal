@@ -11,7 +11,7 @@
         android:label="@string/title_list"
         tools:layout="@layout/fragment_item_list" >
         <action
-            android:id="@+id/action_navigation_list_to_editItemFragment"
+            android:id="@+id/createItem"
             app:destination="@id/editItemFragment" />
         <action
             android:id="@+id/showItemDetail"
@@ -35,7 +35,7 @@
         android:label="fragment_item_detail"
         tools:layout="@layout/fragment_item_detail" >
         <action
-            android:id="@+id/action_itemDetailFragment_to_editItemFragment"
+            android:id="@+id/editItem"
             app:destination="@id/editItemFragment" />
         <argument
             android:name="itemUid"
@@ -45,5 +45,9 @@
         android:id="@+id/editItemFragment"
         android:name="com.bteam.blocal.ui.edit_item.EditItemFragment"
         android:label="fragment_edit_item"
-        tools:layout="@layout/fragment_edit_item" />
+        tools:layout="@layout/fragment_edit_item">
+        <argument
+            android:name="itemUid"
+            app:argType="string" />
+    </fragment>
 </navigation>

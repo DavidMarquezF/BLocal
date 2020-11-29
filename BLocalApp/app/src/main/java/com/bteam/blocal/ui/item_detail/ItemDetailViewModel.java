@@ -16,7 +16,7 @@ public class ItemDetailViewModel  extends ViewModel {
 
     public LiveData<Resource<ItemModel>> itemDetail;
 
-    public ItemDetailViewModel(@NonNull SavedStateHandle savedStateHandle){
+    public ItemDetailViewModel(){
         itemDetail = new MutableLiveData<>();
     }
 

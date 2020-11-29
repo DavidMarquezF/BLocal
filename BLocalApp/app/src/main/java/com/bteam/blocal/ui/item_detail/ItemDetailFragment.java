@@ -2,6 +2,7 @@ package com.bteam.blocal.ui.item_detail;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -109,13 +110,24 @@ public class ItemDetailFragment extends Fragment {
                         nameTxt.setText(itemModel.getName());
                         priceTxt.setText("" + itemModel.getPrice());
                         inStockTxt.setText(InStockText.isInStockText(itemModel.isInStock()));
-                        //descriptionTxt.setText(itemModel.getDescription());
+                        descriptionTxt.setText(itemModel.getDescription());
                         Glide.with(getContext()).load(itemModel.getImageUrl()).apply(Constants.getItemDefaultOptions()).into(headerImg);
                         break;
                 }
             }
         });
 
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.btn_edit:
+                        navigateEdit();
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     private void showEditOption(boolean show) {
@@ -124,6 +136,7 @@ public class ItemDetailFragment extends Fragment {
 
 
     private void navigateEdit() {
-        NavHostFragment.findNavController(this).navigate(R.id.action_itemDetailFragment_to_editItemFragment);
+        ItemDetailFragmentDirections.EditItem directions = ItemDetailFragmentDirections.editItem(vm.itemDetail.getValue().data.getUid());
+        NavHostFragment.findNavController(this).navigate(directions);
     }
 }

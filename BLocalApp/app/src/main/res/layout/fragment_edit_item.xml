@@ -73,8 +73,8 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="@dimen/icon_list"
-                android:layout_height="@dimen/icon_list"
+                android:layout_width="@dimen/icon_form"
+                android:layout_height="@dimen/icon_form"
                 app:srcCompat="@drawable/ic_barcode"
                 app:layout_constraintBottom_toBottomOf="@+id/txt_inp_code"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
@@ -83,13 +83,13 @@
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="@dimen/icon_list"
-                android:layout_height="@dimen/icon_list"
-                app:srcCompat="@drawable/ic_baseline_shopping_cart_24"
+                android:layout_width="@dimen/icon_form"
+                android:layout_height="@dimen/icon_form"
                 app:layout_constraintBottom_toBottomOf="@+id/txt_inp_name"
                 app:layout_constraintEnd_toStartOf="@+id/txt_inp_name"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/txt_inp_name" />
+                app:layout_constraintTop_toTopOf="@+id/txt_inp_name"
+                app:srcCompat="@drawable/ic_baseline_shopping_cart_24" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline2"
@@ -129,8 +129,8 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="@dimen/icon_list"
-                android:layout_height="@dimen/icon_list"
+                android:layout_width="@dimen/icon_form"
+                android:layout_height="@dimen/icon_form"
                 app:srcCompat="@drawable/ic_baseline_attach_money_24"
                 app:layout_constraintBottom_toBottomOf="@+id/txt_inp_price"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
@@ -138,18 +138,29 @@
                 app:layout_constraintTop_toTopOf="@+id/txt_inp_price" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_inp_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/txt_inp_price">
+                app:layout_constraintTop_toBottomOf="@+id/checkbox_in_stock">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/lbl_description" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <CheckBox
+                android:id="@+id/checkbox_in_stock"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/lbl_in_stock"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/txt_inp_price" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
