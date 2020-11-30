@@ -40,7 +40,7 @@ public class StoreDetailFragment extends Fragment {
             }
         });
 
-        return inflater.inflate(R.layout.store_detail_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_store_detail, container, false);
     }
 
     @Override

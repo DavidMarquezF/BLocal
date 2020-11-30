@@ -60,7 +60,7 @@
         android:id="@+id/user_nav_store_detail"
         android:name="com.bteam.blocal.ui.store_detail.StoreDetailFragment"
         android:label="Store detail"
-        tools:layout="@layout/store_detail_fragment" >
+        tools:layout="@layout/fragment_store_detail" >
 
         <argument
             android:name="storeUid"
