@@ -106,7 +106,15 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
         switch (item.getItemId()){
             case R.id.btn_save:
                 String name = nameTxtInp.getEditText().getText().toString();
-                float price = Float.parseFloat(priceTxtInp.getEditText().getText().toString());
+
+                float price;
+                try{
+                    price = Float.parseFloat(priceTxtInp.getEditText().getText().toString());
+                }
+                catch(Exception err) {
+                    price = 0;
+                }
+                
                 int stock = checkBox.isChecked() ? 1 : 0;
                 String description = descrTxtInp.getEditText().getText().toString();
                 ItemModel itemModel = new ItemModel(name, null, price,  stock, description);

@@ -3,6 +3,7 @@ package com.bteam.blocal.ui.edit_item;
 import android.os.Bundle;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.bteam.blocal.data.model.ItemModel;
@@ -33,10 +34,15 @@ public class EditItemViewModel extends ViewModel {
 
     public void setArguments(Bundle savedInstanceState) {
         StoreRepository repository = StoreRepository.getInstance();
-        ItemDetailFragmentArgs args = ItemDetailFragmentArgs.fromBundle(savedInstanceState);
+        EditItemFragmentArgs args = EditItemFragmentArgs.fromBundle(savedInstanceState);
         if(args != null){
             uid = args.getItemUid();
-            itemDetail = repository.getStoreItem(uid);
+            if(uid != null){
+                itemDetail = repository.getStoreItem(uid);
+            }
+            else{
+                itemDetail = new MutableLiveData<>();
+            }
         }
 
     }

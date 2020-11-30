@@ -17,6 +17,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bteam.blocal.R;
+import com.bteam.blocal.ui.item_list.ItemListFragmentDirections;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 // Navigation inspired by https://github.com/SmartToolFactory/NavigationComponents-Tutorials/blob/master/Tutorial1-3Navigation-NestedNavHost/src/main/java/com/smarttoolfactory/tutorial1_3navigation_nestednavhost/navhost/HomeNavHostFragment.kt
@@ -46,6 +47,12 @@ public class MainStoreFragment extends Fragment {
         _navController = ((NavHostFragment)getChildFragmentManager().findFragmentById(R.id.nav_store_host_fragment)).getNavController();
         NavigationUI.setupWithNavController(navView, _navController);
 
+        view.findViewById(R.id.flt_add_item).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                _navController.navigate(ItemListFragmentDirections.createItem(null));
+            }
+        });
         listenToBackStack();
     }
 
