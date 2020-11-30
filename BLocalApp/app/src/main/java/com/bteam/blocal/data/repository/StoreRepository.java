@@ -6,10 +6,12 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.Resource;
+import com.bteam.blocal.data.model.StoreModel;
 import com.bteam.blocal.data.model.errors.NoDocumentException;
 import com.bteam.blocal.data.model.errors.UnsuccessfulQueryException;
 import com.bteam.blocal.utility.FirestoreLiveData;
@@ -19,10 +21,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -39,12 +44,20 @@ public class StoreRepository {
 
     private final FirebaseFirestore db;
     private final FirebaseStorage storage;
+    private final FirebaseAuth auth;
     private final StorageReference itemsImagesStorage;
+    private final MutableLiveData<StoreModel> myStore;
+
+    public LiveData<StoreModel> getMyStore() {
+        return myStore;
+    }
 
     private StoreRepository() {
         db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
         itemsImagesStorage = storage.getReference().child("items");
+        myStore = new MutableLiveData<>();
     }
 
     public static StoreRepository getInstance() {
@@ -55,19 +68,45 @@ public class StoreRepository {
     }
 
 
-    public Query getItemsQuery() {
+    public CollectionReference getItemsQuery() {
         return db.collection("stores")
-                .document("y51lMtTGgqZMHTbpcAKh")
+                .document(myStore.getValue().getUid())
                 .collection("items");
+    }
+
+    public LiveData<StoreModel> updateMyStore(IOnCompleteCallback<StoreModel> callback) {
+        db.collection("stores")
+                .whereEqualTo("ownerId", auth.getCurrentUser().getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot snapshots = task.getResult();
+                            if (!snapshots.isEmpty()) {
+                                StoreModel store = snapshots.getDocuments().get(0).toObject(StoreModel.class);
+                                myStore.setValue(store);
+                                callback.onSuccess(store);
+                            } else {
+                                callback.onError(new NoDocumentException());
+                                myStore.setValue(null);
+                            }
+                        } else {
+                            callback.onError(new UnsuccessfulQueryException());
+                            myStore.setValue(null);
+                        }
+                    }
+                });
+        return myStore;
     }
 
 
     public interface IOnSuccessCallback<T> {
-        void OnSuccess(T data);
+        void onSuccess(T data);
     }
 
     public interface IOnErrorCallback {
-        void OnError(Throwable err);
+        void onError(Throwable err);
     }
 
     public interface IOnCompleteCallback<T> extends IOnErrorCallback, IOnSuccessCallback<T> {
@@ -78,30 +117,28 @@ public class StoreRepository {
     }
 
     public void updateItem(String uid, ItemModel model, IOnCompleteCallback<Void> callback) {
-        db.collection("stores").document("y51lMtTGgqZMHTbpcAKh")
-                .collection("items").document(uid).set(model).addOnCompleteListener(new OnCompleteListener<Void>() {
+        getItemsQuery().document(uid).set(model).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    callback.OnSuccess(null);
+                    callback.onSuccess(null);
                 } else {
-                    callback.OnError(new UnsuccessfulQueryException());
+                    callback.onError(new UnsuccessfulQueryException());
                 }
             }
         });
     }
 
     public void createItem(ItemModel model, IOnCompleteCallback<ItemModel> callback) {
-        db.collection("stores").document("y51lMtTGgqZMHTbpcAKh")
-                .collection("items").add(model).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+        getItemsQuery().add(model).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 if (task.isSuccessful()) {
                     DocumentReference doc = task.getResult();
                     model.setUid(doc.getId());
-                    callback.OnSuccess(model);
+                    callback.onSuccess(model);
                 } else {
-                    callback.OnError(new UnsuccessfulQueryException());
+                    callback.onError(new UnsuccessfulQueryException());
                 }
             }
         });
@@ -113,7 +150,7 @@ public class StoreRepository {
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
-            StorageReference reference = itemsImagesStorage.child(UUID.randomUUID().toString());
+        StorageReference reference = itemsImagesStorage.child(UUID.randomUUID().toString());
         UploadTask uploadTask = reference.putBytes(data);
 
         uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -133,21 +170,19 @@ public class StoreRepository {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        callback.OnError(exception);
+                        callback.onError(exception);
                     }
                 }).addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                callback.OnSuccess(uri.toString());
+                callback.onSuccess(uri.toString());
             }
         });
     }
 
 
     public LiveData<Resource<ItemModel>> getStoreItemLive(String uid) {
-        FirestoreLiveData liveDat = new FirestoreLiveData(db.collection("stores")
-                .document("y51lMtTGgqZMHTbpcAKh")
-                .collection("items")
+        FirestoreLiveData liveDat = new FirestoreLiveData(getItemsQuery()
                 .document(uid));
 
         return Transformations.map(liveDat, new Function<DocumentSnapshot, Resource<ItemModel>>() {
@@ -158,26 +193,21 @@ public class StoreRepository {
         });
     }
 
-    public SingleLiveEvent<Resource<ItemModel>> getStoreItem(String uid){
+    public SingleLiveEvent<Resource<ItemModel>> getStoreItem(String uid) {
         SingleLiveEvent<Resource<ItemModel>> liveData = new SingleLiveEvent<>();
-        db.collection("stores")
-                .document("y51lMtTGgqZMHTbpcAKh")
-                .collection("items")
-                .document(uid)
+        getItemsQuery().document(uid)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             DocumentSnapshot doc = task.getResult();
-                            if(doc.exists()){
+                            if (doc.exists()) {
                                 liveData.setValue(Resource.success(doc.toObject(ItemModel.class)));
-                            }
-                            else{
+                            } else {
                                 liveData.setValue(Resource.error(new NoDocumentException(), null));
                             }
-                        }
-                        else{
+                        } else {
                             liveData.setValue(Resource.error(new UnsuccessfulQueryException(), null));
                         }
                     }

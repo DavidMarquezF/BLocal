@@ -11,25 +11,27 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.bteam.blocal.R;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class NotificationsFragment extends Fragment {
+public class NotificationsFragment extends PreferenceFragmentCompat {
 
-    private NotificationsViewModel notificationsViewModel;
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.store_settings, rootKey);
+    }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                new ViewModelProvider(this).get(NotificationsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
+    @Override
+    public boolean onPreferenceTreeClick(Preference preference) {
+        String key = preference.getKey();
+        switch (key){
+            case "btn_logout":
+                FirebaseAuth.getInstance().signOut();
+                return true;
+        }
+        return super.onPreferenceTreeClick(preference);
     }
 }

@@ -153,24 +153,24 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
                 if (vm.getIsModeEdit()) {
                     vm.updateItem(itemModel, new StoreRepository.IOnCompleteCallback<Void>() {
                         @Override
-                        public void OnError(Throwable err) {
+                        public void onError(Throwable err) {
 
                         }
 
                         @Override
-                        public void OnSuccess(Void data) {
+                        public void onSuccess(Void data) {
                             navigateBack();
                         }
                     });
                 } else {
                     vm.createItem(itemModel, new StoreRepository.IOnCompleteCallback<ItemModel>() {
                         @Override
-                        public void OnError(Throwable err) {
+                        public void onError(Throwable err) {
 
                         }
 
                         @Override
-                        public void OnSuccess(ItemModel data) {
+                        public void onSuccess(ItemModel data) {
                             navigateBack();
                         }
                     });
@@ -182,7 +182,14 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
 
     private void selectImage() {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-        builder.setTitle(R.string.title_change_photo);
+        builder.setTitle(R.string.title_change_photo)
+                .setCancelable(true)
+                .setNegativeButton(R.string.lbl_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
         builder.setItems(R.array.array_choose_photo, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -216,6 +223,7 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
             Bitmap image = null;
             switch (requestCode) {
                 case TAKE_PICUTRE_REQUEST_CODE:
+                    //TODO: This is good for thumbnails but it's not good for full size images
                     image = (Bitmap) data.getExtras().get("data");
                     break;
                 case PICK_PICTURE_REQUEST_CODE:
@@ -238,14 +246,14 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
 
                 vm.uploadImage(image, new StoreRepository.IOnCompleteCallback<String>() {
                     @Override
-                    public void OnError(Throwable err) {
+                    public void onError(Throwable err) {
                         itemImageBtn.setImageResource(R.drawable.ic_outline_camera_alt_24);
                         itemImageBtn.setScaleType(ImageView.ScaleType.CENTER);
                         imageUrl = null;
                     }
 
                     @Override
-                    public void OnSuccess(String data) {
+                    public void onSuccess(String data) {
                         imageUrl = data;
                     }
                 });

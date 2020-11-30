@@ -19,10 +19,12 @@
     <string name="title_change_photo">Change photo</string>
     <string name="lbl_take_photo">Take photo</string>
     <string name="lbl_choose_photo">Choose photo</string>
+    <string name="lbl_cancel">Cancel</string>
     <string-array name="array_choose_photo">
         <item>@string/lbl_take_photo</item>
         <item>@string/lbl_choose_photo</item>
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lbl_logout">Logout</string>
 </resources>

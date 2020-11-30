@@ -9,6 +9,7 @@
     tools:context=".ui.edit_item.EditItemFragment"
     tools:layout_editor_absoluteY="118dp">
 
+
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/tlb_edit_item"
         style="@style/Widget.MaterialComponents.Toolbar.Primary"
@@ -21,8 +22,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -42,7 +42,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/label_name"
-                    android:maxLines="2" />
+                    android:imeOptions="actionNext"
+                    android:maxLines="2"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,7 +71,9 @@
                     android:drawableEnd="@drawable/ic_baseline_qr_code_scanner_24"
                     android:drawableRight="@drawable/ic_baseline_qr_code_scanner_24"
                     android:hint="@string/label_code"
-                    android:inputType="number" />
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -125,8 +129,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/lbl_price"
+                    android:imeOptions="actionNext"
                     android:inputType="number"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
