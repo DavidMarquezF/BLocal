@@ -9,16 +9,15 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bteam.blocal.R;
 import com.bteam.blocal.ui.item_list.ItemListFragmentDirections;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 // Navigation inspired by https://github.com/SmartToolFactory/NavigationComponents-Tutorials/blob/master/Tutorial1-3Navigation-NestedNavHost/src/main/java/com/smarttoolfactory/tutorial1_3navigation_nestednavhost/navhost/HomeNavHostFragment.kt
 // and by https://proandroiddev.com/handle-complex-navigation-flow-with-single-activity-and-android-jetpacks-navigation-component-6ad988602902
@@ -31,7 +30,8 @@ public class MainStoreFragment extends Fragment {
 
 
     private NavController _navController;
-
+    private BottomNavigationView _bottomNavView;
+    private FloatingActionButton _floatingActionButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,17 +43,45 @@ public class MainStoreFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        BottomNavigationView navView = view.findViewById(R.id.nav_view);
-        _navController = ((NavHostFragment)getChildFragmentManager().findFragmentById(R.id.nav_store_host_fragment)).getNavController();
-        NavigationUI.setupWithNavController(navView, _navController);
+        _bottomNavView = view.findViewById(R.id.nav_view);
+        _navController = ((NavHostFragment) getChildFragmentManager().findFragmentById(R.id.nav_store_host_fragment)).getNavController();
+        _floatingActionButton = view.findViewById(R.id.flt_add_item);
 
-        view.findViewById(R.id.flt_add_item).setOnClickListener(new View.OnClickListener() {
+        NavigationUI.setupWithNavController(_bottomNavView, _navController);
+
+        _floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 _navController.navigate(ItemListFragmentDirections.createItem(null));
             }
         });
         listenToBackStack();
+
+        _navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                switch (destination.getId()) {
+                    case R.id.navigation_list:
+                    case R.id.navigation_notifications:
+                    case R.id.navigation_dashboard:
+                        setMainUIVisibility(true);
+                        break;
+                    default:
+                        setMainUIVisibility(false);
+                        break;
+                }
+            }
+        });
+    }
+
+    private void setMainUIVisibility(boolean visible) {
+        _bottomNavView.setVisibility(visible ? View.VISIBLE : View.GONE);
+        if(visible){
+            _floatingActionButton.show();
+        }
+        else{
+            _floatingActionButton.setVisibility(View.GONE);
+        }
     }
 
     @Override
