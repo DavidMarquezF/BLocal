@@ -38,6 +38,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/btn_item_picture">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/label_name"
@@ -62,6 +63,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_inp_name">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_baseline_qr_code_scanner_24"
@@ -104,11 +106,10 @@
                 android:layout_height="64dp"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/shape_circle"
-                app:srcCompat="@drawable/ic_outline_camera_alt_24"
-                android:tint="?attr/colorOnSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_outline_camera_alt_24" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txt_inp_price"
@@ -120,6 +121,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_inp_code">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/lbl_price"
@@ -147,6 +149,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/checkbox_in_stock">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_descirption"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/lbl_description" />

@@ -2,10 +2,8 @@ package com.bteam.blocal.ui.item_detail;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
 import com.bteam.blocal.data.model.ItemModel;
@@ -23,6 +21,6 @@ public class ItemDetailViewModel  extends ViewModel {
     public void setArguments(Bundle savedInstanceState) {
         StoreRepository repository = StoreRepository.getInstance();
         String uid = ItemDetailFragmentArgs.fromBundle(savedInstanceState).getItemUid();
-        itemDetail = repository.getStoreItem(uid);
+        itemDetail = repository.getStoreItemLive(uid);
     }
 }

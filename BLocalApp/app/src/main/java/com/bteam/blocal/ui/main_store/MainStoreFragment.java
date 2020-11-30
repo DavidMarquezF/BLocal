@@ -9,12 +9,15 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bteam.blocal.R;
+import com.bteam.blocal.ui.edit_item.EditItemViewModel;
 import com.bteam.blocal.ui.item_list.ItemListFragmentDirections;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,11 +35,11 @@ public class MainStoreFragment extends Fragment {
     private NavController _navController;
     private BottomNavigationView _bottomNavView;
     private FloatingActionButton _floatingActionButton;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_main_store, container, false);
     }
 

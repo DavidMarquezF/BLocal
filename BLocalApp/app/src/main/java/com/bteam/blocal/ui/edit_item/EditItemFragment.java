@@ -1,5 +1,11 @@
 package com.bteam.blocal.ui.edit_item;
 
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -7,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,17 +27,30 @@ import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.Resource;
 import com.bteam.blocal.data.repository.StoreRepository;
 import com.bteam.blocal.utility.EditTextButton;
+import com.bumptech.glide.Glide;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.io.FileNotFoundException;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
+    public static final int TAKE_PICUTRE_REQUEST_CODE = 0;
+    public static final int PICK_PICTURE_REQUEST_CODE = 1;
     private EditItemViewModel vm;
+
 
     private ImageButton itemImageBtn;
     private Toolbar toolbar;
 
     private TextInputLayout nameTxtInp, descrTxtInp, priceTxtInp, codeTxtInp;
+
     private CheckBox checkBox;
+    private String imageUrl;
+
     public EditItemFragment() {
     }
 
@@ -50,7 +70,6 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         itemImageBtn = view.findViewById(R.id.btn_item_picture);
         nameTxtInp = view.findViewById(R.id.txt_inp_name);
         codeTxtInp = view.findViewById(R.id.txt_inp_code);
@@ -71,14 +90,21 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
         EditTextButton.setOnRightDrawableClicked(codeTxtInp.getEditText(), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             //TODO: Scan
+                //TODO: Scan
+            }
+        });
+
+        itemImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImage();
             }
         });
 
         vm.getItemDetail().observe(getViewLifecycleOwner(), new Observer<Resource<ItemModel>>() {
             @Override
             public void onChanged(Resource<ItemModel> itemModelResource) {
-                switch (itemModelResource.status){
+                switch (itemModelResource.status) {
                     case SUCCESS:
                         updateUi(itemModelResource.data);
                         break;
@@ -87,6 +113,7 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
         });
 
         toolbar.setOnMenuItemClickListener(this);
+
     }
 
     private void updateUi(ItemModel data) {
@@ -94,6 +121,11 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
         priceTxtInp.getEditText().setText(Float.toString(data.getPrice()));
         descrTxtInp.getEditText().setText(data.getDescription());
         checkBox.setChecked(data.getStock() > 0);
+        if (data.getImageUrl() != null && !data.getImageUrl().isEmpty()) {
+            Glide.with(getContext()).load(data.getImageUrl()).centerCrop()
+                    .into(itemImageBtn);
+        }
+
     }
 
     private void navigateBack() {
@@ -103,23 +135,22 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.btn_save:
                 String name = nameTxtInp.getEditText().getText().toString();
 
                 float price;
-                try{
+                try {
                     price = Float.parseFloat(priceTxtInp.getEditText().getText().toString());
-                }
-                catch(Exception err) {
+                } catch (Exception err) {
                     price = 0;
                 }
-                
+
                 int stock = checkBox.isChecked() ? 1 : 0;
                 String description = descrTxtInp.getEditText().getText().toString();
-                ItemModel itemModel = new ItemModel(name, null, price,  stock, description);
+                ItemModel itemModel = new ItemModel(name, imageUrl, price, stock, description);
 
-                if(vm.getIsModeEdit()){
+                if (vm.getIsModeEdit()) {
                     vm.updateItem(itemModel, new StoreRepository.IOnCompleteCallback<Void>() {
                         @Override
                         public void OnError(Throwable err) {
@@ -131,8 +162,7 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
                             navigateBack();
                         }
                     });
-                }
-                else{
+                } else {
                     vm.createItem(itemModel, new StoreRepository.IOnCompleteCallback<ItemModel>() {
                         @Override
                         public void OnError(Throwable err) {
@@ -148,5 +178,78 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
                 break;
         }
         return false;
+    }
+
+    private void selectImage() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+        builder.setTitle(R.string.title_change_photo);
+        builder.setItems(R.array.array_choose_photo, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                switch (i) {
+                    case 0:
+                        Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        try{
+                            startActivityForResult(takePicture, TAKE_PICUTRE_REQUEST_CODE);
+                        }
+                        catch (ActivityNotFoundException err){
+                            //TODO: Display to user error
+                        }
+
+                        break;
+                    case 1:
+                        Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(pickPhoto, PICK_PICTURE_REQUEST_CODE);
+                        break;
+
+                }
+            }
+        });
+
+        builder.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_CANCELED) {
+            Bitmap image = null;
+            switch (requestCode) {
+                case TAKE_PICUTRE_REQUEST_CODE:
+                    image = (Bitmap) data.getExtras().get("data");
+                    break;
+                case PICK_PICTURE_REQUEST_CODE:
+                    if (resultCode == RESULT_OK && data != null) {
+                        Uri selectedImage = data.getData();
+                        if (selectedImage != null) {
+                            try {
+                                image = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(selectedImage));
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            if (image != null) {
+                itemImageBtn.setImageBitmap(image);
+                itemImageBtn.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+                vm.uploadImage(image, new StoreRepository.IOnCompleteCallback<String>() {
+                    @Override
+                    public void OnError(Throwable err) {
+                        itemImageBtn.setImageResource(R.drawable.ic_outline_camera_alt_24);
+                        itemImageBtn.setScaleType(ImageView.ScaleType.CENTER);
+                        imageUrl = null;
+                    }
+
+                    @Override
+                    public void OnSuccess(String data) {
+                        imageUrl = data;
+                    }
+                });
+            }
+        }
     }
 }
