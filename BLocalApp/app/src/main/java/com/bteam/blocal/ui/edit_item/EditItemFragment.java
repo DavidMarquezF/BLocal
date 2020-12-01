@@ -55,6 +55,7 @@ public class EditItemFragment extends Fragment {
             @Override
             public void onClick(View view) {
              //TODO: Scan
+
             }
         });
     }
