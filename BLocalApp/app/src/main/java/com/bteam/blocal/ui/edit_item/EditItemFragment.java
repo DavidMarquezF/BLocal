@@ -1,5 +1,6 @@
 package com.bteam.blocal.ui.edit_item;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bteam.blocal.MainActivity;
 import com.bteam.blocal.R;
+import com.bteam.blocal.model.BarcodeScanner.CameraView;
 import com.bteam.blocal.utility.EditTextButton;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -55,7 +58,7 @@ public class EditItemFragment extends Fragment {
             @Override
             public void onClick(View view) {
              //TODO: Scan
-
+                startScanner();
             }
         });
     }
@@ -65,6 +68,11 @@ public class EditItemFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(EditItemViewModel.class);
         // TODO: Use the ViewModel
+    }
+
+    private void startScanner(){
+        //Intent i = new Intent(this, CameraView.class);
+        //startActivityForResult(i, 1011);
     }
 
 }
