@@ -1,9 +1,9 @@
 package com.bteam.blocal.ui.main_user;
 
 import android.content.res.Configuration;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,21 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.appcompat.widget.Toolbar;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bteam.blocal.R;
 import com.bumptech.glide.Glide;
@@ -98,9 +91,21 @@ public class MainUserFragment extends Fragment {
                 R.string.user_nav_drawer_open, R.string.user_nav_drawer_close);
         drawer.addDrawerListener(toggle);
 
+
         mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mainActivity.getSupportActionBar().setHomeButtonEnabled(true);
 
+        navController = ((NavHostFragment) getChildFragmentManager()
+                .findFragmentById(R.id.user_nav_host_fragment)).getNavController();
+
+
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_store_list, R.id.navigation_dashboard, R.id.navigation_shopping_lists, R.id.navigation_maps)
+                .build();
+
+        NavigationUI.setupActionBarWithNavController((AppCompatActivity) getActivity(), navController, appBarConfiguration);
         // Set up the header card
         NavigationView userNavView = view.findViewById(R.id.user_nav_view);
         View headerView = userNavView.getHeaderView(0);
@@ -119,8 +124,6 @@ public class MainUserFragment extends Fragment {
                 });
 
 
-        navController = ((NavHostFragment) getChildFragmentManager()
-                .findFragmentById(R.id.user_nav_host_fragment)).getNavController();
         NavigationUI.setupWithNavController(userNavView, navController);
 
         listenToBackStack();
