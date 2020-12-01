@@ -22,4 +22,8 @@
     <string name="title_shopping_lists">Shopping Lists</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_store_list_distance">Show stores in distance of</string>
+    <string name="title_store_list">Stores</string>
+    <string name="title_store_detail">Store Detail</string>
+    <string name="title_item_detail">Item detail</string>
 </resources>

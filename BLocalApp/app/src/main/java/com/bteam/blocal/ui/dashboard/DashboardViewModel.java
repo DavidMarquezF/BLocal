@@ -34,10 +34,10 @@ public class DashboardViewModel extends ViewModel {
 
     // TODO: Move to the utility class or something like that
     private DashboardButtonModel[] items = {
-            new DashboardButtonModel(R.string.title_maps, R.drawable.ic_baseline_map_24, R.id.action_user_nav_dashboard_to_user_nav_maps),
-            new DashboardButtonModel(R.string.title_stores, R.drawable.ic_baseline_store_24, R.id.action_user_nav_dashboard_to_user_nav_store_list),
-            new DashboardButtonModel(R.string.title_search, R.drawable.ic_baseline_search_24, R.id.action_user_nav_dashboard_to_user_nav_item_list),
-            new DashboardButtonModel(R.string.title_shopping_lists, R.drawable.ic_baseline_shopping_basket_24, R.id.action_user_nav_dashboard_to_user_nav_shopping_lists)
+            new DashboardButtonModel(R.string.title_maps, R.drawable.ic_baseline_map_24, R.id.openMaps),
+            new DashboardButtonModel(R.string.title_stores, R.drawable.ic_baseline_store_24, R.id.openStoreList),
+            new DashboardButtonModel(R.string.title_search, R.drawable.ic_baseline_search_24, R.id.openItemList),
+            new DashboardButtonModel(R.string.title_shopping_lists, R.drawable.ic_baseline_shopping_basket_24, R.id.openShoppingLists)
     };
 
 }

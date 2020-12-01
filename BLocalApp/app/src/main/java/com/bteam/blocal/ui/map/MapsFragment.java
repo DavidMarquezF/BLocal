@@ -4,13 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,12 +17,6 @@ import android.view.ViewGroup;
 
 import com.bteam.blocal.R;
 import com.bteam.blocal.model.StoreModel;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationAvailability;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,15 +24,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.CancellationToken;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.OnTokenCanceledListener;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY;
 
 public class MapsFragment extends Fragment {
     private static final String TAG = "MapsFragment";
@@ -65,11 +52,59 @@ public class MapsFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             gMap = googleMap;
-//            LatLng sydney = new LatLng(-34, 151);
-//            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+            // Show the current location on the map
+            mapsViewModel.getCurrentLocation().observe(getViewLifecycleOwner(), location -> {
+                if (null != currentLocationMarker) currentLocationMarker.remove();
+                LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+                currentLocationMarker = gMap.addMarker(new MarkerOptions().position(current)
+                        .title("You are here!").snippet("current location"));
+                gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 15));
+            });
+
+            mapsViewModel.getNearbyStores().observe(getViewLifecycleOwner(), stores -> {
+                // Clear the store markers
+                storeMarkers.forEach(Marker::remove);
+                storeMarkers.clear();
+
+                // Add them again
+                stores.forEach(s -> {
+                    LatLng storePos = new LatLng(s.getLat(), s.getLon());
+                    Marker marker = gMap.addMarker(new MarkerOptions().position(storePos)
+                            .title(s.getName()).snippet(s.getOwner()));
+                    marker.setTag(s);
+                    storeMarkers.add(marker);
+                });
+            });
+
+            gMap.setOnMarkerClickListener(marker -> {
+                if (!marker.equals(currentLocationMarker)) {
+                    openStoreDialog((StoreModel) marker.getTag());
+                } else {
+                    marker.showInfoWindow();
+                }
+                return true;
+            });
         }
     };
+
+    private void openStoreDialog(StoreModel storeModel) {
+        new MaterialAlertDialogBuilder(getContext())
+                .setTitle(storeModel.getName())
+                .setMessage("ID: " + storeModel.getUid() + "\nOwner: " + storeModel.getOwner())
+                .setIcon(R.drawable.ic_baseline_store_24)
+                .setNeutralButton("Close", (dialog, which) -> {
+                })
+                .setPositiveButton("Store Detail", (dialog, which) -> {
+                    Log.d(TAG, "openStoreDialog: " + storeModel.getName() + " " + storeModel.getLat() + " " + storeModel.getLon());
+                    // Pass store's uid to be retrieved in the StoreDetailFragment
+                    Bundle bundle = new Bundle();
+                    bundle.putString("storeUid", storeModel.getUid());
+                    NavHostFragment.findNavController(this)
+                            .navigate(R.id.openStoreDetailFromMaps, bundle);
+                })
+                .show();
+    }
 
     @Nullable
     @Override
@@ -92,17 +127,14 @@ public class MapsFragment extends Fragment {
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
-
-        // Show the current location on the map
-        mapsViewModel.getCurrentLocation().observe(getViewLifecycleOwner(), location -> {
-            if (null != currentLocationMarker) currentLocationMarker.remove();
-            LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
-            currentLocationMarker = gMap.addMarker(new MarkerOptions().position(current)
-                    .title("You are here!"));
-            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 15));
-        });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: requesting location update");
+        mapsViewModel.requestCurrentLocation();
+    }
 
     private void checkLocationPermissions() {
         if (ActivityCompat.checkSelfPermission(getContext(),

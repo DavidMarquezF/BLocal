@@ -12,8 +12,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.bteam.blocal.model.StoreModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class MapsViewModel extends AndroidViewModel {
@@ -33,7 +33,7 @@ public class MapsViewModel extends AndroidViewModel {
 
         this.fusedLocationClient = LocationServices.getFusedLocationProviderClient(application);
 
-        requestCurrentLocation();
+        this.nearbyStores.setValue(Arrays.asList(dummyData));
     }
 
     public LiveData<List<StoreModel>> getNearbyStores() {
@@ -61,7 +61,7 @@ public class MapsViewModel extends AndroidViewModel {
     }
 
     @SuppressLint("MissingPermission")
-    private void requestCurrentLocation() {
+    public void requestCurrentLocation() {
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(location -> {
                     if (null != location) {
@@ -75,4 +75,9 @@ public class MapsViewModel extends AndroidViewModel {
                 );
     }
 
+    private StoreModel[] dummyData = {
+            new StoreModel("1", "Skejby Specialbutik", "Store owner 1", 56.1943794, 10.1950201),
+            new StoreModel("2", "Naeringen Lokal Kiosk", "Store owner 2", 56.1941645, 10.1991454),
+            new StoreModel("3", "LIDL Skejby", "Store owner 3", 56.1995529, 10.1828308)
+    };
 }
