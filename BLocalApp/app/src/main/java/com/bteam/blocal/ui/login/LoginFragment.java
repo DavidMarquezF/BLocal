@@ -93,7 +93,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onError(Throwable err) {
                 if(err instanceof NoDocumentException){
-                    //TODO: Hanlde error, user doesn't have a store, navigate to user view
+                    NavController navHostController = Navigation.findNavController(getActivity(), R.id.main_nav_host_fragment);
+                    navHostController.navigate(LoginFragmentDirections.actionLoginToMainUserFragment());
                 }
                 else{
                     //TODO: Handle unexpected error
