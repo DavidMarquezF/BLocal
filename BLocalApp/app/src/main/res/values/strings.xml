@@ -38,4 +38,7 @@
     <string name="title_store_detail">Store Detail</string>
     <string name="title_item_detail">Item detail</string>
 
+    <string name="user_nav_drawer_open">Drawer opens</string>
+    <string name="user_nav_drawer_close">Drawer closes</string>
+
 </resources>
