@@ -1,6 +1,11 @@
 package com.bteam.blocal.ui.main_user;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -11,15 +16,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.bteam.blocal.R;
-import com.bteam.blocal.ui.dashboard.DashboardViewModel;
-import com.google.android.material.card.MaterialCardView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainUserFragment extends Fragment {
@@ -28,6 +27,7 @@ public class MainUserFragment extends Fragment {
 
     private MainUserViewModel mainUserViewModel;
     private TextView txtCurrentUser, txtEmail;
+    private ImageView userProfileImage;
 
     public MainUserFragment() {
         // Required empty public constructor
@@ -52,27 +52,25 @@ public class MainUserFragment extends Fragment {
         mainUserViewModel =
                 new ViewModelProvider(this).get(MainUserViewModel.class);
 
-        // Fill the card header information
-        // TODO: use real user from the database
-        mainUserViewModel.setCurrentUser("user");
-        mainUserViewModel.setEmail("user@example.com");
 
         NavigationView userNavView = view.findViewById(R.id.user_nav_view);
         View headerView = userNavView.getHeaderView(0);
 
         txtCurrentUser = headerView.findViewById(R.id.user_nav_header_username);
         txtEmail = headerView.findViewById(R.id.user_nav_header_email);
+        userProfileImage = headerView.findViewById(R.id.user_nav_header_icon);
 
         mainUserViewModel.getCurrentUser().observe(getViewLifecycleOwner(),
-                username -> txtCurrentUser.setText(username));
-        mainUserViewModel.getEmail().observe(getViewLifecycleOwner(),
-                email -> txtEmail.setText(email));
+                user -> {
+                    txtEmail.setText(user.getEmail());
+                    txtCurrentUser.setText(user.getDisplayName());
+                    Glide.with(this).load(user.getPhotoUrl()).apply(new RequestOptions()
+                            .placeholder(R.drawable.ic_outline_account_circle_24)
+                            .error(R.drawable.ic_outline_account_circle_24)).into(userProfileImage);
+                });
 
-        MaterialCardView headerUserInfoCard = headerView.findViewById(R.id.user_nav_header_card);
 
-        // TODO: maybe implement logout/profile dialog when the card is clicked
-        headerUserInfoCard.setOnClickListener(v -> Log.d(TAG, "onViewCreated: card clicked"));
-        navController = ((NavHostFragment)getChildFragmentManager()
+        navController = ((NavHostFragment) getChildFragmentManager()
                 .findFragmentById(R.id.user_nav_host_fragment)).getNavController();
         NavigationUI.setupWithNavController(userNavView, navController);
 

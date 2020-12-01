@@ -4,29 +4,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.bteam.blocal.data.repository.UserRepository;
+import com.google.firebase.auth.FirebaseUser;
+
 public class MainUserViewModel extends ViewModel {
-    // TODO: consider replacing it with the user model object mapped from the database
-    private MutableLiveData<String> currentUser;
-    private MutableLiveData<String> email;
-
-    public MainUserViewModel() {
-        this.currentUser = new MutableLiveData<>();
-        this.email = new MutableLiveData<>();
+    public LiveData<FirebaseUser> getCurrentUser(){
+        return UserRepository.getInstance().getUser();
     }
 
-    public LiveData<String> getCurrentUser() {
-        return currentUser;
-    }
 
-    public void setCurrentUser(String currentUser) {
-        this.currentUser.setValue(currentUser);
-    }
 
-    public LiveData<String> getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email.setValue(email);
-    }
 }
