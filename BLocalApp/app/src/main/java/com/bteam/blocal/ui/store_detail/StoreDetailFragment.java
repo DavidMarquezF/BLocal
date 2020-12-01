@@ -1,6 +1,5 @@
 package com.bteam.blocal.ui.store_detail;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -17,12 +16,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bteam.blocal.R;
-import com.bteam.blocal.model.StoreModel;
 import com.google.android.material.button.MaterialButton;
 
 public class StoreDetailFragment extends Fragment {
     private static final String TAG = "StoreDetailFragment";
     private StoreDetailViewModel storeDetailViewModel;
+
+    // REMOVE
+    private String storeUid;
 
     private TextView storeName, storeOwner;
     private MaterialButton btnItems, btnRate;
@@ -32,12 +33,9 @@ public class StoreDetailFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         storeDetailViewModel = new ViewModelProvider(this).get(StoreDetailViewModel.class);
 
-        storeDetailViewModel.getCurrentStore().observe(getViewLifecycleOwner(), new Observer<StoreModel>() {
-            @Override
-            public void onChanged(StoreModel storeModel) {
-                storeName.setText(storeModel.getName());
-                storeOwner.setText(storeModel.getOwner());
-            }
+        storeDetailViewModel.getCurrentStore().observe(getViewLifecycleOwner(), storeModel -> {
+            storeName.setText(storeModel.getName());
+            storeOwner.setText(storeModel.getOwner());
         });
 
         return inflater.inflate(R.layout.fragment_store_detail, container, false);
@@ -68,11 +66,15 @@ public class StoreDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: store uid is: " + getArguments().getString("storeUid"));
         // TODO: update the ViewModel internal variable to the real store
-
+//        storeDetailViewModel.setCurrentStore(findStoreById(getArguments().getString("storeUid")));
+        storeUid = getArguments().getString("storeUid");
     }
 
     private void navigateToItemList() {
+        Bundle bundle = new Bundle();
+        bundle.putString("storeUid", storeUid);
+//        bundle.putString("storeUid", storeDetailViewModel.getCurrentStore().getValue().getUid());
         NavHostFragment.findNavController(this)
-                .navigate(R.id.action_user_nav_store_detail_to_user_nav_item_list);
+                .navigate(R.id.openItemListFromStoreDetail, bundle);
     }
 }

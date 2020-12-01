@@ -64,6 +64,6 @@ public class StoreListFragment extends Fragment implements StoreListAdapter.IIte
         Bundle bundle = new Bundle();
         bundle.putString("storeUid", sm.getUid());
         NavHostFragment.findNavController(this)
-                .navigate(R.id.action_user_nav_store_list_to_user_nav_store_detail, bundle);
+                .navigate(R.id.openStoreDetailFromList, bundle);
     }
 }

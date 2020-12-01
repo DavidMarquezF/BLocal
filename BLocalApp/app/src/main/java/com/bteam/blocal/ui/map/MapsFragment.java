@@ -101,7 +101,7 @@ public class MapsFragment extends Fragment {
                     Bundle bundle = new Bundle();
                     bundle.putString("storeUid", storeModel.getUid());
                     NavHostFragment.findNavController(this)
-                            .navigate(R.id.action_user_nav_maps_to_user_nav_store_detail, bundle);
+                            .navigate(R.id.openStoreDetailFromMaps, bundle);
                 })
                 .show();
     }
