@@ -1,5 +1,7 @@
 package com.bteam.blocal.ui.main_user;
 
+import android.content.res.Configuration;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +12,23 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bteam.blocal.R;
 import com.bumptech.glide.Glide;
@@ -24,6 +38,7 @@ import com.google.android.material.navigation.NavigationView;
 public class MainUserFragment extends Fragment {
     private static final String TAG = "MainUserFragment";
     private NavController navController;
+    private ActionBarDrawerToggle toggle;
 
     private MainUserViewModel mainUserViewModel;
     private TextView txtCurrentUser, txtEmail;
@@ -36,6 +51,26 @@ public class MainUserFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        toggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        toggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -53,6 +88,20 @@ public class MainUserFragment extends Fragment {
                 new ViewModelProvider(this).get(MainUserViewModel.class);
 
 
+        // Set up the toolbar for the whole user part of the app
+        Toolbar toolbar = view.findViewById(R.id.user_nav_toolbar_main);
+        AppCompatActivity mainActivity = (AppCompatActivity) getActivity();
+        mainActivity.setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = view.findViewById(R.id.user_drawer_layout);
+        toggle = new ActionBarDrawerToggle(mainActivity, drawer, toolbar,
+                R.string.user_nav_drawer_open, R.string.user_nav_drawer_close);
+        drawer.addDrawerListener(toggle);
+
+        mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mainActivity.getSupportActionBar().setHomeButtonEnabled(true);
+
+        // Set up the header card
         NavigationView userNavView = view.findViewById(R.id.user_nav_view);
         View headerView = userNavView.getHeaderView(0);
 

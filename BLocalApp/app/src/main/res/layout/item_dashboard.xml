@@ -19,7 +19,6 @@
             android:id="@+id/dashboard_item_image"
             android:layout_width="164dp"
             android:layout_height="164dp"
-            android:background="?attr/colorPrimaryDark"
             android:scaleType="centerCrop" />
 
         <TextView
