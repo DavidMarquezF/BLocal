@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,6 +149,13 @@ public class MapsFragment extends Fragment {
         }
     }
 
+    private void showLocationPermissionSnackbar() {
+        Snackbar.make(getView(), R.string.snackbar_maps_location_needed, Snackbar.LENGTH_LONG)
+                .setAction(R.string.snackbar_maps_location_try_again,
+                        v -> checkLocationPermissions())
+                .show();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -159,6 +167,7 @@ public class MapsFragment extends Fragment {
             Log.d(TAG, "onRequestPermissionsResult: Location permission was successfully obtained.");
         } else {
             Log.d(TAG, "onRequestPermissionsResult: Location permission was not granted!");
+            showLocationPermissionSnackbar();
         }
     }
 }

@@ -40,5 +40,7 @@
 
     <string name="user_nav_drawer_open">Drawer opens</string>
     <string name="user_nav_drawer_close">Drawer closes</string>
+    <string name="snackbar_maps_location_needed">Location permission is required for the usage of the map!</string>
+    <string name="snackbar_maps_location_try_again">Try again</string>
 
 </resources>
