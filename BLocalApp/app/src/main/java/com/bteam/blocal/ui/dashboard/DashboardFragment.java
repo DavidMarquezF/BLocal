@@ -1,6 +1,8 @@
 package com.bteam.blocal.ui.dashboard;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,8 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.IIte
     private RecyclerView recyclerView;
     private DashboardAdapter adapter;
 
+    private int nButtons = 2;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
@@ -36,8 +40,17 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.IIte
         dashboardViewModel.getButtons().observe(getViewLifecycleOwner(),
                 buttons -> adapter.updateItemsList(buttons));
 
+        // Check the orientation
+        int orientation = this.getResources().getConfiguration().orientation;
+        Log.d(TAG, "onCreateView: " + orientation);
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            nButtons = 3;
+        } else {
+            nButtons = 2;
+        }
+
         // Create Grid with the buttons
-        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), nButtons));
         recyclerView.setAdapter(adapter);
 
         return view;
