@@ -1,4 +1,4 @@
-package com.bteam.blocal.model;
+package com.bteam.blocal.data.model;
 
 public class DashboardButtonModel {
     private int textId;

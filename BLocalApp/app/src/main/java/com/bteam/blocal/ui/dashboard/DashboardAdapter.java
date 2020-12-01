@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bteam.blocal.R;
-import com.bteam.blocal.model.DashboardButtonModel;
+import com.bteam.blocal.data.model.DashboardButtonModel;
 
 import java.util.List;
 

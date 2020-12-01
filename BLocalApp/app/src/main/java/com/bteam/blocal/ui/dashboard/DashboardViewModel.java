@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.bteam.blocal.R;
-import com.bteam.blocal.model.DashboardButtonModel;
+import com.bteam.blocal.data.model.DashboardButtonModel;
 
 import java.util.Arrays;
 import java.util.List;

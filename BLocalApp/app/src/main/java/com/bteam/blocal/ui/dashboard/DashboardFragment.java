@@ -7,16 +7,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bteam.blocal.R;
-import com.bteam.blocal.model.DashboardButtonModel;
-
-import java.util.List;
+import com.bteam.blocal.data.model.DashboardButtonModel;
 
 public class DashboardFragment extends Fragment implements DashboardAdapter.IItemClickListener {
     private static final String TAG = "DashboardFragment";

@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bteam.blocal.R;
-import com.bteam.blocal.model.StoreModel;
+import com.bteam.blocal.data.model.StoreModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -64,17 +64,20 @@ public class MapsFragment extends Fragment {
 
             mapsViewModel.getNearbyStores().observe(getViewLifecycleOwner(), stores -> {
                 // Clear the store markers
-                storeMarkers.forEach(Marker::remove);
+                for (Marker marker: storeMarkers) {
+                    marker.remove();
+                }
                 storeMarkers.clear();
 
                 // Add them again
-                stores.forEach(s -> {
-                    LatLng storePos = new LatLng(s.getLat(), s.getLon());
+                for (StoreModel store: stores) {
+                    LatLng storePos = new LatLng(store.getLocation().getLatitude(), store.getLocation().getLongitude());
                     Marker marker = gMap.addMarker(new MarkerOptions().position(storePos)
-                            .title(s.getName()).snippet(s.getOwner()));
-                    marker.setTag(s);
+                            .title(store.getName()).snippet(store.getOwnerId()));
+                    marker.setTag(store);
                     storeMarkers.add(marker);
-                });
+                }
+
             });
 
             gMap.setOnMarkerClickListener(marker -> {
@@ -91,12 +94,11 @@ public class MapsFragment extends Fragment {
     private void openStoreDialog(StoreModel storeModel) {
         new MaterialAlertDialogBuilder(getContext())
                 .setTitle(storeModel.getName())
-                .setMessage("ID: " + storeModel.getUid() + "\nOwner: " + storeModel.getOwner())
+                .setMessage("ID: " + storeModel.getUid() + "\nOwner: " + storeModel.getOwnerId())
                 .setIcon(R.drawable.ic_baseline_store_24)
                 .setNeutralButton("Close", (dialog, which) -> {
                 })
                 .setPositiveButton("Store Detail", (dialog, which) -> {
-                    Log.d(TAG, "openStoreDialog: " + storeModel.getName() + " " + storeModel.getLat() + " " + storeModel.getLon());
                     // Pass store's uid to be retrieved in the StoreDetailFragment
                     Bundle bundle = new Bundle();
                     bundle.putString("storeUid", storeModel.getUid());

@@ -8,11 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="pink_700">#880e4f</color>
-    <color name="pink_400">#bc477b</color>
-    <color name="pink_900">#560027</color>
-    <color name="yellow_500">#ffeb3b</color>
-    <color name="secondaryLightColor">#ffff72</color>
+    <color name="blue_700">#2196F3</color>
+    <color name="blue_900">#1976D2</color>
+    <color name="yellow_500">#FFC107</color>
     <color name="yellow_700">#c8b900</color>
 
 </resources>

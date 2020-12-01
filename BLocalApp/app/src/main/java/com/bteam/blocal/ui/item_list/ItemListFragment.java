@@ -2,7 +2,6 @@ package com.bteam.blocal.ui.item_list;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,32 +9,41 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bteam.blocal.R;
-import com.bteam.blocal.ui.item_list.dummy.DummyContent;
+import com.bteam.blocal.data.model.ItemModel;
+import com.bteam.blocal.ui.item_detail.ItemDetailFragmentDirections;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class ItemListFragment extends Fragment implements ItemListAdapter.IItemClickListener {
-    private static final String TAG = "ItemListFragment";
+
     private ItemListViewModel itemListViewModel;
+    private ItemListAdapter adapter;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        itemListViewModel =
+                new ViewModelProvider(this).get(ItemListViewModel.class);
+
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        itemListViewModel =
-                new ViewModelProvider(this).get(ItemListViewModel.class);
         View root = inflater.inflate(R.layout.fragment_item_list, container, false);
-        //final TextView textView = root.findViewById(R.id.text_home);
-        itemListViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                /*textView.setText(s);*/
-            }
-        });
+
+        adapter = new ItemListAdapter(this, new FirestorePagingOptions.Builder<ItemModel>()
+                .setLifecycleOwner(this)
+                .setQuery(itemListViewModel.getQuery(), itemListViewModel.getPagingConfig(), ItemModel.class)
+                .build());
+
 
         return root;
     }
@@ -44,28 +52,39 @@ public class ItemListFragment extends Fragment implements ItemListAdapter.IItemC
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            ItemListAdapter adapter = new ItemListAdapter(this);
-            adapter.updateItemsList(DummyContent.ITEMS);
-            recyclerView.setAdapter(adapter);
-        }
+
+        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swiperefresh_store);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Clear items and obtain data again
+                adapter.refresh();
+            }
+        });
+        RecyclerView recyclerView = view.findViewById(R.id.list_items);
+        Context context = view.getContext();
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        adapter.bindSwipeRefresh(swipeRefreshLayout);
+
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Accessed the list from the store's detail fragment
-        if (null != getArguments().getString("storeUid")) {
-            // TODO: show items of the selected store
-            Log.d(TAG, "onCreate: accessed from the store with uid: " + getArguments().getString("storeUid"));
-        }
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
     }
 
     @Override
-    public void onItemClick(int index) {
-        NavHostFragment.findNavController(this).navigate(R.id.action_navigation_list_to_itemDetailFragment);
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
+    @Override
+    public void onItemClick(DocumentSnapshot document, int index) {
+        ItemListFragmentDirections.ShowItemDetail dir =  ItemListFragmentDirections.showItemDetail(document.toObject(ItemModel.class).getUid());
+        NavHostFragment.findNavController(this).navigate(dir);
     }
 }

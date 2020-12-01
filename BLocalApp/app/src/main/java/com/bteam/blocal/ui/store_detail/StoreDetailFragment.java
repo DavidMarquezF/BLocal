@@ -35,7 +35,7 @@ public class StoreDetailFragment extends Fragment {
 
         storeDetailViewModel.getCurrentStore().observe(getViewLifecycleOwner(), storeModel -> {
             storeName.setText(storeModel.getName());
-            storeOwner.setText(storeModel.getOwner());
+            storeOwner.setText(storeModel.getOwnerId());
         });
 
         return inflater.inflate(R.layout.fragment_store_detail, container, false);

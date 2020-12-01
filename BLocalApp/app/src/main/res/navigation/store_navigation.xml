@@ -11,10 +11,10 @@
         android:label="@string/title_list"
         tools:layout="@layout/fragment_item_list" >
         <action
-            android:id="@+id/action_navigation_list_to_itemDetailFragment"
+            android:id="@+id/showItemDetail"
             app:destination="@id/itemDetailFragment" />
         <action
-            android:id="@+id/action_navigation_list_to_editItemFragment"
+            android:id="@+id/createItem"
             app:destination="@id/editItemFragment" />
     </fragment>
 
@@ -35,12 +35,20 @@
         android:label="fragment_item_detail"
         tools:layout="@layout/fragment_item_detail" >
         <action
-            android:id="@+id/action_itemDetailFragment_to_editItemFragment"
+            android:id="@+id/editItem"
             app:destination="@id/editItemFragment" />
+        <argument
+            android:name="itemUid"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/editItemFragment"
         android:name="com.bteam.blocal.ui.edit_item.EditItemFragment"
         android:label="fragment_edit_item"
-        tools:layout="@layout/fragment_edit_item" />
+        tools:layout="@layout/fragment_edit_item">
+        <argument
+            android:name="itemUid"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>

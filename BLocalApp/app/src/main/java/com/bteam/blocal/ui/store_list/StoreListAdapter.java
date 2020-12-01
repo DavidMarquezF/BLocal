@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bteam.blocal.R;
-import com.bteam.blocal.model.StoreModel;
+import com.bteam.blocal.data.model.StoreModel;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Stor
     public void onBindViewHolder(@NonNull StoreListViewHolder holder, int position) {
         StoreModel sm = nearbyStores.get(position);
         holder.txtStoreName.setText(sm.getName());
-        holder.txtStoreOwner.setText(sm.getOwner());
+        holder.txtStoreOwner.setText(sm.getOwnerId());
         // TODO: calculate distance to the stores
         holder.txtStoreDistance.setText("3.4km");
     }

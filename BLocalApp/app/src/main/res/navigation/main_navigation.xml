@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/mainUserFragment">
+    app:startDestination="@id/login">
 
-    <fragment android:id="@+id/login" >
+    <fragment
+        android:id="@+id/login"
+        android:name="com.bteam.blocal.ui.login.LoginFragment"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_login_to_mainStoreFragment"
             app:destination="@id/mainStoreFragment" />
@@ -17,7 +21,7 @@
         android:id="@+id/mainStoreFragment"
         android:name="com.bteam.blocal.ui.main_store.MainStoreFragment"
         android:label="MainStoreFragment" />
-
+    <action android:id="@+id/action_global_login" app:destination="@id/login" />
     <fragment
         android:id="@+id/mainUserFragment"
         android:name="com.bteam.blocal.ui.main_user.MainUserFragment"

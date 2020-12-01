@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bteam.blocal.R;
-import com.bteam.blocal.model.StoreModel;
+import com.bteam.blocal.data.model.StoreModel;
 
 public class StoreListFragment extends Fragment implements StoreListAdapter.IItemClickListener {
     private static final String TAG = "StoreListFragment";
