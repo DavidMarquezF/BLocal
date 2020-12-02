@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/store_navigation"
-    app:startDestination="@+id/navigation_list">
+    app:startDestination="@+id/my_store_item_list">
 
     <fragment
-        android:id="@+id/navigation_list"
-        android:name="com.bteam.blocal.ui.item_list.ItemListFragment"
+        android:id="@+id/my_store_item_list"
+        android:name="com.bteam.blocal.ui.store.ItemListStoreFragment"
         android:label="@string/title_list"
-        tools:layout="@layout/fragment_item_list" >
+        tools:layout="@layout/fragment_item_list">
         <action
             android:id="@+id/showItemDetail"
             app:destination="@id/itemDetailFragment" />
         <action
-            android:id="@+id/createItem"
+            android:id="@+id/createNewItem"
             app:destination="@id/editItemFragment" />
     </fragment>
 
@@ -26,12 +26,12 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.bteam.blocal.ui.notifications.NotificationsFragment"
+        android:name="com.bteam.blocal.ui.store.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/itemDetailFragment"
-        android:name="com.bteam.blocal.ui.item_detail.ItemDetailFragment"
+        android:name="com.bteam.blocal.ui.store.ItemDetailStoreFragment"
         android:label="fragment_item_detail"
         tools:layout="@layout/fragment_item_detail" >
         <action
@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/editItemFragment"
-        android:name="com.bteam.blocal.ui.edit_item.EditItemFragment"
+        android:name="com.bteam.blocal.ui.store.edit_item.EditItemFragment"
         android:label="fragment_edit_item"
         tools:layout="@layout/fragment_edit_item">
         <argument

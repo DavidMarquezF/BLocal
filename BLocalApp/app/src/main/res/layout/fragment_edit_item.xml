@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.edit_item.EditItemFragment"
+    tools:context=".ui.store.edit_item.EditItemFragment"
     tools:layout_editor_absoluteY="118dp">
 
 

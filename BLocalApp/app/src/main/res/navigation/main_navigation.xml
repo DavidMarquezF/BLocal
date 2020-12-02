@@ -19,11 +19,11 @@
 
     <fragment
         android:id="@+id/mainStoreFragment"
-        android:name="com.bteam.blocal.ui.main_store.MainStoreFragment"
+        android:name="com.bteam.blocal.ui.store.main_store.MainStoreFragment"
         android:label="MainStoreFragment" />
     <action android:id="@+id/action_global_login" app:destination="@id/login" />
     <fragment
         android:id="@+id/mainUserFragment"
-        android:name="com.bteam.blocal.ui.main_user.MainUserFragment"
+        android:name="com.bteam.blocal.ui.user.main_user.MainUserFragment"
         android:label="MainUserFragment" />
 </navigation>

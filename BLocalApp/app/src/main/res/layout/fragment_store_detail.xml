@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.store_detail.StoreDetailFragment">
+    tools:context=".ui.shared.store_detail.StoreDetailFragment">
 
     <ImageView
         android:id="@+id/img_store_detail_icon"
