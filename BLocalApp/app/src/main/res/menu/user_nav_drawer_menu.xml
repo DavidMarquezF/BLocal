@@ -24,8 +24,10 @@
         android:id="@+id/navigation_shopping_lists"
         android:icon="@drawable/ic_baseline_shopping_basket_24"
         android:title="@string/title_shopping_lists" />
+    <!--
     <item
         android:id="@+id/navigation_my_store"
         android:icon="@drawable/ic_baseline_storefront_24"
         android:title="@string/title_my_store" />
+        -->
 </menu>
