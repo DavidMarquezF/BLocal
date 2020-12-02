@@ -10,6 +10,7 @@ public class StoreModel {
     private String name;
     private String ownerId;
     private GeoPoint location;
+    private String description;
 
     public GeoPoint getLocation() {
         return location;
@@ -40,5 +41,13 @@ public class StoreModel {
     }
     public String getUid(){
         return uid;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

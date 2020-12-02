@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.collection.ArraySet;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,10 +29,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.navigation.NavigationView;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class MainUserFragment extends Fragment {
     private static final String TAG = "MainUserFragment";
     private NavController navController;
-    private ActionBarDrawerToggle toggle;
 
     private MainUserViewModel mainUserViewModel;
     private TextView txtCurrentUser, txtEmail;
@@ -39,31 +44,6 @@ public class MainUserFragment extends Fragment {
 
     public MainUserFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        toggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        toggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (toggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -83,17 +63,16 @@ public class MainUserFragment extends Fragment {
 
         // Set up the toolbar for the whole user part of the app
         Toolbar toolbar = view.findViewById(R.id.user_nav_toolbar_main);
+
         AppCompatActivity mainActivity = (AppCompatActivity) getActivity();
-        mainActivity.setSupportActionBar(toolbar);
+
+        //mainActivity.setSupportActionBar(toolbar);
 
         DrawerLayout drawer = view.findViewById(R.id.user_drawer_layout);
-        toggle = new ActionBarDrawerToggle(mainActivity, drawer, toolbar,
-                R.string.user_nav_drawer_open, R.string.user_nav_drawer_close);
-        drawer.addDrawerListener(toggle);
 
 
-        mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mainActivity.getSupportActionBar().setHomeButtonEnabled(true);
+        //mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //mainActivity.getSupportActionBar().setHomeButtonEnabled(true);
 
         navController = ((NavHostFragment) getChildFragmentManager()
                 .findFragmentById(R.id.user_nav_host_fragment)).getNavController();
@@ -101,11 +80,12 @@ public class MainUserFragment extends Fragment {
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_store_list, R.id.navigation_dashboard, R.id.navigation_shopping_lists, R.id.navigation_maps, R.id.navigation_my_store_fragment)
+        Set<Integer> topLevelDestinations = new HashSet<>(Arrays.asList(R.id.navigation_store_list, R.id.navigation_dashboard, R.id.navigation_shopping_lists, R.id.navigation_maps, R.id.navigation_my_store_fragment));
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(topLevelDestinations)
+                .setOpenableLayout(drawer)
                 .build();
 
-        NavigationUI.setupActionBarWithNavController((AppCompatActivity) getActivity(), navController, appBarConfiguration);
+
         // Set up the header card
         NavigationView userNavView = view.findViewById(R.id.user_nav_view);
         View headerView = userNavView.getHeaderView(0);
@@ -123,8 +103,17 @@ public class MainUserFragment extends Fragment {
                             .error(R.drawable.ic_outline_account_circle_24)).into(userProfileImage);
                 });
 
-
         NavigationUI.setupWithNavController(userNavView, navController);
+        NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
+
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if(topLevelDestinations.contains(destination.getId())){
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            }
+            else{
+                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            }
+        });
 
         listenToBackStack();
     }
@@ -157,7 +146,7 @@ public class MainUserFragment extends Fragment {
                      gets invoked  calls this callback  gets stuck in a loop
                  */
                 setEnabled(false);
-                requireActivity().onBackPressed();
+                navController.navigateUp();
                 setEnabled(true);
 
             } else if (isVisible()) {

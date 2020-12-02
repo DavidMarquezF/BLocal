@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.bteam.blocal"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         multiDexEnabled true
         versionCode 1
@@ -71,7 +71,7 @@ dependencies {
     // Maps and location
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.1.0'
-
+    implementation 'com.google.android.gms:play-services-places:17.0.0'
     //Barcode scanner
     implementation 'com.google.android.gms:play-services-mlkit-barcode-scanning:16.1.2'
 

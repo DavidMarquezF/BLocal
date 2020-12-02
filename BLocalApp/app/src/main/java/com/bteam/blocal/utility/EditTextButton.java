@@ -22,7 +22,7 @@ public class EditTextButton {
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     if(event.getRawX() >= (edt.getRight() - edt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         // your action here
-
+                        listener.onClick(v);
                         return true;
                     }
                 }

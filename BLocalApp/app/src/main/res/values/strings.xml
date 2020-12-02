@@ -43,10 +43,15 @@
     <string name="snackbar_maps_location_needed">Location permission is required for the usage of the map!</string>
     <string name="snackbar_maps_location_try_again">Try again</string>
     <string name="title_my_store">My Store</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="descr_create_my_store">Create and manage your own store so that your business can grwo exponentially</string>
+    <string name="descr_create_my_store">Create and manage your own store so that your business can grow exponentially</string>
     <string name="descr_slogan">You do what you\'ve been doing, we\'ll just let the world know</string>
     <string name="btn_create_store">Create my store</string>
+    <string name="lbl_use_location">Use this location?</string>
+    <string name="lbl_change_loc">Change Location</string>
+    <string name="lbl_select">Select</string>
+    <string name="title_create_store">Create Store</string>
+    <string name="lbl_location">Location</string>
+    <string name="title_location_picker">Location Picker</string>
 
 </resources>
