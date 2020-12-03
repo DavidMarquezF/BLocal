@@ -1,7 +1,7 @@
 package com.bteam.blocal.data.model.BarcodeScanner;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
@@ -13,12 +13,15 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -35,34 +38,46 @@ import java.util.concurrent.Executors;
 
 //This activity and its layout was based on https://akhilbattula.medium.com/android-camerax-java-example-aeee884f9102
 //There have been some changes as some functions aren't in use anymore
-public class CameraView extends AppCompatActivity {
+public class CameraView extends Fragment {
+    @Nullable private VisionImageProcessor imageProcessor;
     private int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
     private boolean allPermissionsGranted(){
 
         for(String permission : REQUIRED_PERMISSIONS){
-            if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED){
+            if(ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED){
                 return false;
             }
         }
         return true;
     }
     private Executor executor = Executors.newSingleThreadExecutor();
-    PreviewView mPreviewView;
+    private PreviewView mPreviewView;
+    private GraphicOverlay graphicOverlay;
+    private BarcodeScannerProcessor scannerProcessor;
     ImageView captureImage;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera_view);
+    public CameraView(){}
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
 
-        mPreviewView = findViewById(R.id.camera);
-        captureImage = findViewById(R.id.captureImg);
+        return inflater.inflate(R.layout.fragment_camera_view, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mPreviewView = view.findViewById(R.id.camera);
+        graphicOverlay = view.findViewById(R.id.overlay);
+        captureImage = view.findViewById(R.id.captureImg);
+        scannerProcessor = new BarcodeScannerProcessor();
 
         if(allPermissionsGranted()){
             startCamera(); //start camera if permission has been granted by user
         } else{
-            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
+            ActivityCompat.requestPermissions(getActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
         }
     }
 
@@ -73,15 +88,15 @@ public class CameraView extends AppCompatActivity {
             if(allPermissionsGranted()){
                 startCamera();
             } else{
-                Toast.makeText(this, "Permissions not granted by the user.", Toast.LENGTH_SHORT).show();
-                this.finish();
+                Toast.makeText(getActivity(), "Permissions not granted by the user.", Toast.LENGTH_SHORT).show();
+                //this.finish();
             }
         }
     }
 
     private void startCamera() {
 
-        final ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+        final ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(getActivity());
 
         cameraProviderFuture.addListener(new Runnable() {
             @Override
@@ -96,7 +111,7 @@ public class CameraView extends AppCompatActivity {
                     // This should never be reached.
                 }
             }
-        }, ContextCompat.getMainExecutor(this));
+        }, ContextCompat.getMainExecutor(getActivity()));
     }
 
     void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
@@ -123,7 +138,7 @@ public class CameraView extends AppCompatActivity {
         }
 
         final ImageCapture imageCapture = builder
-                .setTargetRotation(this.getWindowManager().getDefaultDisplay().getRotation())
+                .setTargetRotation(getActivity().getWindowManager().getDefaultDisplay().getRotation())
                 .build();
         preview.setSurfaceProvider(mPreviewView.getSurfaceProvider());
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, preview, imageAnalysis, imageCapture);
@@ -135,7 +150,7 @@ public class CameraView extends AppCompatActivity {
             public void onClick(View v) {
 
                 SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
-                File file = new File(getDataDir(), mDateFormat.format(new Date())+ ".jpg");
+                File file = new File(getActivity().getFilesDir(), mDateFormat.format(new Date())+ ".jpg");
 
                 ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
                 imageCapture.takePicture(outputFileOptions, executor, new ImageCapture.OnImageSavedCallback () {
@@ -144,7 +159,7 @@ public class CameraView extends AppCompatActivity {
                         new Handler().post(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(CameraView.this, "Image Saved successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Image Saved successfully", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
