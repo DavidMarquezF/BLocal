@@ -50,5 +50,12 @@
             android:name="itemUid"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_editItemFragment_to_cameraView2"
+            app:destination="@id/cameraView2" />
     </fragment>
+    <fragment
+        android:id="@+id/cameraView2"
+        android:name="com.bteam.blocal.data.model.BarcodeScanner.CameraView"
+        android:label="CameraView" />
 </navigation>
