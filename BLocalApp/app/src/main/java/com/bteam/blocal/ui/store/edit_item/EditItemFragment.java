@@ -1,11 +1,7 @@
 package com.bteam.blocal.ui.store.edit_item;
 
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -27,19 +23,12 @@ import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.Resource;
 import com.bteam.blocal.data.repository.StoreRepository;
 import com.bteam.blocal.utility.EditTextButton;
+import com.bteam.blocal.utility.ImageSelector;
 import com.bumptech.glide.Glide;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.io.FileNotFoundException;
-
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
 
 public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
-    public static final int TAKE_PICUTRE_REQUEST_CODE = 0;
-    public static final int PICK_PICTURE_REQUEST_CODE = 1;
     private EditItemViewModel vm;
 
 
@@ -181,83 +170,31 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
     }
 
     private void selectImage() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-        builder.setTitle(R.string.title_change_photo)
-                .setCancelable(true)
-                .setNegativeButton(R.string.lbl_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-        builder.setItems(R.array.array_choose_photo, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                switch (i) {
-                    case 0:
-                        Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                        try{
-                            startActivityForResult(takePicture, TAKE_PICUTRE_REQUEST_CODE);
-                        }
-                        catch (ActivityNotFoundException err){
-                            //TODO: Display to user error
-                        }
-
-                        break;
-                    case 1:
-                        Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(pickPhoto, PICK_PICTURE_REQUEST_CODE);
-                        break;
-
-                }
-            }
-        });
-
-        builder.show();
+        ImageSelector.requestImage(this);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_CANCELED) {
-            Bitmap image = null;
-            switch (requestCode) {
-                case TAKE_PICUTRE_REQUEST_CODE:
-                    //TODO: This is good for thumbnails but it's not good for full size images
-                    image = (Bitmap) data.getExtras().get("data");
-                    break;
-                case PICK_PICTURE_REQUEST_CODE:
-                    if (resultCode == RESULT_OK && data != null) {
-                        Uri selectedImage = data.getData();
-                        if (selectedImage != null) {
-                            try {
-                                image = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(selectedImage));
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                    break;
-            }
+        Bitmap image = ImageSelector.onActitityResultImageHandler(getActivity().getContentResolver(), requestCode, resultCode, data);
+        if (image != null) {
+            itemImageBtn.setImageBitmap(image);
+            itemImageBtn.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-            if (image != null) {
-                itemImageBtn.setImageBitmap(image);
-                itemImageBtn.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            vm.uploadImage(image, new StoreRepository.IOnCompleteCallback<String>() {
+                @Override
+                public void onError(Throwable err) {
+                    itemImageBtn.setImageResource(R.drawable.ic_outline_camera_alt_24);
+                    itemImageBtn.setScaleType(ImageView.ScaleType.CENTER);
+                    imageUrl = null;
+                }
 
-                vm.uploadImage(image, new StoreRepository.IOnCompleteCallback<String>() {
-                    @Override
-                    public void onError(Throwable err) {
-                        itemImageBtn.setImageResource(R.drawable.ic_outline_camera_alt_24);
-                        itemImageBtn.setScaleType(ImageView.ScaleType.CENTER);
-                        imageUrl = null;
-                    }
-
-                    @Override
-                    public void onSuccess(String data) {
-                        imageUrl = data;
-                    }
-                });
-            }
+                @Override
+                public void onSuccess(String data) {
+                    imageUrl = data;
+                }
+            });
         }
     }
+
 }

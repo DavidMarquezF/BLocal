@@ -53,5 +53,9 @@
     <string name="title_create_store">Create Store</string>
     <string name="lbl_location">Location</string>
     <string name="title_location_picker">Location Picker</string>
+    <string name="lbl_create_my_store">Create My Store</string>
+    <string name="err_required">Field required</string>
+    <string name="err_image_required">Image is required</string>
+    <string name="err_loc_required">Location required</string>
 
 </resources>

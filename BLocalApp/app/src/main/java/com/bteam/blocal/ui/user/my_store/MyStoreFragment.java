@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.bteam.blocal.CreateStoreFragmentDirections;
 import com.bteam.blocal.R;
 
 public class MyStoreFragment extends Fragment {

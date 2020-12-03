@@ -112,7 +112,7 @@
     </fragment>
     <fragment
         android:id="@+id/createStoreFragment"
-        android:name="com.bteam.blocal.CreateStoreFragment"
+        android:name="com.bteam.blocal.ui.shared.create_store.CreateStoreFragment"
         android:label="@string/title_create_store"
         tools:layout="@layout/fragment_create_store">
         <action

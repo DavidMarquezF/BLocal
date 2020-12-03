@@ -25,5 +25,9 @@
     <fragment
         android:id="@+id/mainUserFragment"
         android:name="com.bteam.blocal.ui.user.main_user.MainUserFragment"
-        android:label="MainUserFragment" />
+        android:label="MainUserFragment" >
+        <action
+            android:id="@+id/action_mainUserFragment_to_mainStoreFragment"
+            app:destination="@id/mainStoreFragment" />
+    </fragment>
 </navigation>

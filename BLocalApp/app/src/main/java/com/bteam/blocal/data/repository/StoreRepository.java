@@ -46,6 +46,7 @@ public class StoreRepository {
     private final FirebaseStorage storage;
     private final FirebaseAuth auth;
     private final StorageReference itemsImagesStorage;
+    private final StorageReference storesImagesStorage;
     private final MutableLiveData<StoreModel> myStore;
 
     public LiveData<StoreModel> getMyStore() {
@@ -57,6 +58,7 @@ public class StoreRepository {
         auth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
         itemsImagesStorage = storage.getReference().child("items");
+        storesImagesStorage = storage.getReference().child("stores");
         myStore = new MutableLiveData<>();
     }
 
@@ -98,6 +100,11 @@ public class StoreRepository {
                     }
                 });
         return myStore;
+    }
+
+    public void uploadStoreImage(Bitmap image, IOnCompleteCallback<String> callback) {
+        StorageReference reference = itemsImagesStorage.child(UUID.randomUUID().toString());
+        uploadImage(reference, image, callback);
     }
 
 
@@ -145,12 +152,32 @@ public class StoreRepository {
 
     }
 
+    public void createStore(StoreModel model, IOnCompleteCallback<StoreModel> callback){
+        db.collection("stores").add(model).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if (task.isSuccessful()) {
+                    DocumentReference doc = task.getResult();
+                    model.setUid(doc.getId());
+                    myStore.setValue(model);
+                    callback.onSuccess(model);
+                } else {
+                    callback.onError(new UnsuccessfulQueryException());
+                }
+            }
+        });
+    }
+
     public void uploadItemImage(Bitmap image, IOnCompleteCallback<String> callback) {
+        StorageReference reference = itemsImagesStorage.child(UUID.randomUUID().toString());
+        uploadImage(reference, image, callback);
+    }
+
+    private void uploadImage(StorageReference reference, Bitmap image, IOnCompleteCallback<String> callback){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
-        StorageReference reference = itemsImagesStorage.child(UUID.randomUUID().toString());
         UploadTask uploadTask = reference.putBytes(data);
 
         uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -179,7 +206,6 @@ public class StoreRepository {
             }
         });
     }
-
 
     public LiveData<Resource<ItemModel>> getStoreItemLive(String uid) {
         FirestoreLiveData liveDat = new FirestoreLiveData(getItemsQuery()

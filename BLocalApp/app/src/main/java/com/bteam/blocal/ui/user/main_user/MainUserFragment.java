@@ -66,7 +66,7 @@ public class MainUserFragment extends Fragment {
 
         AppCompatActivity mainActivity = (AppCompatActivity) getActivity();
 
-        //mainActivity.setSupportActionBar(toolbar);
+        mainActivity.setSupportActionBar(toolbar);
 
         DrawerLayout drawer = view.findViewById(R.id.user_drawer_layout);
 

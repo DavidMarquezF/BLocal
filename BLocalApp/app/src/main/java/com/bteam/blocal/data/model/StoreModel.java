@@ -12,6 +12,17 @@ public class StoreModel {
     private GeoPoint location;
     private String description;
 
+    public StoreModel(){
+
+    }
+
+    public StoreModel(String name, String ownerId, GeoPoint location, String description){
+        this.name = name;
+        this.ownerId = ownerId;
+        this.location = location;
+        this.description = description;
+    }
+
     public GeoPoint getLocation() {
         return location;
     }
