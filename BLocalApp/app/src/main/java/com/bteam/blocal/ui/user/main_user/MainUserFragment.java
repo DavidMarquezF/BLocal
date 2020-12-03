@@ -25,6 +25,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bteam.blocal.R;
+import com.bteam.blocal.utility.IToolbarHandler;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.navigation.NavigationView;
@@ -34,13 +35,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MainUserFragment extends Fragment {
+public class MainUserFragment extends Fragment implements IToolbarHandler {
     private static final String TAG = "MainUserFragment";
     private NavController navController;
 
     private MainUserViewModel mainUserViewModel;
     private TextView txtCurrentUser, txtEmail;
     private ImageView userProfileImage;
+    private Toolbar toolbar;
 
     public MainUserFragment() {
         // Required empty public constructor
@@ -62,11 +64,7 @@ public class MainUserFragment extends Fragment {
 
 
         // Set up the toolbar for the whole user part of the app
-        Toolbar toolbar = view.findViewById(R.id.user_nav_toolbar_main);
-
-        AppCompatActivity mainActivity = (AppCompatActivity) getActivity();
-
-        mainActivity.setSupportActionBar(toolbar);
+        toolbar = view.findViewById(R.id.user_nav_toolbar_main);
 
         DrawerLayout drawer = view.findViewById(R.id.user_drawer_layout);
 
@@ -107,6 +105,8 @@ public class MainUserFragment extends Fragment {
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            // Clear the menu that might have been added by the IToolbarHandler interface
+            toolbar.getMenu().clear();
             if(topLevelDestinations.contains(destination.getId())){
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             }
@@ -114,6 +114,7 @@ public class MainUserFragment extends Fragment {
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             }
         });
+
 
         listenToBackStack();
     }
@@ -154,4 +155,14 @@ public class MainUserFragment extends Fragment {
             }
         }
     };
+
+    @Override
+    public void setOptionsMenu(Integer menuRes) {
+        toolbar.inflateMenu(menuRes);
+    }
+
+    @Override
+    public void setMenuListener(Toolbar.OnMenuItemClickListener callback) {
+        toolbar.setOnMenuItemClickListener(callback);
+    }
 }

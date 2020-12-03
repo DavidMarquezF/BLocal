@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -27,6 +28,7 @@ import com.bteam.blocal.data.model.StoreModel;
 import com.bteam.blocal.data.repository.StoreRepository;
 import com.bteam.blocal.ui.user.main_user.MainUserFragmentDirections;
 import com.bteam.blocal.utility.EditTextButton;
+import com.bteam.blocal.utility.IToolbarHandler;
 import com.bteam.blocal.utility.ImageSelector;
 import com.bteam.blocal.utility.NavigationResult;
 import com.bumptech.glide.Glide;
@@ -44,6 +46,8 @@ public class CreateStoreFragment extends Fragment {
 
     private CreateStoreViewModel vm;
 
+    private IToolbarHandler toolbarHandler;
+
     public CreateStoreFragment() {
     }
 
@@ -52,28 +56,18 @@ public class CreateStoreFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         vm = new ViewModelProvider(this).get(CreateStoreViewModel.class);
+        // The parent is the navHost, so we need the parent of the parent
+        toolbarHandler = (IToolbarHandler)getParentFragment().getParentFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        toolbarHandler.setOptionsMenu(R.menu.menu_create_store);
         return inflater.inflate(R.layout.fragment_create_store, container, false);
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_create_store, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.btn_save) {
-            saveItem();
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     private void saveItem() {
         String name = nameTxtInp.getEditText().getText().toString();
@@ -163,6 +157,16 @@ public class CreateStoreFragment extends Fragment {
             if (o != null) {
                 setLocText(o);
                 vm.setLocation(o);
+            }
+        });
+        toolbarHandler.setMenuListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.btn_save) {
+                    saveItem();
+                }
+
+                return false;
             }
         });
     }

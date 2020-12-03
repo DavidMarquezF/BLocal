@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/user_navigation"
+    android:label="@string/title_my_store"
     app:startDestination="@id/navigation_dashboard">
 
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.bteam.blocal.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" >
+        tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/openMaps"
             app:destination="@id/navigation_maps" />
@@ -40,7 +41,7 @@
         android:id="@+id/navigation_maps"
         android:name="com.bteam.blocal.ui.user.map.MapsFragment"
         android:label="@string/title_maps"
-        tools:layout="@layout/fragment_maps" >
+        tools:layout="@layout/fragment_maps">
         <action
             android:id="@+id/openStoreDetailFromMaps"
             app:destination="@id/navigation_store_detail" />
@@ -50,7 +51,7 @@
         android:id="@+id/navigation_store_list"
         android:name="com.bteam.blocal.ui.user.store_list.StoreListFragment"
         android:label="@string/title_store_list"
-        tools:layout="@layout/fragment_store_list" >
+        tools:layout="@layout/fragment_store_list">
         <action
             android:id="@+id/openStoreDetailFromList"
             app:destination="@id/navigation_store_detail" />
@@ -60,7 +61,7 @@
         android:id="@+id/my_store_item_list"
         android:name="com.bteam.blocal.ui.user.ItemListUserFragment"
         android:label="@string/title_list"
-        tools:layout="@layout/fragment_item_list" >
+        tools:layout="@layout/fragment_item_list">
 
         <argument
             android:name="storeUid"
@@ -80,7 +81,7 @@
         android:id="@+id/navigation_store_detail"
         android:name="com.bteam.blocal.ui.shared.store_detail.StoreDetailFragment"
         android:label="@string/title_store_detail"
-        tools:layout="@layout/fragment_store_detail" >
+        tools:layout="@layout/fragment_store_detail">
 
         <argument
             android:name="storeUid"
@@ -95,7 +96,7 @@
         android:id="@+id/navigation_item_detail"
         android:name="com.bteam.blocal.ui.user.ItemDetailUserFragment"
         android:label="@string/title_item_detail"
-        tools:layout="@layout/fragment_item_detail" >
+        tools:layout="@layout/fragment_item_detail">
 
         <argument
             android:name="itemUid"
@@ -104,8 +105,8 @@
     <fragment
         android:id="@+id/navigation_my_store_fragment"
         android:name="com.bteam.blocal.ui.user.my_store.MyStoreFragment"
-        tools:layout="@layout/fragment_my_store"
-        android:label="MyStoreFragment" >
+        android:label="@string/title_my_store"
+        tools:layout="@layout/fragment_my_store">
         <action
             android:id="@+id/action_navigation_my_store_fragment_to_createStoreFragment"
             app:destination="@id/createStoreFragment" />
