@@ -39,7 +39,7 @@
 
     <fragment
         android:id="@+id/navigation_maps"
-        android:name="com.bteam.blocal.ui.user.map.MapsFragment"
+        android:name="com.bteam.blocal.ui.user.map.StoresMapFragment"
         android:label="@string/title_maps"
         tools:layout="@layout/fragment_maps">
         <action
@@ -122,7 +122,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_place_picker"
-        android:name="com.bteam.blocal.PlacePickerFragment"
+        android:name="com.bteam.blocal.ui.shared.place_picker.PlacePickerFragment"
         android:label="@string/title_location_picker"
         tools:layout="@layout/fragment_place_picker">
         <action

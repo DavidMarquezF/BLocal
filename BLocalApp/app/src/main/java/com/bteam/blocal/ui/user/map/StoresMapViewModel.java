@@ -15,22 +15,18 @@ import com.google.android.gms.location.LocationServices;
 
 import java.util.List;
 
-public class MapsViewModel extends AndroidViewModel {
+public class StoresMapViewModel extends AndroidViewModel {
     private static final String TAG = "MapsViewModel";
 
     private MutableLiveData<List<StoreModel>> nearbyStores;
     private MutableLiveData<StoreModel> selectedStore;
 
-    private FusedLocationProviderClient fusedLocationClient;
-    private MutableLiveData<Location> currentLocation;
 
-    public MapsViewModel(Application application) {
+    public StoresMapViewModel(Application application) {
         super(application);
         this.nearbyStores = new MutableLiveData<>();
         this.selectedStore = new MutableLiveData<>();
-        this.currentLocation = new MutableLiveData<>();
 
-        this.fusedLocationClient = LocationServices.getFusedLocationProviderClient(application);
 
         //this.nearbyStores.setValue(Arrays.asList(dummyData));
     }
@@ -49,29 +45,6 @@ public class MapsViewModel extends AndroidViewModel {
 
     public void setSelectedStore(StoreModel selectedStore) {
         this.selectedStore.setValue(selectedStore);
-    }
-
-    public LiveData<Location> getCurrentLocation() {
-        return currentLocation;
-    }
-
-    public void setCurrentLocation(Location currentLocation) {
-        this.currentLocation.setValue(currentLocation);
-    }
-
-    @SuppressLint("MissingPermission")
-    public void requestCurrentLocation() {
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(location -> {
-                    if (null != location) {
-                        Log.d(TAG, "requestCurrentLocation: Obtained last location!");
-                        currentLocation.setValue(location);
-                    } else {
-                        Log.d(TAG, "requestCurrentLocation: Last location was not obtained!");
-                    }
-                })
-                .addOnFailureListener(e -> Log.e(TAG, "requestCurrentLocation: " + e.getLocalizedMessage(), e)
-                );
     }
 
 }
