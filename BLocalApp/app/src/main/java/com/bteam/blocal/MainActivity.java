@@ -1,5 +1,6 @@
 package com.bteam.blocal;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.bteam.blocal.Service.ForegroundService;
 import com.bteam.blocal.ui.login.LoginFragmentDirections;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -17,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        startService();
     }
 
 
@@ -32,6 +35,12 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         FirebaseAuth.getInstance().removeAuthStateListener(this);
     }
 
+    @Override
+    protected void onDestroy() {
+        stopService();
+        super.onDestroy();
+    }
+
     private void navigateToLogin() {
         NavController navHostController = Navigation.findNavController(this, R.id.main_nav_host_fragment);
         if (navHostController.getCurrentDestination().getId() != R.id.login) {
@@ -45,5 +54,15 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         if (firebaseAuth.getCurrentUser() == null) {
             navigateToLogin();
         }
+    }
+
+    private void startService(){
+        Intent serviceIntent = new Intent(getApplication(), ForegroundService.class);
+        startService(serviceIntent);
+    }
+
+    private void stopService(){
+        Intent serviceIntent = new Intent(getApplication(), ForegroundService.class);
+        stopService(serviceIntent);
     }
 }
