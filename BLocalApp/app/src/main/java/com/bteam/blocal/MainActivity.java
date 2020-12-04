@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        startService();
     }
 
 
@@ -32,6 +33,12 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     protected void onStop() {
         super.onStop();
         FirebaseAuth.getInstance().removeAuthStateListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopService();
+        super.onDestroy();
     }
 
     private void navigateToLogin() {
