@@ -11,14 +11,18 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.bteam.blocal.R;
+import com.bteam.blocal.data.model.BarcodeScanner.CameraView;
 import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.Resource;
 import com.bteam.blocal.data.repository.StoreRepository;
@@ -30,7 +34,7 @@ import com.google.android.material.textfield.TextInputLayout;
 public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
     private EditItemViewModel vm;
-
+    //private NavController _navController;
 
     private ImageButton itemImageBtn;
     private Toolbar toolbar;
@@ -78,7 +82,7 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
         EditTextButton.setOnRightDrawableClicked(codeTxtInp.getEditText(), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Scan
+                navigateCamera();
             }
         });
 
@@ -199,6 +203,10 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
                 }
             });
         }
+    }
+
+    private void navigateCamera(){
+        NavHostFragment.findNavController(this).navigate(EditItemFragmentDirections.actionEditItemFragmentToCameraView2());
     }
 
 }
