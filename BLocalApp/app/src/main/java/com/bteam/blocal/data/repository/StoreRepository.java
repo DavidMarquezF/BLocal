@@ -26,7 +26,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -53,6 +52,10 @@ public class StoreRepository {
         return myStore;
     }
 
+    public String getMyStoreUid(){
+        return myStore.getValue().getUid();
+    }
+
     private StoreRepository() {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -71,9 +74,10 @@ public class StoreRepository {
     }
 
 
-    public CollectionReference getItemsQuery() {
+
+    public CollectionReference getItemsQuery(String uid) {
         return getStoreQuery()
-                .document(myStore.getValue().getUid())
+                .document(uid)
                 .collection("items");
     }
 
@@ -86,7 +90,7 @@ public class StoreRepository {
 
 
 
-    public LiveData<StoreModel> updateMyStore(IOnCompleteCallback<StoreModel> callback) {
+    public void updateMyStore(IOnCompleteCallback<StoreModel> callback) {
         storeCollection
                 .whereEqualTo("ownerId", auth.getCurrentUser().getUid())
                 .get()
@@ -109,7 +113,6 @@ public class StoreRepository {
                         }
                     }
                 });
-        return myStore;
     }
 
     public void uploadStoreImage(Bitmap image, IOnCompleteCallback<String> callback) {
@@ -135,7 +138,7 @@ public class StoreRepository {
     }
 
     public void updateItem(String uid, ItemModel model, IOnCompleteCallback<Void> callback) {
-        getItemsQuery().document(uid).set(model).addOnCompleteListener(new OnCompleteListener<Void>() {
+        getItemsQuery(getMyStoreUid()).document(uid).set(model).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -148,7 +151,7 @@ public class StoreRepository {
     }
 
     public void createItem(ItemModel model, IOnCompleteCallback<ItemModel> callback) {
-        getItemsQuery().add(model).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+        getItemsQuery(getMyStoreUid()).add(model).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 if (task.isSuccessful()) {
@@ -218,8 +221,8 @@ public class StoreRepository {
         });
     }
 
-    public LiveData<Resource<ItemModel>> getStoreItemLive(String uid) {
-        FirestoreLiveData liveDat = new FirestoreLiveData(getItemsQuery()
+    public LiveData<Resource<ItemModel>> getStoreItemLive(String storeUid, String uid) {
+        FirestoreLiveData liveDat = new FirestoreLiveData(getItemsQuery(storeUid)
                 .document(uid));
 
         return Transformations.map(liveDat, new Function<DocumentSnapshot, Resource<ItemModel>>() {
@@ -230,9 +233,9 @@ public class StoreRepository {
         });
     }
 
-    public SingleLiveEvent<Resource<ItemModel>> getStoreItem(String uid) {
+    public SingleLiveEvent<Resource<ItemModel>> getStoreItem(String storeUid, String uid) {
         SingleLiveEvent<Resource<ItemModel>> liveData = new SingleLiveEvent<>();
-        getItemsQuery().document(uid)
+        getItemsQuery(storeUid).document(uid)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -251,5 +254,17 @@ public class StoreRepository {
                 });
 
         return liveData;
+    }
+
+    public LiveData<Resource<StoreModel>> getStoreLive(String uid) {
+        FirestoreLiveData liveDat = new FirestoreLiveData(getStoreQuery()
+                .document(uid));
+
+        return Transformations.map(liveDat, new Function<DocumentSnapshot, Resource<StoreModel>>() {
+            @Override
+            public Resource<StoreModel> apply(DocumentSnapshot input) {
+                return Resource.success(input.toObject(StoreModel.class));
+            }
+        });
     }
 }

@@ -18,10 +18,10 @@ public class Constants {
     private static RequestOptions storeDefaultOptions;
 
     public static RequestOptions getStoreDefaultOptions() {
-        if (Constants.itemDefaultOptions == null)
-            itemDefaultOptions = new RequestOptions()
+        if (Constants.storeDefaultOptions == null)
+            storeDefaultOptions = new RequestOptions()
                     .placeholder(R.drawable.ic_baseline_storefront_24)
                     .error(R.drawable.ic_baseline_storefront_24);
-        return itemDefaultOptions;
+        return storeDefaultOptions;
     }
 }

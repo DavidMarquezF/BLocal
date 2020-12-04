@@ -12,8 +12,11 @@ import com.google.firebase.firestore.Query;
 import java.util.List;
 
 public class ItemListViewModel extends ViewModel {
+
+    private String storeUid;
     public Query getQuery(){
-        return StoreRepository.getInstance().getItemsQuery();
+        StoreRepository storeRepository = StoreRepository.getInstance();
+        return storeRepository.getItemsQuery(storeUid == null ? storeRepository.getMyStoreUid() : storeUid);
     }
 
     public PagedList.Config getPagingConfig(){
@@ -25,4 +28,11 @@ public class ItemListViewModel extends ViewModel {
                 .build();
     }
 
+    public void setStoreUid(String uid){
+        storeUid = uid;
+    }
+
+    public String getStoreUid() {
+        return storeUid;
+    }
 }

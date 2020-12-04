@@ -40,8 +40,6 @@ public abstract class ItemDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         vm = new ViewModelProvider(this).get(ItemDetailViewModel.class);
-        vm.setArguments(getArguments());
-
     }
 
     @Nullable
@@ -71,7 +69,7 @@ public abstract class ItemDetailFragment extends Fragment {
 
         floatingActionButton = view.findViewById(R.id.fab_edit);
 
-        vm.itemDetail.observe(getViewLifecycleOwner(), new Observer<Resource<ItemModel>>() {
+        vm.getItemDetail().observe(getViewLifecycleOwner(), new Observer<Resource<ItemModel>>() {
             @Override
             public void onChanged(Resource<ItemModel> itemModelResource) {
                 switch (itemModelResource.status) {

@@ -51,7 +51,7 @@ public class EditItemViewModel extends ViewModel {
             // this function is called when the screen rotates. We only want to get the data the first time
             if(itemDetail == null){
                 if(uid != null && !uid.equals(this.uid)){
-                    itemDetail = repository.getStoreItem(uid);
+                    itemDetail = repository.getStoreItem(repository.getMyStoreUid(), uid);
                     this.uid = uid;
                 }
                 else{

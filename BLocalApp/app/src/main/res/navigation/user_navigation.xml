@@ -79,7 +79,7 @@
 
     <fragment
         android:id="@+id/navigation_store_detail"
-        android:name="com.bteam.blocal.ui.shared.store_detail.StoreDetailFragment"
+        android:name="com.bteam.blocal.ui.user.store_detail.StoreDetailFragment"
         android:label="@string/title_store_detail"
         tools:layout="@layout/fragment_store_detail">
 
@@ -88,7 +88,7 @@
             app:argType="string" />
 
         <action
-            android:id="@+id/openItemListFromStoreDetail"
+            android:id="@+id/showStoreItems"
             app:destination="@id/my_store_item_list" />
     </fragment>
 
@@ -101,6 +101,7 @@
         <argument
             android:name="itemUid"
             app:argType="string" />
+        <argument android:name="storeUid" />
     </fragment>
     <fragment
         android:id="@+id/navigation_my_store_fragment"

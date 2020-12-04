@@ -9,6 +9,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.bteam.blocal.ui.shared.item_detail.ItemDetailFragment;
 import com.bteam.blocal.ui.shared.item_list.ItemListFragment;
+import com.bteam.blocal.ui.store.ItemDetailStoreFragmentArgs;
 
 /**
  * We need to create this implementation so that the NavigationComponent can use it
@@ -20,6 +21,15 @@ import com.bteam.blocal.ui.shared.item_list.ItemListFragment;
  * This is a workaround until NavComponent introduces a way to separate reused fragments
  */
 public class ItemDetailUserFragment extends ItemDetailFragment {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ItemDetailUserFragmentArgs args = ItemDetailUserFragmentArgs.fromBundle(getArguments());
+        vm.setItemUid(args.getItemUid());
+        vm.setStoreUid(args.getStoreUid());
+
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

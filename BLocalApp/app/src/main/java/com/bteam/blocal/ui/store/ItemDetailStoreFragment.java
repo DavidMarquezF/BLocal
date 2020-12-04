@@ -11,6 +11,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.bteam.blocal.R;
 import com.bteam.blocal.ui.shared.item_detail.ItemDetailFragment;
+import com.bteam.blocal.ui.user.ItemDetailUserFragmentArgs;
 import com.google.android.material.appbar.AppBarLayout;
 
 /**
@@ -23,6 +24,12 @@ import com.google.android.material.appbar.AppBarLayout;
  * This is a workaround until NavComponent introduces a way to separate reused fragments
  */
 public class ItemDetailStoreFragment extends ItemDetailFragment {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ItemDetailStoreFragmentArgs args = ItemDetailStoreFragmentArgs.fromBundle(getArguments());
+        vm.setItemUid(args.getItemUid());
+    }
 
 
     @Override
@@ -71,7 +78,7 @@ public class ItemDetailStoreFragment extends ItemDetailFragment {
     }
 
     private void navigateEdit() {
-        ItemDetailStoreFragmentDirections.EditItem directions = ItemDetailStoreFragmentDirections.editItem(vm.itemDetail.getValue().data.getUid());
+        ItemDetailStoreFragmentDirections.EditItem directions = ItemDetailStoreFragmentDirections.editItem(vm.getItemDetail().getValue().data.getUid());
         NavHostFragment.findNavController(this).navigate(directions);
     }
 

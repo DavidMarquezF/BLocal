@@ -23,7 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 public abstract class ItemListFragment extends Fragment implements ItemListAdapter.IItemClickListener {
 
-    private ItemListViewModel itemListViewModel;
+    protected ItemListViewModel itemListViewModel;
     private ItemListAdapter adapter;
 
 

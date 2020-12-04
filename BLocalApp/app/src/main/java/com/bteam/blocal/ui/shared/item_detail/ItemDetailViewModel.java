@@ -1,7 +1,5 @@
 package com.bteam.blocal.ui.shared.item_detail;
 
-import android.os.Bundle;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -9,20 +7,29 @@ import androidx.lifecycle.ViewModel;
 import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.Resource;
 import com.bteam.blocal.data.repository.StoreRepository;
-import com.bteam.blocal.ui.store.ItemDetailStoreFragmentArgs;
-import com.bteam.blocal.ui.store.ItemDetailStoreFragmentDirections;
 
-public class ItemDetailViewModel  extends ViewModel {
+public class ItemDetailViewModel extends ViewModel {
 
-    public LiveData<Resource<ItemModel>> itemDetail;
+    private String storeUid;
+    private String itemUid;
 
-    public ItemDetailViewModel(){
-        itemDetail = new MutableLiveData<>();
+    private LiveData<Resource<ItemModel>> itemDetail;
+
+    public LiveData<Resource<ItemModel>> getItemDetail() {
+        if (itemDetail == null) {
+            StoreRepository repository = StoreRepository.getInstance();
+            itemDetail = repository.getStoreItemLive(storeUid == null ? repository.getMyStoreUid() : storeUid, itemUid);
+        }
+        return itemDetail;
     }
 
-    public void setArguments(Bundle savedInstanceState) {
-        StoreRepository repository = StoreRepository.getInstance();
-        String uid = ItemDetailStoreFragmentArgs.fromBundle(savedInstanceState).getItemUid();
-        itemDetail = repository.getStoreItemLive(uid);
+
+    public void setStoreUid(String uid) {
+        storeUid = uid;
     }
+
+    public void setItemUid(String uid){
+        itemUid = uid;
+    }
+
 }

@@ -1,5 +1,8 @@
 package com.bteam.blocal.ui.user;
 
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bteam.blocal.ui.shared.item_list.ItemListFragment;
@@ -15,8 +18,15 @@ import com.bteam.blocal.ui.shared.item_list.ItemListFragment;
  */
 public class ItemListUserFragment extends ItemListFragment {
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ItemListUserFragmentArgs args = ItemListUserFragmentArgs.fromBundle(getArguments());
+        itemListViewModel.setStoreUid(args.getStoreUid());
+    }
+
+    @Override
     protected void navigateToDetail(String uid) {
-        ItemListUserFragmentDirections.ShowItemDetail dir = ItemListUserFragmentDirections.showItemDetail(uid);
+        ItemListUserFragmentDirections.ShowItemDetail dir = ItemListUserFragmentDirections.showItemDetail(uid, itemListViewModel.getStoreUid());
         NavHostFragment.findNavController(this).navigate(dir);
     }
 }
