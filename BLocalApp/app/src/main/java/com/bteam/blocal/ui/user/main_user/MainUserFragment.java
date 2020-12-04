@@ -104,6 +104,9 @@ public class MainUserFragment extends Fragment implements IToolbarHandler {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             // Clear the menu that might have been added by the IToolbarHandler interface
             toolbar.getMenu().clear();
+            // Restore the visibility of the toolbar
+            toolbar.setVisibility(View.VISIBLE);
+
             if (topLevelDestinations.contains(destination.getId())) {
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             } else {
@@ -160,5 +163,10 @@ public class MainUserFragment extends Fragment implements IToolbarHandler {
     @Override
     public void setMenuListener(Toolbar.OnMenuItemClickListener callback) {
         toolbar.setOnMenuItemClickListener(callback);
+    }
+
+    @Override
+    public void hideToolbar() {
+        toolbar.setVisibility(View.GONE);
     }
 }

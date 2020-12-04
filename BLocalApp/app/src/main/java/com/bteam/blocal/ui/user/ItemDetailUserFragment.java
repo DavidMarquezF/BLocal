@@ -10,6 +10,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.bteam.blocal.ui.shared.item_detail.ItemDetailFragment;
 import com.bteam.blocal.ui.shared.item_list.ItemListFragment;
 import com.bteam.blocal.ui.store.ItemDetailStoreFragmentArgs;
+import com.bteam.blocal.utility.IToolbarHandler;
 
 /**
  * We need to create this implementation so that the NavigationComponent can use it
@@ -21,18 +22,20 @@ import com.bteam.blocal.ui.store.ItemDetailStoreFragmentArgs;
  * This is a workaround until NavComponent introduces a way to separate reused fragments
  */
 public class ItemDetailUserFragment extends ItemDetailFragment {
+    private IToolbarHandler toolbarHandler;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ItemDetailUserFragmentArgs args = ItemDetailUserFragmentArgs.fromBundle(getArguments());
         vm.setItemUid(args.getItemUid());
         vm.setStoreUid(args.getStoreUid());
-
+        toolbarHandler = (IToolbarHandler)getParentFragment().getParentFragment();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         floatingActionButton.setVisibility(View.GONE);
+        toolbarHandler.hideToolbar();
     }
 }
