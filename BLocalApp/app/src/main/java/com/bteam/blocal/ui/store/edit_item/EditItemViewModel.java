@@ -10,8 +10,11 @@ import androidx.lifecycle.ViewModel;
 import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.Resource;
 import com.bteam.blocal.data.repository.StoreRepository;
+import com.bteam.blocal.utility.SingleLiveEvent;
 
 public class EditItemViewModel extends ViewModel {
+
+    private String imageUrl;
 
     public boolean getIsModeEdit(){
         return uid != null && !uid.isEmpty();
@@ -46,16 +49,24 @@ public class EditItemViewModel extends ViewModel {
         if(args != null){
             String uid = args.getItemUid();
             // this function is called when the screen rotates. We only want to get the data the first time
-            if(itemDetail == null || !uid.equals(this.uid)){
-                if(uid != null){
+            if(itemDetail == null){
+                if(uid != null && !uid.equals(this.uid)){
                     itemDetail = repository.getStoreItem(uid);
                     this.uid = uid;
                 }
                 else{
-                    itemDetail = new MutableLiveData<>();
+                    itemDetail = new SingleLiveEvent<>();
                 }
             }
         }
 
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

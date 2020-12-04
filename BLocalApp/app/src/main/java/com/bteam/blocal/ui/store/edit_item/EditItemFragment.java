@@ -38,7 +38,6 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
     private TextInputLayout nameTxtInp, descrTxtInp, priceTxtInp, codeTxtInp;
 
     private CheckBox checkBox;
-    private String imageUrl;
 
     public EditItemFragment() {
     }
@@ -90,11 +89,18 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
             }
         });
 
+        if (vm.getImageUrl() != null && !vm.getImageUrl().isEmpty()) {
+            Glide.with(getContext()).load(vm.getImageUrl()).centerCrop()
+                    .into(itemImageBtn);
+        }
+
+
         vm.getItemDetail().observe(getViewLifecycleOwner(), new Observer<Resource<ItemModel>>() {
             @Override
             public void onChanged(Resource<ItemModel> itemModelResource) {
                 switch (itemModelResource.status) {
                     case SUCCESS:
+                        vm.setImageUrl(itemModelResource.data.getImageUrl());
                         updateUi(itemModelResource.data);
                         break;
                 }
@@ -124,47 +130,45 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.btn_save:
-                String name = nameTxtInp.getEditText().getText().toString();
+        if (item.getItemId() == R.id.btn_save) {
+            String name = nameTxtInp.getEditText().getText().toString();
 
-                float price;
-                try {
-                    price = Float.parseFloat(priceTxtInp.getEditText().getText().toString());
-                } catch (Exception err) {
-                    price = 0;
-                }
+            float price;
+            try {
+                price = Float.parseFloat(priceTxtInp.getEditText().getText().toString());
+            } catch (Exception err) {
+                price = 0;
+            }
 
-                int stock = checkBox.isChecked() ? 1 : 0;
-                String description = descrTxtInp.getEditText().getText().toString();
-                ItemModel itemModel = new ItemModel(name, imageUrl, price, stock, description);
+            int stock = checkBox.isChecked() ? 1 : 0;
+            String description = descrTxtInp.getEditText().getText().toString();
+            ItemModel itemModel = new ItemModel(name, vm.getImageUrl(), price, stock, description);
 
-                if (vm.getIsModeEdit()) {
-                    vm.updateItem(itemModel, new StoreRepository.IOnCompleteCallback<Void>() {
-                        @Override
-                        public void onError(Throwable err) {
+            if (vm.getIsModeEdit()) {
+                vm.updateItem(itemModel, new StoreRepository.IOnCompleteCallback<Void>() {
+                    @Override
+                    public void onError(Throwable err) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onSuccess(Void data) {
-                            navigateBack();
-                        }
-                    });
-                } else {
-                    vm.createItem(itemModel, new StoreRepository.IOnCompleteCallback<ItemModel>() {
-                        @Override
-                        public void onError(Throwable err) {
+                    @Override
+                    public void onSuccess(Void data) {
+                        navigateBack();
+                    }
+                });
+            } else {
+                vm.createItem(itemModel, new StoreRepository.IOnCompleteCallback<ItemModel>() {
+                    @Override
+                    public void onError(Throwable err) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onSuccess(ItemModel data) {
-                            navigateBack();
-                        }
-                    });
-                }
-                break;
+                    @Override
+                    public void onSuccess(ItemModel data) {
+                        navigateBack();
+                    }
+                });
+            }
         }
         return false;
     }
@@ -186,12 +190,12 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
                 public void onError(Throwable err) {
                     itemImageBtn.setImageResource(R.drawable.ic_outline_camera_alt_24);
                     itemImageBtn.setScaleType(ImageView.ScaleType.CENTER);
-                    imageUrl = null;
+                    vm.setImageUrl(null);;
                 }
 
                 @Override
                 public void onSuccess(String data) {
-                    imageUrl = data;
+                    vm.setImageUrl(data);
                 }
             });
         }
