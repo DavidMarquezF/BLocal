@@ -63,5 +63,6 @@
     <string name="err_stores_load">Stores couldn\'t load correctly</string>
     <string name="lbl_close">Close</string>
     <string name="view_store">View Store</string>
+    <string name="lbl_stub_data">Stub data, feature coming soon!</string>
 
 </resources>

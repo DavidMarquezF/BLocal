@@ -72,7 +72,7 @@ public class MainUserFragment extends Fragment implements IToolbarHandler {
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        Set<Integer> topLevelDestinations = new HashSet<>(Arrays.asList(R.id.navigation_store_list, R.id.navigation_dashboard, R.id.navigation_shopping_lists, R.id.navigation_maps, R.id.navigation_my_store_fragment));
+        Set<Integer> topLevelDestinations = new HashSet<>(Arrays.asList(R.id.navigation_store_list, R.id.navigation_store_analytics, R.id.navigation_shopping_lists, R.id.navigation_maps, R.id.navigation_my_store_fragment));
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(topLevelDestinations)
                 .setOpenableLayout(drawer)
                 .build();

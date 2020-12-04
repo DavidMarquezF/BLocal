@@ -1,4 +1,4 @@
-package com.bteam.blocal.ui.dashboard;
+package com.bteam.blocal.ui.user.dashboard;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

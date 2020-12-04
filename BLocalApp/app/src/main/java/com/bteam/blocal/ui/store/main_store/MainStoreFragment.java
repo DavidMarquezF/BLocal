@@ -62,22 +62,30 @@ public class MainStoreFragment extends Fragment {
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
                 switch (destination.getId()) {
                     case R.id.my_store_item_list:
-                    case R.id.navigation_notifications:
-                    case R.id.navigation_dashboard:
-                        setMainUIVisibility(true);
+                        setMainUIVisibility(true, true);
+                        break;
+                    case R.id.navigation_store_settings:
+                    case R.id.navigation_store_analytics:
+                        setMainUIVisibility(true, false);
                         break;
                     default:
-                        setMainUIVisibility(false);
+                        setMainUIVisibility(false, false);
                         break;
                 }
             }
         });
     }
 
-    private void setMainUIVisibility(boolean visible) {
+    private void setMainUIVisibility(boolean visible, boolean hasFloating) {
         _bottomNavView.setVisibility(visible ? View.VISIBLE : View.GONE);
         if(visible){
-            _floatingActionButton.show();
+            if(hasFloating){
+                _floatingActionButton.show();
+            }
+            else{
+                _floatingActionButton.hide();
+            }
+
         }
         else{
             _floatingActionButton.setVisibility(View.GONE);
