@@ -99,8 +99,8 @@
 
             <ImageButton
                 android:id="@+id/btn_item_picture"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:background="@drawable/shape_circle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
