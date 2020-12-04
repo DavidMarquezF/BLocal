@@ -38,7 +38,7 @@ public class CreateStoreViewModel extends ViewModel {
 
     public void createStore(String name, String description, StoreRepository.IOnCompleteCallback<StoreModel> callback) {
         String userUid = UserRepository.getInstance().getUser().getValue().getUid();
-        StoreModel storeModel = new StoreModel(name, userUid, new GeoPoint(location.latitude, location.longitude), description);
+        StoreModel storeModel = new StoreModel(name, userUid, new GeoPoint(location.latitude, location.longitude), description, imageUrl);
         storeRepository.createStore(storeModel, callback);
     }
 

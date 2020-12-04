@@ -11,16 +11,18 @@ public class StoreModel {
     private String ownerId;
     private GeoPoint location;
     private String description;
+    private String imageUrl;
 
     public StoreModel(){
 
     }
 
-    public StoreModel(String name, String ownerId, GeoPoint location, String description){
+    public StoreModel(String name, String ownerId, GeoPoint location, String description, String imageUrl){
         this.name = name;
         this.ownerId = ownerId;
         this.location = location;
         this.description = description;
+        this.imageUrl = imageUrl;
     }
 
     public GeoPoint getLocation() {
@@ -60,5 +62,13 @@ public class StoreModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

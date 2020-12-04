@@ -1,5 +1,6 @@
 package com.bteam.blocal.ui.user.store_list;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +11,33 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bteam.blocal.R;
+import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.StoreModel;
+import com.bteam.blocal.ui.shared.item_list.ItemListAdapter;
+import com.bteam.blocal.utility.Constants;
+import com.bteam.blocal.utility.FirebaseSwipeAdapter;
+import com.bteam.blocal.utility.InStockText;
+import com.bumptech.glide.Glide;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 
 import java.util.List;
 
-public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.StoreListViewHolder> {
-    private List<StoreModel> nearbyStores;
-    private IItemClickListener listener;
+public class StoreListAdapter extends FirebaseSwipeAdapter<StoreModel, StoreListAdapter.StoreListViewHolder> {
+    private Context context;
 
-    public StoreListAdapter(IItemClickListener listener) {
-        this.listener = listener;
+    public StoreListAdapter(FirebaseSwipeAdapter.IItemClickListener listener, @NonNull FirestorePagingOptions<StoreModel> options) {
+        super(options, listener);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+
+        // We obtain the context here to use it in the onBindViewHolder
+        // Even though it's possible to get it from the item views in the onBindViewHolder function
+        // This solution seems to be better
+        // Source: https://stackoverflow.com/a/48660869
+        context = recyclerView.getContext();
     }
 
     @NonNull
@@ -31,32 +49,22 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Stor
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StoreListViewHolder holder, int position) {
-        StoreModel sm = nearbyStores.get(position);
-        holder.txtStoreName.setText(sm.getName());
-        holder.txtStoreOwner.setText(sm.getOwnerId());
+    protected void onBindViewHolder(@NonNull StoreListViewHolder storeListViewHolder, int i, @NonNull StoreModel storeModel) {
+        storeListViewHolder.txtStoreName.setText(storeModel.getName());
+        storeListViewHolder.txtStoreOwner.setText(storeModel.getOwnerId());
+        Glide.with(context).load(storeModel.getImageUrl()).apply(Constants.getStoreDefaultOptions()).into(storeListViewHolder.imgStoreIcon);
         // TODO: calculate distance to the stores
-        holder.txtStoreDistance.setText("3.4km");
+        storeListViewHolder.txtStoreDistance.setText("3.4km");
     }
 
     @Override
-    public int getItemCount() {
-        if (null != nearbyStores)
-            return nearbyStores.size();
-        else
-            return 0;
+    protected void onError(@NonNull Exception e) {
+        super.onError(e);
+        //TODO: Handle error with callback so that snackbar can be shown
     }
 
-    public void updateItemList(List<StoreModel> items) {
-        nearbyStores = items;
-        notifyDataSetChanged();
-    }
 
-    public interface IItemClickListener {
-        void onItemClick(int index);
-    }
-
-    public class StoreListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class StoreListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView txtStoreName, txtStoreOwner, txtStoreDistance;
         ImageView imgStoreIcon;
 
@@ -75,7 +83,10 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Stor
 
         @Override
         public void onClick(View v) {
-            listener.onItemClick(getAdapterPosition());
+            int position = getAdapterPosition();
+            if(position != RecyclerView.NO_POSITION && listener != null){
+                listener.onItemClick(getItem(position),position);
+            }
         }
     }
 }

@@ -12,9 +12,6 @@ import com.google.firebase.firestore.Query;
 import java.util.List;
 
 public class ItemListViewModel extends ViewModel {
-
-    private MutableLiveData<List<ItemModel>> _items;
-
     public Query getQuery(){
         return StoreRepository.getInstance().getItemsQuery();
     }
@@ -28,13 +25,4 @@ public class ItemListViewModel extends ViewModel {
                 .build();
     }
 
-    public ItemListViewModel() {
-
-        _items = new MutableLiveData<>();
-
-    }
-
-    public LiveData<List<ItemModel>> getItems() {
-        return _items;
-    }
 }

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bteam.blocal.utility.FirebaseSwipeAdapter;
 import com.bteam.blocal.utility.InStockText;
 import com.bumptech.glide.Glide;
 import com.bteam.blocal.R;
@@ -21,15 +22,12 @@ import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-public class ItemListAdapter extends FirestorePagingAdapter<ItemModel, ItemListAdapter.ItemViewHolder> {
+public class ItemListAdapter extends FirebaseSwipeAdapter<ItemModel, ItemListAdapter.ItemViewHolder> {
 
-    private IItemClickListener listener;
     private Context context;
-    private SwipeRefreshLayout _swipeRefreshLayout;
 
     public ItemListAdapter(IItemClickListener listener, @NonNull FirestorePagingOptions<ItemModel> options) {
-        super(options);
-        this.listener = listener;
+        super(options, listener);
     }
 
     @Override
@@ -66,37 +64,6 @@ public class ItemListAdapter extends FirestorePagingAdapter<ItemModel, ItemListA
         //TODO: Handle error with callback so that snackbar can be shown
     }
 
-    @Override
-    protected void onLoadingStateChanged(@NonNull LoadingState state) {
-        switch (state){
-            case LOADING_INITIAL:
-            case LOADING_MORE:
-                swipeRefreshIsReloading(true);
-                break;
-            case LOADED:
-            case FINISHED:
-                swipeRefreshIsReloading(false);
-                break;
-            case ERROR:
-                //TODO: Handle error
-                swipeRefreshIsReloading(false);
-                break;
-        }
-    }
-
-    public void bindSwipeRefresh(SwipeRefreshLayout swipeRefreshLayout){
-        _swipeRefreshLayout = swipeRefreshLayout;
-    }
-
-    private void swipeRefreshIsReloading(boolean isRefreshing){
-        if(_swipeRefreshLayout != null){
-            _swipeRefreshLayout.setRefreshing(isRefreshing);
-        }
-    }
-
-    public interface IItemClickListener {
-        void onItemClick(DocumentSnapshot document, int index);
-    }
 
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView itemImage;

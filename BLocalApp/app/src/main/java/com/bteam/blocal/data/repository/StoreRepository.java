@@ -40,13 +40,13 @@ public class StoreRepository {
 
     private static StoreRepository _instance;
 
-    //private final MutableLiveData<String> _currStoreUid;
 
     private final FirebaseFirestore db;
     private final FirebaseStorage storage;
     private final FirebaseAuth auth;
     private final StorageReference itemsImagesStorage;
     private final StorageReference storesImagesStorage;
+    private final CollectionReference storeCollection;
     private final MutableLiveData<StoreModel> myStore;
 
     public LiveData<StoreModel> getMyStore() {
@@ -60,6 +60,7 @@ public class StoreRepository {
         itemsImagesStorage = storage.getReference().child("items");
         storesImagesStorage = storage.getReference().child("stores");
         myStore = new MutableLiveData<>();
+        storeCollection = db.collection("stores");
     }
 
     public static StoreRepository getInstance() {
@@ -71,13 +72,22 @@ public class StoreRepository {
 
 
     public CollectionReference getItemsQuery() {
-        return db.collection("stores")
+        return getStoreQuery()
                 .document(myStore.getValue().getUid())
                 .collection("items");
     }
 
+
+
+    public CollectionReference getStoreQuery() {
+        return storeCollection;
+    }
+
+
+
+
     public LiveData<StoreModel> updateMyStore(IOnCompleteCallback<StoreModel> callback) {
-        db.collection("stores")
+        storeCollection
                 .whereEqualTo("ownerId", auth.getCurrentUser().getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -103,9 +113,10 @@ public class StoreRepository {
     }
 
     public void uploadStoreImage(Bitmap image, IOnCompleteCallback<String> callback) {
-        StorageReference reference = itemsImagesStorage.child(UUID.randomUUID().toString());
+        StorageReference reference = storesImagesStorage.child(UUID.randomUUID().toString());
         uploadImage(reference, image, callback);
     }
+
 
 
     public interface IOnSuccessCallback<T> {
@@ -153,7 +164,7 @@ public class StoreRepository {
     }
 
     public void createStore(StoreModel model, IOnCompleteCallback<StoreModel> callback){
-        db.collection("stores").add(model).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+        storeCollection.add(model).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 if (task.isSuccessful()) {

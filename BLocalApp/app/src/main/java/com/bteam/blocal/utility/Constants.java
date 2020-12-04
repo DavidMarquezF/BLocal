@@ -14,4 +14,14 @@ public class Constants {
                     .error(R.drawable.ic_baseline_shopping_basket_24);
         return itemDefaultOptions;
     }
+
+    private static RequestOptions storeDefaultOptions;
+
+    public static RequestOptions getStoreDefaultOptions() {
+        if (Constants.itemDefaultOptions == null)
+            itemDefaultOptions = new RequestOptions()
+                    .placeholder(R.drawable.ic_baseline_storefront_24)
+                    .error(R.drawable.ic_baseline_storefront_24);
+        return itemDefaultOptions;
+    }
 }
