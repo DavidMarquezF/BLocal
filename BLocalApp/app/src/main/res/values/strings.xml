@@ -60,5 +60,8 @@
     <string name="title_settings">Settings</string>
     <string name="title_account">Account</string>
     <string name="lbl_show_items">What do we offer?</string>
+    <string name="err_stores_load">Stores couldn\'t load correctly</string>
+    <string name="lbl_close">Close</string>
+    <string name="view_store">View Store</string>
 
 </resources>

@@ -33,6 +33,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 import java.util.UUID;
 
 public class StoreRepository {
@@ -247,6 +248,24 @@ public class StoreRepository {
                             } else {
                                 liveData.setValue(Resource.error(new NoDocumentException(), null));
                             }
+                        } else {
+                            liveData.setValue(Resource.error(new UnsuccessfulQueryException(), null));
+                        }
+                    }
+                });
+
+        return liveData;
+    }
+
+    public SingleLiveEvent<Resource<List<StoreModel>>> getStores() {
+        SingleLiveEvent<Resource<List<StoreModel>>> liveData = new SingleLiveEvent<>();
+        storeCollection.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot doc = task.getResult();
+                            liveData.setValue(Resource.success(doc.toObjects(StoreModel.class)));
                         } else {
                             liveData.setValue(Resource.error(new UnsuccessfulQueryException(), null));
                         }
