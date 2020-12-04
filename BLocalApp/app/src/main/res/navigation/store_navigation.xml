@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.bteam.blocal.ui.store.notifications.NotificationsFragment"
+        android:name="com.bteam.blocal.ui.store.store_settings.StoreSettingsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
     <fragment

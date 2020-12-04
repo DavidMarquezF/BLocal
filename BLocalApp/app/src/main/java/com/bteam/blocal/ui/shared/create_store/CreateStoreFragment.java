@@ -68,47 +68,6 @@ public class CreateStoreFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_create_store, container, false);
     }
 
-
-    private void saveItem() {
-        String name = nameTxtInp.getEditText().getText().toString();
-        String description = descrTxtInp.getEditText().getText().toString();
-        boolean valid = true;
-        if (name.isEmpty()) {
-            nameTxtInp.setError(getText(R.string.err_required));
-            valid = false;
-        }
-        if (description.isEmpty()) {
-            descrTxtInp.setError(getText(R.string.err_required));
-            valid = false;
-        }
-        if (vm.getImageUrl() == null || vm.getImageUrl().isEmpty()) {
-            Snackbar.make(getView(), R.string.err_image_required, Snackbar.LENGTH_LONG).show();
-            valid = false;
-        }
-        if (vm.getLocation() == null) {
-            Snackbar.make(getView(), R.string.err_loc_required, Snackbar.LENGTH_LONG).show();
-            valid = false;
-        }
-        if (valid) {
-            vm.createStore(name, description, new StoreRepository.IOnCompleteCallback<StoreModel>() {
-                @Override
-                public void onError(Throwable err) {
-
-                }
-
-                @Override
-                public void onSuccess(StoreModel data) {
-                    navigateToMyStore();
-                }
-            });
-        }
-    }
-
-    private void navigateToMyStore() {
-        NavController navHostController = Navigation.findNavController(getActivity(), R.id.main_nav_host_fragment);
-        navHostController.navigate(MainUserFragmentDirections.actionMainUserFragmentToMainStoreFragment());
-    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -177,28 +136,6 @@ public class CreateStoreFragment extends Fragment {
         ImageSelector.handleRequestPermission(this, requestCode, permissions, grantResults);
     }
 
-    private void selectImage() {
-        ImageSelector.requestImage(this);
-    }
-
-    private void setLocText(LatLng loc) {
-        locTxtInp.getEditText().setText(loc.toString());
-    }
-
-    private void navigatePlacePicker() {
-        NavHostFragment.findNavController(this).navigate(CreateStoreFragmentDirections.actionCreateStoreFragmentToPlacePickerFragment());
-    }
-
-    private void updateUi(ItemModel data) {
-        nameTxtInp.getEditText().setText(data.getName());
-        descrTxtInp.getEditText().setText(data.getDescription());
-        if (data.getImageUrl() != null && !data.getImageUrl().isEmpty()) {
-            Glide.with(getContext()).load(data.getImageUrl()).centerCrop()
-                    .into(itemImageBtn);
-        }
-
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -222,4 +159,68 @@ public class CreateStoreFragment extends Fragment {
             });
         }
     }
+
+    private void saveItem() {
+        String name = nameTxtInp.getEditText().getText().toString();
+        String description = descrTxtInp.getEditText().getText().toString();
+        boolean valid = true;
+        if (name.isEmpty()) {
+            nameTxtInp.setError(getText(R.string.err_required));
+            valid = false;
+        }
+        if (description.isEmpty()) {
+            descrTxtInp.setError(getText(R.string.err_required));
+            valid = false;
+        }
+        if (vm.getImageUrl() == null || vm.getImageUrl().isEmpty()) {
+            Snackbar.make(getView(), R.string.err_image_required, Snackbar.LENGTH_LONG).show();
+            valid = false;
+        }
+        if (vm.getLocation() == null) {
+            Snackbar.make(getView(), R.string.err_loc_required, Snackbar.LENGTH_LONG).show();
+            valid = false;
+        }
+        if (valid) {
+            vm.createStore(name, description, new StoreRepository.IOnCompleteCallback<StoreModel>() {
+                @Override
+                public void onError(Throwable err) {
+
+                }
+
+                @Override
+                public void onSuccess(StoreModel data) {
+                    navigateToMyStore();
+                }
+            });
+        }
+    }
+
+    private void navigateToMyStore() {
+        NavController navHostController = Navigation.findNavController(getActivity(), R.id.main_nav_host_fragment);
+        navHostController.navigate(MainUserFragmentDirections.actionMainUserFragmentToMainStoreFragment());
+    }
+
+
+    private void selectImage() {
+        ImageSelector.requestImage(this);
+    }
+
+    private void setLocText(LatLng loc) {
+        locTxtInp.getEditText().setText(loc.toString());
+    }
+
+    private void navigatePlacePicker() {
+        NavHostFragment.findNavController(this).navigate(CreateStoreFragmentDirections.actionCreateStoreFragmentToPlacePickerFragment());
+    }
+
+    private void updateUi(ItemModel data) {
+        nameTxtInp.getEditText().setText(data.getName());
+        descrTxtInp.getEditText().setText(data.getDescription());
+        if (data.getImageUrl() != null && !data.getImageUrl().isEmpty()) {
+            Glide.with(getContext()).load(data.getImageUrl()).centerCrop()
+                    .into(itemImageBtn);
+        }
+
+    }
+
 }

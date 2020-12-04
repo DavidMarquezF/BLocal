@@ -1,9 +1,7 @@
 package com.bteam.blocal.ui.user.main_user;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,10 +10,7 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.collection.ArraySet;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,7 +25,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.navigation.NavigationView;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -94,11 +88,14 @@ public class MainUserFragment extends Fragment implements IToolbarHandler {
 
         mainUserViewModel.getCurrentUser().observe(getViewLifecycleOwner(),
                 user -> {
-                    txtEmail.setText(user.getEmail());
-                    txtCurrentUser.setText(user.getDisplayName());
-                    Glide.with(this).load(user.getPhotoUrl()).apply(new RequestOptions()
-                            .placeholder(R.drawable.ic_outline_account_circle_24)
-                            .error(R.drawable.ic_outline_account_circle_24)).into(userProfileImage);
+                    if (user != null) {
+                        txtEmail.setText(user.getEmail());
+                        txtCurrentUser.setText(user.getDisplayName());
+                        Glide.with(this).load(user.getPhotoUrl()).apply(new RequestOptions()
+                                .placeholder(R.drawable.ic_outline_account_circle_24)
+                                .error(R.drawable.ic_outline_account_circle_24)).into(userProfileImage);
+                    }
+
                 });
 
         NavigationUI.setupWithNavController(userNavView, navController);
@@ -107,10 +104,9 @@ public class MainUserFragment extends Fragment implements IToolbarHandler {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             // Clear the menu that might have been added by the IToolbarHandler interface
             toolbar.getMenu().clear();
-            if(topLevelDestinations.contains(destination.getId())){
+            if (topLevelDestinations.contains(destination.getId())) {
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            }
-            else{
+            } else {
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             }
         });

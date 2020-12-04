@@ -57,5 +57,7 @@
     <string name="err_image_required">Image is required</string>
     <string name="err_loc_required">Location required</string>
     <string name="title_my_store">My Store</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_account">Account</string>
 
 </resources>

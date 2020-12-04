@@ -33,4 +33,7 @@ public class UserRepository {
         return _userLiveData;
     }
 
+    public void logout(){
+        auth.signOut();
+    }
 }
