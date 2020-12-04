@@ -6,19 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.store.edit_item.EditItemFragment"
     tools:layout_editor_absoluteY="118dp">
 
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/tlb_edit_item"
-        style="@style/Widget.MaterialComponents.Toolbar.Primary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:menu="@menu/menu_edit_item"
-        app:navigationIcon="@drawable/ic_baseline_arrow_back_24" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -32,7 +22,7 @@
                 android:id="@+id/txt_inp_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="32dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="parent">
@@ -65,12 +55,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_inp_name">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_code"
+                    android:id="@+id/edt_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_baseline_qr_code_scanner_24"
-                    android:drawableRight="@drawable/ic_baseline_qr_code_scanner_24"
-                    android:hint="@string/label_code"
+                    android:cursorVisible="false"
+                    android:drawableEnd="@drawable/ic_baseline_location_on_24"
+                    android:drawableRight="@drawable/ic_baseline_location_on_24"
+                    android:enabled="true"
+                    android:focusable="false"
+                    android:hint="@string/lbl_location"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:singleLine="true" />
@@ -85,7 +78,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/txt_inp_code"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/txt_inp_code"
-                app:srcCompat="@drawable/ic_barcode" />
+                app:srcCompat="@drawable/ic_baseline_my_location_24" />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -95,7 +88,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/txt_inp_name"
                 app:layout_constraintEnd_toStartOf="@+id/txt_inp_name"
                 app:layout_constraintTop_toTopOf="@+id/txt_inp_name"
-                app:srcCompat="@drawable/ic_baseline_shopping_cart_24" />
+                app:srcCompat="@drawable/ic_baseline_storefront_24" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline2"
@@ -106,8 +99,8 @@
 
             <ImageButton
                 android:id="@+id/btn_item_picture"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:background="@drawable/shape_circle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
@@ -116,45 +109,13 @@
                 app:srcCompat="@drawable/ic_outline_camera_alt_24" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/txt_inp_price"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/checkbox_in_stock"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/txt_inp_code">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/lbl_price"
-                    android:imeOptions="actionNext"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="@dimen/icon_form"
-                android:layout_height="@dimen/icon_form"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/txt_inp_price"
-                app:layout_constraintEnd_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="@+id/txt_inp_price"
-                app:srcCompat="@drawable/ic_baseline_attach_money_24" />
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txt_inp_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/txt_inp_price">
+                app:layout_constraintTop_toBottomOf="@+id/txt_inp_code">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_descirption"
@@ -163,13 +124,6 @@
                     android:hint="@string/lbl_description" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <CheckBox
-                android:id="@+id/checkbox_in_stock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lbl_in_stock"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/txt_inp_price" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
