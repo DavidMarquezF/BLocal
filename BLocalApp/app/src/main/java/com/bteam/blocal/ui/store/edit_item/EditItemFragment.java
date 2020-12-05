@@ -11,23 +11,22 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bteam.blocal.R;
-import com.bteam.blocal.data.model.BarcodeScanner.CameraView;
 import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.Resource;
 import com.bteam.blocal.data.repository.StoreRepository;
+import com.bteam.blocal.ui.store.CameraFragment;
 import com.bteam.blocal.utility.EditTextButton;
 import com.bteam.blocal.utility.ImageSelector;
+import com.bteam.blocal.utility.NavigationResult;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -113,6 +112,13 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
 
         toolbar.setOnMenuItemClickListener(this);
 
+        NavigationResult.<String>getNavigationResult(this, CameraFragment.BAR_CODE_RESULT)
+                .observe(getViewLifecycleOwner(), r -> {
+                    if(r != null){
+                        codeTxtInp.getEditText().setText(r);
+                    }
+                });
+
     }
 
     private void updateUi(ItemModel data) {
@@ -124,6 +130,7 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
             Glide.with(getContext()).load(data.getImageUrl()).centerCrop()
                     .into(itemImageBtn);
         }
+        codeTxtInp.getEditText().setText(data.getCode());
 
     }
 
@@ -146,7 +153,8 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
 
             int stock = checkBox.isChecked() ? 1 : 0;
             String description = descrTxtInp.getEditText().getText().toString();
-            ItemModel itemModel = new ItemModel(name, vm.getImageUrl(), price, stock, description);
+            String code = codeTxtInp.getEditText().getText().toString();
+            ItemModel itemModel = new ItemModel(name, vm.getImageUrl(), price, stock, description, code);
 
             if (vm.getIsModeEdit()) {
                 vm.updateItem(itemModel, new StoreRepository.IOnCompleteCallback<Void>() {

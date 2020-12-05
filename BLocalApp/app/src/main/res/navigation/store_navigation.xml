@@ -55,6 +55,6 @@
     </fragment>
     <fragment
         android:id="@+id/cameraView2"
-        android:name="com.bteam.blocal.data.model.BarcodeScanner.CameraView"
+        android:name="com.bteam.blocal.ui.store.CameraFragment"
         android:label="CameraView" />
 </navigation>
