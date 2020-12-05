@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.bteam.blocal.R;
 import com.bteam.blocal.ui.shared.item_detail.ItemDetailFragment;
 import com.bteam.blocal.ui.shared.item_list.ItemListFragment;
 import com.bteam.blocal.ui.store.ItemDetailStoreFragmentArgs;
@@ -29,13 +30,20 @@ public class ItemDetailUserFragment extends ItemDetailFragment {
         ItemDetailUserFragmentArgs args = ItemDetailUserFragmentArgs.fromBundle(getArguments());
         vm.setItemUid(args.getItemUid());
         vm.setStoreUid(args.getStoreUid());
-        toolbarHandler = (IToolbarHandler)getParentFragment().getParentFragment();
+        if(!getIsTablet()){
+            toolbarHandler = (IToolbarHandler)getParentFragment().getParentFragment();
+        }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         floatingActionButton.setVisibility(View.GONE);
-        toolbarHandler.hideToolbar();
+        if(toolbarHandler != null){
+            toolbarHandler.hideToolbar();
+        }
+
     }
+
+
 }

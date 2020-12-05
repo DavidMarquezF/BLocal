@@ -14,7 +14,7 @@
             android:id="@+id/showItemDetail"
             app:destination="@id/itemDetailFragment" />
         <action
-            android:id="@+id/createNewItem"
+            android:id="@+id/goToEdit"
             app:destination="@id/editItemFragment" />
     </fragment>
 

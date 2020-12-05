@@ -12,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.bteam.blocal.R;
 import com.bteam.blocal.ui.shared.item_detail.ItemDetailFragment;
 import com.bteam.blocal.ui.user.ItemDetailUserFragmentArgs;
+import com.bteam.blocal.utility.SizeUtils;
 import com.google.android.material.appbar.AppBarLayout;
 
 /**
@@ -78,8 +79,17 @@ public class ItemDetailStoreFragment extends ItemDetailFragment {
     }
 
     private void navigateEdit() {
-        ItemDetailStoreFragmentDirections.EditItem directions = ItemDetailStoreFragmentDirections.editItem(vm.getItemDetail().getValue().data.getUid());
-        NavHostFragment.findNavController(this).navigate(directions);
+
+        if(SizeUtils.isTablet(getContext())){
+            // Access the general navigator, not the detail
+            ItemListStoreFragmentDirections.GoToEdit directions = ItemListStoreFragmentDirections.goToEdit(vm.getItemDetail().getValue().data.getUid());
+            NavHostFragment.findNavController(getParentFragment().getParentFragment()).navigate(directions);
+        }
+        else{
+            ItemDetailStoreFragmentDirections.EditItem directions = ItemDetailStoreFragmentDirections.editItem(vm.getItemDetail().getValue().data.getUid());
+            NavHostFragment.findNavController(this).navigate(directions);
+        }
+
     }
 
     private void showEditOption(boolean show) {

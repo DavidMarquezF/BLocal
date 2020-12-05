@@ -6,11 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.NavigationRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavArgs;
 import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
+import androidx.navigation.NavHostController;
+import androidx.navigation.NavInflater;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +24,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bteam.blocal.R;
 import com.bteam.blocal.data.model.ItemModel;
+import com.bteam.blocal.ui.store.ItemDetailStoreFragmentArgs;
+import com.bteam.blocal.utility.SizeUtils;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -84,7 +92,35 @@ public abstract class ItemListFragment extends Fragment implements ItemListAdapt
 
     @Override
     public void onItemClick(DocumentSnapshot document, int index) {
-        navigateToDetail(document.toObject(ItemModel.class).getUid());
+        String uid = document.toObject(ItemModel.class).getUid();
+        if(!SizeUtils.isTablet(getContext())){
+            navigateToDetail(uid);
+        }
+        else{
+            swapDetailFragment(uid);
+        }
+
     }
+
+    private void swapDetailFragment(String uid) {
+        NavHostFragment hostFragment = ((NavHostFragment) getChildFragmentManager()
+                .findFragmentById(R.id.detail_host));
+        if(hostFragment != null){
+            NavController controller = hostFragment.getNavController();
+            NavInflater inflater = controller.getNavInflater();
+            NavGraph graph = inflater.inflate(getNavigationGraphId());
+            graph.setStartDestination(getDetailNavigationId());
+            //Override the arguments here with whatever we need to produce this detail fragment
+            Bundle args = getDetailArgsBundle(uid);
+            controller.setGraph(graph, args);
+        }
+    }
+
+    protected abstract @NavigationRes int getNavigationGraphId();
+
+    protected abstract Bundle getDetailArgsBundle(String itemUid);
+
+    protected abstract @IdRes int getDetailNavigationId();
+
     protected abstract void navigateToDetail(String uid);
 }

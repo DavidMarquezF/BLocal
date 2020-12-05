@@ -52,7 +52,7 @@ public class MainStoreFragment extends Fragment {
         _floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              _navController.navigate( ItemListStoreFragmentDirections.createNewItem(null));
+              _navController.navigate( ItemListStoreFragmentDirections.goToEdit(null));
             }
         });
         listenToBackStack();

@@ -2,7 +2,6 @@ package com.bteam.blocal.ui.shared.item_detail;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,16 +10,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.bteam.blocal.R;
 import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.Resource;
 import com.bteam.blocal.utility.Constants;
 import com.bteam.blocal.utility.InStockText;
+import com.bteam.blocal.utility.SizeUtils;
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,6 +32,7 @@ public abstract class ItemDetailFragment extends Fragment {
     protected  FloatingActionButton floatingActionButton;
     private ImageView headerImg;
     protected ItemDetailViewModel vm;
+    private  AppBarLayout appBar;
 
     public ItemDetailFragment() {
     }
@@ -66,8 +67,29 @@ public abstract class ItemDetailFragment extends Fragment {
         inStockTxt = view.findViewById(R.id.txt_item_stock);
         descriptionTxt = view.findViewById(R.id.txt_item_description);
         headerImg = view.findViewById(R.id.header);
+        appBar = view.findViewById(R.id.app_bar);
 
         floatingActionButton = view.findViewById(R.id.fab_edit);
+
+        if(getIsTablet()){
+            toolbar.setVisibility(View.INVISIBLE);
+            appBar.setExpanded(true);
+            // Block appbarlayout from collapsing.
+            // Inspired by https://code.luasoftware.com/tutorials/android/how-to-disable-or-lock-collapsingtoolbarlayout-collapse-or-expand/
+            view.findViewById(R.id.nested_scroll_detail).setNestedScrollingEnabled(false);
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBar.getLayoutParams();
+            if(params.getBehavior() == null){
+                params.setBehavior(new AppBarLayout.Behavior());
+            }
+            AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+            behavior.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
+                @Override
+                public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
+                    return false;
+                }
+            });
+        }
+
 
         vm.getItemDetail().observe(getViewLifecycleOwner(), new Observer<Resource<ItemModel>>() {
             @Override
@@ -84,6 +106,9 @@ public abstract class ItemDetailFragment extends Fragment {
                 }
             }
         });
+    }
+    protected boolean getIsTablet(){
+        return SizeUtils.isTablet(getContext());
     }
 
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.bteam.blocal.R;
 import com.bteam.blocal.ui.shared.item_list.ItemListFragment;
 
 /**
@@ -25,8 +26,27 @@ public class ItemListUserFragment extends ItemListFragment {
     }
 
     @Override
+    protected int getNavigationGraphId() {
+        return R.navigation.user_navigation;
+    }
+
+    @Override
+    protected Bundle getDetailArgsBundle(String uid) {
+        return getDirection(uid).getArguments();
+    }
+
+    @Override
+    protected int getDetailNavigationId() {
+        return R.id.navigation_item_detail;
+    }
+
+    @Override
     protected void navigateToDetail(String uid) {
-        ItemListUserFragmentDirections.ShowItemDetail dir = ItemListUserFragmentDirections.showItemDetail(uid, itemListViewModel.getStoreUid());
-        NavHostFragment.findNavController(this).navigate(dir);
+
+        NavHostFragment.findNavController(this).navigate(getDirection(uid));
+    }
+
+    private ItemListUserFragmentDirections.ShowItemDetail getDirection(String uid){
+        return ItemListUserFragmentDirections.showItemDetail(uid, itemListViewModel.getStoreUid());
     }
 }
