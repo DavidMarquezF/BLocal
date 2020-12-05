@@ -130,6 +130,7 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
             Glide.with(getContext()).load(data.getImageUrl()).centerCrop()
                     .into(itemImageBtn);
         }
+        codeTxtInp.getEditText().setText(data.getCode());
 
     }
 
@@ -152,7 +153,8 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
 
             int stock = checkBox.isChecked() ? 1 : 0;
             String description = descrTxtInp.getEditText().getText().toString();
-            ItemModel itemModel = new ItemModel(name, vm.getImageUrl(), price, stock, description);
+            String code = codeTxtInp.getEditText().getText().toString();
+            ItemModel itemModel = new ItemModel(name, vm.getImageUrl(), price, stock, description, code);
 
             if (vm.getIsModeEdit()) {
                 vm.updateItem(itemModel, new StoreRepository.IOnCompleteCallback<Void>() {

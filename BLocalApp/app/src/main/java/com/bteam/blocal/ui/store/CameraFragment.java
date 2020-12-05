@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
@@ -20,8 +21,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.bteam.blocal.BarcodeScannerAnalyzer;
 import com.bteam.blocal.R;
-import com.bteam.blocal.data.model.BarcodeScanner.BarcodeScannerAnalyzer;
 import com.bteam.blocal.data.repository.StoreRepository;
 import com.bteam.blocal.utility.NavigationResult;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -36,7 +37,7 @@ public class CameraFragment extends Fragment {
     public static final String BAR_CODE_RESULT = "bar_code_result";
 
     private int REQUEST_CODE_PERMISSIONS = 1001;
-    private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.CAMERA};
 
     private boolean allPermissionsGranted() {
 
@@ -65,6 +66,10 @@ public class CameraFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPreviewView = view.findViewById(R.id.camera);
+        Toolbar tlb = view.findViewById(R.id.tlb_camera_view);
+
+        tlb.setNavigationOnClickListener(l -> navigateBack());
+
         if (allPermissionsGranted()) {
             startCamera(); //start camera if permission has been granted by user
         } else {
@@ -79,7 +84,7 @@ public class CameraFragment extends Fragment {
             if (allPermissionsGranted()) {
                 startCamera();
             } else {
-                NavHostFragment.findNavController(this).navigateUp();
+                navigateBack();
             }
         }
     }

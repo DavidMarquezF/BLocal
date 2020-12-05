@@ -1,4 +1,4 @@
-package com.bteam.blocal.data.model.BarcodeScanner;
+package com.bteam.blocal;
 
 import android.annotation.SuppressLint;
 import android.graphics.Point;
