@@ -130,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/lbl_price"
                     android:imeOptions="actionNext"
-                    android:inputType="number"
+                    android:inputType="number|numberDecimal"
                     android:maxLines="1"
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
