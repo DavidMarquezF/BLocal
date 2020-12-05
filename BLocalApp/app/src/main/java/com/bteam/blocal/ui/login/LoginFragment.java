@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -41,6 +42,8 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), _backNavCallback);
+
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             navigateUserLoggedIn();
         }
@@ -71,6 +74,7 @@ public class LoginFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                navigateUserLoggedIn();
             } else {
+                getActivity().finish();
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
@@ -103,4 +107,11 @@ public class LoginFragment extends Fragment {
 
         });
     }
+
+    private final OnBackPressedCallback _backNavCallback = new OnBackPressedCallback(false) {
+        @Override
+        public void handleOnBackPressed() {
+          getActivity().finish();
+        }
+    };
 }
