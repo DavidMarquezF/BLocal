@@ -31,7 +31,6 @@ public class ItemDetailStoreFragment extends ItemDetailFragment {
         vm.setItemUid(args.getItemUid());
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -77,8 +76,9 @@ public class ItemDetailStoreFragment extends ItemDetailFragment {
 
     }
 
-    private void navigateEdit() {
-        ItemDetailStoreFragmentDirections.EditItem directions = ItemDetailStoreFragmentDirections.editItem(vm.getItemDetail().getValue().data.getUid());
+    protected void navigateEdit() {
+        ItemDetailStoreFragmentDirections.EditItem directions = ItemDetailStoreFragmentDirections
+                .editItem(vm.getItemDetail().getValue().data.getUid());
         NavHostFragment.findNavController(this).navigate(directions);
     }
 
