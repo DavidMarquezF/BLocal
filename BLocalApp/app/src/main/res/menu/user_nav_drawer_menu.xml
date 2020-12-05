@@ -11,23 +11,15 @@
         android:title="@string/title_maps" />
 
     <item
-        android:id="@+id/my_store_item_list"
-        android:icon="@drawable/ic_baseline_search_24"
-        android:title="@string/title_search" />
-
-    <item
         android:id="@+id/navigation_store_list"
         android:icon="@drawable/ic_baseline_store_24"
         android:title="@string/title_stores" />
 
     <item
-        android:id="@+id/navigation_shopping_lists"
-        android:icon="@drawable/ic_baseline_shopping_basket_24"
-        android:title="@string/title_shopping_lists" />
-    <item
         android:id="@+id/navigation_my_store_fragment"
         android:icon="@drawable/ic_baseline_storefront_24"
         android:title="@string/title_my_store" />
+
     <item
         android:id="@+id/navigation_user_settings"
         android:title="@string/title_settings"
