@@ -21,6 +21,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.bteam.blocal.R;
 import com.bteam.blocal.utility.IToolbarHandler;
+import com.bteam.blocal.utility.SizeUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.navigation.NavigationView;
@@ -59,7 +60,6 @@ public class MainUserFragment extends Fragment implements IToolbarHandler {
 
         // Set up the toolbar for the whole user part of the app
         toolbar = view.findViewById(R.id.user_nav_toolbar_main);
-
         DrawerLayout drawer = view.findViewById(R.id.user_drawer_layout);
 
 
@@ -72,11 +72,13 @@ public class MainUserFragment extends Fragment implements IToolbarHandler {
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        Set<Integer> topLevelDestinations = new HashSet<>(Arrays.asList(R.id.navigation_store_list, R.id.navigation_store_analytics, R.id.navigation_shopping_lists, R.id.navigation_maps, R.id.navigation_my_store_fragment));
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(topLevelDestinations)
-                .setOpenableLayout(drawer)
-                .build();
-
+        Set<Integer> topLevelDestinations = new HashSet<>(Arrays.asList(R.id.navigation_store_list,
+                R.id.navigation_store_analytics, R.id.navigation_maps,
+                R.id.navigation_my_store_fragment));
+        AppBarConfiguration.Builder builder = new AppBarConfiguration.Builder(topLevelDestinations);
+        // If you are not using tablet, add drawer hamburger icon
+        if (!SizeUtils.isTablet(getContext())) builder.setOpenableLayout(drawer);
+        AppBarConfiguration appBarConfiguration = builder.build();
 
         // Set up the header card
         NavigationView userNavView = view.findViewById(R.id.user_nav_view);
