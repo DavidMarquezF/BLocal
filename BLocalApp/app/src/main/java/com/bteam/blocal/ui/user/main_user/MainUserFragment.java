@@ -148,7 +148,7 @@ public class MainUserFragment extends Fragment implements IToolbarHandler {
                      gets invoked  calls this callback  gets stuck in a loop
                  */
                 setEnabled(false);
-                navController.navigateUp();
+                requireActivity().onBackPressed();
                 setEnabled(true);
 
             } else if (isVisible()) {
