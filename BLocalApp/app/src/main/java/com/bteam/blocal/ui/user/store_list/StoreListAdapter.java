@@ -101,5 +101,6 @@ public class StoreListAdapter extends FirebaseSwipeAdapter<StoreModel, StoreList
 
     public void setLastLocation(Location lastLocation) {
         this.lastLocation = lastLocation;
+        notifyDataSetChanged();
     }
 }

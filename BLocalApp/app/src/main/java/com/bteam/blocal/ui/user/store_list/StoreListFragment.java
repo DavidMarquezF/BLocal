@@ -82,6 +82,10 @@ public class StoreListFragment extends Fragment implements StoreListAdapter.IIte
         storeListAdapter.bindSwipeRefresh(swipeRefreshLayout);
 
         recyclerView.setAdapter(storeListAdapter);
+
+        // Update the adapter with the new location
+        storeListViewModel.getLastLocation().observe(getViewLifecycleOwner(),
+                location -> storeListAdapter.setLastLocation(location));
     }
 
     @Override
@@ -94,10 +98,6 @@ public class StoreListFragment extends Fragment implements StoreListAdapter.IIte
         if (hasLocationPermissions()) {
             storeListViewModel.updateLastLocation();
         }
-
-        // Update the adapter with the new location
-        storeListViewModel.getLastLocation().observe(getViewLifecycleOwner(),
-                location -> storeListAdapter.setLastLocation(location));
     }
 
     @Override
@@ -144,6 +144,7 @@ public class StoreListFragment extends Fragment implements StoreListAdapter.IIte
                 }
             }
         }
+        storeListViewModel.updateLastLocation();
     }
 
     private void showLocationPermissionSnackbar() {
