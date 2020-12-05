@@ -33,7 +33,7 @@
     <string name="title_stores">Stores</string>
     <string name="title_search">Search</string>
     <string name="title_shopping_lists">Shopping Lists</string>
-    <string name="txt_store_list_distance">Distance</string>
+    <string name="txt_store_list_distance">Show stores in distance of</string>
     <string name="title_store_list">Stores</string>
     <string name="title_store_detail">Store Detail</string>
     <string name="title_item_detail">Item detail</string>
@@ -65,8 +65,7 @@
     <string name="view_store">View Store</string>
     <string name="lbl_stub_data">Stub data, feature coming soon!</string>
     <string name="title_barcode_scanner">Barcode Scanner</string>
-    <string name="lbl_connection_info">Connection Info</string>
-    <string name="btn_check_connection">Check connection</string>
-    <string name="snackbar_connection_info">Fetching connection information.</string>
+    <string name="title_find_item">Find Item</string>
+    <string name="err_item_not_found">Item not found</string>
 
 </resources>

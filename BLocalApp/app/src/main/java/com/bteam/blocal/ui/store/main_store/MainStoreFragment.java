@@ -66,6 +66,7 @@ public class MainStoreFragment extends Fragment {
                         break;
                     case R.id.navigation_store_settings:
                     case R.id.navigation_store_analytics:
+                    case R.id.navigation_item_finder:
                         setMainUIVisibility(true, false);
                         break;
                     default:

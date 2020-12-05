@@ -16,7 +16,6 @@ import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -38,6 +37,7 @@ public class CameraFragment extends Fragment {
 
     private int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.CAMERA};
+    protected Toolbar tlb;
 
     private boolean allPermissionsGranted() {
 
@@ -66,14 +66,14 @@ public class CameraFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPreviewView = view.findViewById(R.id.camera);
-        Toolbar tlb = view.findViewById(R.id.tlb_camera_view);
+        tlb = view.findViewById(R.id.tlb_camera_view);
 
         tlb.setNavigationOnClickListener(l -> navigateBack());
 
         if (allPermissionsGranted()) {
             startCamera(); //start camera if permission has been granted by user
         } else {
-            ActivityCompat.requestPermissions(getActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
+            requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
         }
     }
 
@@ -137,7 +137,7 @@ public class CameraFragment extends Fragment {
 
     }
 
-    private void barCodeScanned(String data) {
+    protected void barCodeScanned(String data) {
         NavigationResult.setNavigationResult(this, BAR_CODE_RESULT, data);
         navigateBack();
     }

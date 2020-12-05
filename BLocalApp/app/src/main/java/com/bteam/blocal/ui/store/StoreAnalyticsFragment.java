@@ -45,7 +45,7 @@ public class StoreAnalyticsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Snackbar.make(getView(), R.string.lbl_stub_data, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(getView(), R.string.lbl_stub_data, Snackbar.LENGTH_SHORT).show();
         setLineChart(view);
         setPieChart(view);
 

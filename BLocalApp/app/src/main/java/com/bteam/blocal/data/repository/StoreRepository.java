@@ -121,6 +121,25 @@ public class StoreRepository {
         uploadImage(reference, image, callback);
     }
 
+    public LiveData<Resource<List<ItemModel>>> findItemByCode(String barcode) {
+        SingleLiveEvent<Resource<List<ItemModel>>> liveData = new SingleLiveEvent<>();
+        getItemsQuery(getMyStoreUid()).whereEqualTo("code", barcode)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot doc = task.getResult();
+                                liveData.setValue(Resource.success(doc.toObjects(ItemModel.class)));
+
+                        } else {
+                            liveData.setValue(Resource.error(new UnsuccessfulQueryException(), null));
+                        }
+                    }
+                });
+
+        return liveData;
+    }
 
 
     public interface IOnSuccessCallback<T> {
