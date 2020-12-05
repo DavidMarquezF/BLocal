@@ -82,7 +82,7 @@ public class StoresMapFragment extends com.bteam.blocal.ui.shared.map.MapsFragme
                             .navigate(dir);
                 });
 
-        Glide.with(this).load(storeModel.getImageUrl()).apply(Constants.getStoreDefaultOptions())
+        Glide.with(getContext()).load(storeModel.getImageUrl()).apply(Constants.getStoreDefaultOptions())
                 .into(new CustomTarget<Drawable>() {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
