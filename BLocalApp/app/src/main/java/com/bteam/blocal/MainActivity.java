@@ -2,15 +2,13 @@ package com.bteam.blocal;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.bteam.blocal.Service.ForegroundService;
+import com.bteam.blocal.service.ForegroundService;
 import com.bteam.blocal.ui.login.LoginFragmentDirections;
 import com.google.firebase.auth.FirebaseAuth;
 
