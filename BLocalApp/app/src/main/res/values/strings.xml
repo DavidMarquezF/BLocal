@@ -66,5 +66,6 @@
     <string name="lbl_stub_data">Stub data, feature coming soon!</string>
     <string name="title_barcode_scanner">Barcode Scanner</string>
     <string name="title_find_item">Find Item</string>
+    <string name="err_item_not_found">Item not found</string>
 
 </resources>
