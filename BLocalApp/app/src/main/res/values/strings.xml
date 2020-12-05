@@ -67,5 +67,8 @@
     <string name="title_barcode_scanner">Barcode Scanner</string>
     <string name="title_find_item">Find Item</string>
     <string name="err_item_not_found">Item not found</string>
+    <string name="lbl_connection_info">Connection Info</string>
+    <string name="btn_check_connection">Check connection</string>
+    <string name="snackbar_connection_info">Fetching connection information.</string>
 
 </resources>
