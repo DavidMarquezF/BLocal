@@ -10,7 +10,10 @@
         android:id="@+id/navigation_store_analytics"
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/title_dashboard" />
-
+    <item
+        android:id="@+id/navigation_item_finder"
+        android:icon="@drawable/ic_barcode"
+        android:title="@string/title_find_item" />
     <item
         android:id="@+id/navigation_store_settings"
         android:icon="@drawable/ic_baseline_settings_24"
