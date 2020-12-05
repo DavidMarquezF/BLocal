@@ -1,6 +1,7 @@
 package com.bteam.blocal.ui.user.store_list;
 
 import android.content.Context;
+import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bteam.blocal.R;
 import com.bteam.blocal.data.model.StoreModel;
 import com.bteam.blocal.utility.Constants;
+import com.bteam.blocal.utility.DistanceCalculator;
 import com.bteam.blocal.utility.FirebaseSwipeAdapter;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 
 public class StoreListAdapter extends FirebaseSwipeAdapter<StoreModel, StoreListAdapter.StoreListViewHolder> {
     private Context context;
+    private Location lastLocation;
 
     public StoreListAdapter(FirebaseSwipeAdapter.IItemClickListener listener, @NonNull FirestorePagingOptions<StoreModel> options) {
         super(options, listener);
@@ -48,8 +51,19 @@ public class StoreListAdapter extends FirebaseSwipeAdapter<StoreModel, StoreList
         storeListViewHolder.txtStoreName.setText(storeModel.getName());
        // storeListViewHolder.txtStoreOwner.setText(storeModel.getOwnerId());
         Glide.with(context).load(storeModel.getImageUrl()).apply(Constants.getStoreDefaultOptions()).into(storeListViewHolder.imgStoreIcon);
-        // TODO: calculate distance to the stores
-        storeListViewHolder.txtStoreDistance.setText("3.4km");
+
+        // Calculate distance to the stores
+        Location storeLocation = new Location("store");
+        storeLocation.setLatitude(storeModel.getLocation().getLatitude());
+        storeLocation.setLongitude(storeModel.getLocation().getLongitude());
+
+        if (null != lastLocation) {
+            // Gets distance in meters
+            double distance = DistanceCalculator.getDistance(storeLocation, lastLocation);
+            storeListViewHolder.txtStoreDistance.setText(String.format(java.util.Locale.US,"%.1f", (distance / 1000)) + " km");
+        } else {
+            storeListViewHolder.txtStoreDistance.setText("n/a");
+        }
     }
 
     @Override
@@ -83,5 +97,9 @@ public class StoreListAdapter extends FirebaseSwipeAdapter<StoreModel, StoreList
                 listener.onItemClick(getItem(position),position);
             }
         }
+    }
+
+    public void setLastLocation(Location lastLocation) {
+        this.lastLocation = lastLocation;
     }
 }
