@@ -133,6 +133,16 @@
     <fragment
         android:id="@+id/navigation_user_settings"
         android:name="com.bteam.blocal.ui.user.user_settings.UserSettingsFragment"
-        android:label="@string/title_settings" />
+        android:label="@string/title_settings" >
 
+        <action
+            android:id="@+id/openUserConnectionInfo"
+            app:destination="@id/navigation_user_connection_info" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_user_connection_info"
+        android:name="com.bteam.blocal.ui.user.UserConnectionInfoFragment"
+        android:label="@string/lbl_connection_info" />
 </navigation>

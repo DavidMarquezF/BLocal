@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -32,6 +33,9 @@ public class StoreSettingsFragment extends PreferenceFragmentCompat {
         switch (key){
             case "btn_logout":
                 vm.logout();
+                return true;
+            case "btn_connection_info":
+                NavHostFragment.findNavController(this).navigate(R.id.openStoreConnectionInfo);
                 return true;
         }
         return super.onPreferenceTreeClick(preference);

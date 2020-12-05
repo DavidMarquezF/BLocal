@@ -25,11 +25,10 @@
             tools:listitem="@layout/item_store" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lla_store_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -37,46 +36,46 @@
             android:id="@+id/txt_store_list_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:text="@string/txt_store_list_distance"
             android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/btn_store_list_toggle"
+        <RadioGroup
+            android:id="@+id/btn_store_list_radio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="0dp"
-            android:paddingBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="0dp">
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/txt_store_list_distance"
+            app:layout_constraintTop_toBottomOf="@id/txt_store_list_distance">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_store_list_toggle1"
+            <RadioButton
+                android:id="@+id/btn_store_list_radio1"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1km" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_store_list_toggle2"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="5km" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_store_list_toggle3"
+            <RadioButton
+                android:id="@+id/btn_store_list_radio2"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="10km" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
 
-    </LinearLayout>
+            <RadioButton
+                android:id="@+id/btn_store_list_radio3"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="15km" />
+        </RadioGroup>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

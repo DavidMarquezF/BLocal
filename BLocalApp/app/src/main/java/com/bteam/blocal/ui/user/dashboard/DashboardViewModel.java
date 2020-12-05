@@ -36,8 +36,8 @@ public class DashboardViewModel extends ViewModel {
     private DashboardButtonModel[] items = {
             new DashboardButtonModel(R.string.title_maps, R.drawable.ic_baseline_map_24, R.id.openMaps),
             new DashboardButtonModel(R.string.title_stores, R.drawable.ic_baseline_store_24, R.id.openStoreList),
-            new DashboardButtonModel(R.string.title_search, R.drawable.ic_baseline_search_24, R.id.openItemList),
-            new DashboardButtonModel(R.string.title_shopping_lists, R.drawable.ic_baseline_shopping_basket_24, R.id.openShoppingLists)
+//            new DashboardButtonModel(R.string.title_search, R.drawable.ic_baseline_search_24, R.id.openItemList),
+//            new DashboardButtonModel(R.string.title_shopping_lists, R.drawable.ic_baseline_shopping_basket_24, R.id.openShoppingLists)
     };
 
 }
