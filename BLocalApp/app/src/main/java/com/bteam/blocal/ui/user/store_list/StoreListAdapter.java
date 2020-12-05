@@ -11,16 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bteam.blocal.R;
-import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.StoreModel;
-import com.bteam.blocal.ui.shared.item_list.ItemListAdapter;
 import com.bteam.blocal.utility.Constants;
 import com.bteam.blocal.utility.FirebaseSwipeAdapter;
-import com.bteam.blocal.utility.InStockText;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
-
-import java.util.List;
 
 public class StoreListAdapter extends FirebaseSwipeAdapter<StoreModel, StoreListAdapter.StoreListViewHolder> {
     private Context context;
@@ -51,7 +46,7 @@ public class StoreListAdapter extends FirebaseSwipeAdapter<StoreModel, StoreList
     @Override
     protected void onBindViewHolder(@NonNull StoreListViewHolder storeListViewHolder, int i, @NonNull StoreModel storeModel) {
         storeListViewHolder.txtStoreName.setText(storeModel.getName());
-        storeListViewHolder.txtStoreOwner.setText(storeModel.getOwnerId());
+       // storeListViewHolder.txtStoreOwner.setText(storeModel.getOwnerId());
         Glide.with(context).load(storeModel.getImageUrl()).apply(Constants.getStoreDefaultOptions()).into(storeListViewHolder.imgStoreIcon);
         // TODO: calculate distance to the stores
         storeListViewHolder.txtStoreDistance.setText("3.4km");
