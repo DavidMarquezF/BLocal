@@ -144,5 +144,6 @@
     <fragment
         android:id="@+id/navigation_user_connection_info"
         android:name="com.bteam.blocal.ui.user.UserConnectionInfoFragment"
-        android:label="@string/lbl_connection_info" />
+        android:label="@string/lbl_connection_info"
+        tools:layout="@layout/fragment_connection_info"/>
 </navigation>

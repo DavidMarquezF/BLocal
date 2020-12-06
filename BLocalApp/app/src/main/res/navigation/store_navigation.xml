@@ -27,7 +27,7 @@
     <fragment
         android:id="@+id/navigation_store_settings"
         android:name="com.bteam.blocal.ui.store.store_settings.StoreSettingsFragment"
-        android:label="@string/title_settings" >
+        android:label="@string/title_settings">
 
         <action
             android:id="@+id/openStoreConnectionInfo"
@@ -38,7 +38,8 @@
     <fragment
         android:id="@+id/navigation_store_connection_info"
         android:name="com.bteam.blocal.ui.store.StoreConnectionInfoFragment"
-        android:label="@string/lbl_connection_info" />
+        android:label="@string/lbl_connection_info"
+        tools:layout="@layout/fragment_connection_info"/>
 
     <fragment
         android:id="@+id/itemDetailFragment"
@@ -68,11 +69,13 @@
     <fragment
         android:id="@+id/navigation_bar_scanner"
         android:name="com.bteam.blocal.ui.store.CameraFragment"
-        android:label="CameraView" />
+        android:label="CameraView"
+        tools:layout="@layout/fragment_camera_view"/>
     <fragment
         android:id="@+id/navigation_item_finder"
         android:name="com.bteam.blocal.ui.store.item_finder.ItemFinderFragment"
-        android:label="ItemFinderFragment" >
+        android:label="ItemFinderFragment"
+        tools:layout="@layout/fragment_camera_view">
         <action
             android:id="@+id/goToItem"
             app:destination="@id/itemDetailFragment"
