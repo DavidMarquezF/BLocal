@@ -4,9 +4,9 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.bteam.blocal.data.IOnCompleteCallback;
 import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.Resource;
 import com.bteam.blocal.data.repository.StoreRepository;
@@ -32,14 +32,14 @@ public class EditItemViewModel extends ViewModel {
     public EditItemViewModel(){
         storeRepository = StoreRepository.getInstance();
     }
-    public void updateItem(ItemModel model, StoreRepository.IOnCompleteCallback<Void> callback){
+    public void updateItem(ItemModel model, IOnCompleteCallback<Void> callback){
         storeRepository.updateItem(uid, model ,callback);
     }
 
-    public void createItem(ItemModel model, StoreRepository.IOnCompleteCallback<ItemModel> callback){
+    public void createItem(ItemModel model, IOnCompleteCallback<ItemModel> callback){
         storeRepository.createItem(model, callback);
     }
-    public void uploadImage(Bitmap image, StoreRepository.IOnCompleteCallback<String> callback){
+    public void uploadImage(Bitmap image, IOnCompleteCallback<String> callback){
         storeRepository.uploadItemImage(image, callback);
     }
 

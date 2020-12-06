@@ -22,7 +22,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.bteam.blocal.BarcodeScannerAnalyzer;
 import com.bteam.blocal.R;
-import com.bteam.blocal.data.repository.StoreRepository;
+import com.bteam.blocal.data.IOnCompleteCallback;
 import com.bteam.blocal.utility.NavigationResult;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -121,7 +121,7 @@ public class CameraFragment extends Fragment {
         ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
                 .build();
 
-        imageAnalysis.setAnalyzer(executor, new BarcodeScannerAnalyzer(new StoreRepository.IOnCompleteCallback<String>() {
+        imageAnalysis.setAnalyzer(executor, new BarcodeScannerAnalyzer(new IOnCompleteCallback<String>() {
             @Override
             public void onError(Throwable err) {
 

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import androidx.lifecycle.ViewModel;
 
+import com.bteam.blocal.data.IOnCompleteCallback;
 import com.bteam.blocal.data.model.StoreModel;
 import com.bteam.blocal.data.repository.StoreRepository;
 import com.bteam.blocal.data.repository.UserRepository;
@@ -36,13 +37,13 @@ public class CreateStoreViewModel extends ViewModel {
         this.imageUrl = imageUrl;
     }
 
-    public void createStore(String name, String description, StoreRepository.IOnCompleteCallback<StoreModel> callback) {
+    public void createStore(String name, String description, IOnCompleteCallback<StoreModel> callback) {
         String userUid = UserRepository.getInstance().getUser().getValue().getUid();
         StoreModel storeModel = new StoreModel(name, userUid, new GeoPoint(location.latitude, location.longitude), description, imageUrl);
         storeRepository.createStore(storeModel, callback);
     }
 
-    public void uploadImage(Bitmap image, StoreRepository.IOnCompleteCallback<String> callback) {
+    public void uploadImage(Bitmap image, IOnCompleteCallback<String> callback) {
         storeRepository.uploadStoreImage(image, callback);
     }
 

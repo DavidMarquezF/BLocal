@@ -13,6 +13,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.bteam.blocal.R;
+import com.bteam.blocal.data.IOnCompleteCallback;
 import com.bteam.blocal.data.model.StoreModel;
 import com.bteam.blocal.data.model.errors.NoDocumentException;
 import com.bteam.blocal.data.repository.StoreRepository;
@@ -85,7 +86,7 @@ public class LoginFragment extends Fragment {
 
     }
     private void navigateUserLoggedIn(){
-        StoreRepository.getInstance().updateMyStore(new StoreRepository.IOnCompleteCallback<StoreModel>() {
+        StoreRepository.getInstance().updateMyStore(new IOnCompleteCallback<StoreModel>() {
 
             @Override
             public void onSuccess(StoreModel data) {

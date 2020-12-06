@@ -1,12 +1,9 @@
 package com.bteam.blocal.ui.shared.create_store;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +20,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bteam.blocal.R;
+import com.bteam.blocal.data.IOnCompleteCallback;
 import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.StoreModel;
-import com.bteam.blocal.data.repository.StoreRepository;
 import com.bteam.blocal.ui.user.main_user.MainUserFragmentDirections;
 import com.bteam.blocal.utility.EditTextButton;
 import com.bteam.blocal.utility.IToolbarHandler;
@@ -144,7 +141,7 @@ public class CreateStoreFragment extends Fragment {
             itemImageBtn.setImageBitmap(image);
             itemImageBtn.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-            vm.uploadImage(image, new StoreRepository.IOnCompleteCallback<String>() {
+            vm.uploadImage(image, new IOnCompleteCallback<String>() {
                 @Override
                 public void onError(Throwable err) {
                     itemImageBtn.setImageResource(R.drawable.ic_outline_camera_alt_24);
@@ -181,7 +178,7 @@ public class CreateStoreFragment extends Fragment {
             valid = false;
         }
         if (valid) {
-            vm.createStore(name, description, new StoreRepository.IOnCompleteCallback<StoreModel>() {
+            vm.createStore(name, description, new IOnCompleteCallback<StoreModel>() {
                 @Override
                 public void onError(Throwable err) {
 

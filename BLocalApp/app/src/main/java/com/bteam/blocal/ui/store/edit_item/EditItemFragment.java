@@ -20,9 +20,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bteam.blocal.R;
+import com.bteam.blocal.data.IOnCompleteCallback;
 import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.Resource;
-import com.bteam.blocal.data.repository.StoreRepository;
 import com.bteam.blocal.ui.store.CameraFragment;
 import com.bteam.blocal.utility.EditTextButton;
 import com.bteam.blocal.utility.ImageSelector;
@@ -157,7 +157,7 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
             ItemModel itemModel = new ItemModel(name, vm.getImageUrl(), price, stock, description, code);
 
             if (vm.getIsModeEdit()) {
-                vm.updateItem(itemModel, new StoreRepository.IOnCompleteCallback<Void>() {
+                vm.updateItem(itemModel, new IOnCompleteCallback<Void>() {
                     @Override
                     public void onError(Throwable err) {
 
@@ -169,7 +169,7 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
                     }
                 });
             } else {
-                vm.createItem(itemModel, new StoreRepository.IOnCompleteCallback<ItemModel>() {
+                vm.createItem(itemModel, new IOnCompleteCallback<ItemModel>() {
                     @Override
                     public void onError(Throwable err) {
 
@@ -197,7 +197,7 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
             itemImageBtn.setImageBitmap(image);
             itemImageBtn.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-            vm.uploadImage(image, new StoreRepository.IOnCompleteCallback<String>() {
+            vm.uploadImage(image, new IOnCompleteCallback<String>() {
                 @Override
                 public void onError(Throwable err) {
                     itemImageBtn.setImageResource(R.drawable.ic_outline_camera_alt_24);

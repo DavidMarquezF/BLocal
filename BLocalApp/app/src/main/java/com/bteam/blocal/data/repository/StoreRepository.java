@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
+import com.bteam.blocal.data.IOnCompleteCallback;
 import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.Resource;
 import com.bteam.blocal.data.model.StoreModel;
@@ -41,8 +42,6 @@ public class StoreRepository {
     private static StoreRepository _instance;
 
 
-    private final FirebaseFirestore db;
-    private final FirebaseStorage storage;
     private final FirebaseAuth auth;
     private final StorageReference itemsImagesStorage;
     private final StorageReference storesImagesStorage;
@@ -53,14 +52,14 @@ public class StoreRepository {
         return myStore;
     }
 
-    public String getMyStoreUid(){
+    public String getMyStoreUid() {
         return myStore.getValue().getUid();
     }
 
     private StoreRepository() {
-        db = FirebaseFirestore.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-        storage = FirebaseStorage.getInstance();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
         itemsImagesStorage = storage.getReference().child("items");
         storesImagesStorage = storage.getReference().child("stores");
         myStore = new MutableLiveData<>();
@@ -74,119 +73,18 @@ public class StoreRepository {
         return _instance;
     }
 
-
-
     public CollectionReference getItemsQuery(String uid) {
         return getStoreQuery()
                 .document(uid)
                 .collection("items");
     }
 
-
-
     public CollectionReference getStoreQuery() {
         return storeCollection;
     }
 
 
-
-
-    public void updateMyStore(IOnCompleteCallback<StoreModel> callback) {
-        storeCollection
-                .whereEqualTo("ownerId", auth.getCurrentUser().getUid())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot snapshots = task.getResult();
-                            if (!snapshots.isEmpty()) {
-                                StoreModel store = snapshots.getDocuments().get(0).toObject(StoreModel.class);
-                                myStore.setValue(store);
-                                callback.onSuccess(store);
-                            } else {
-                                callback.onError(new NoDocumentException());
-                                myStore.setValue(null);
-                            }
-                        } else {
-                            callback.onError(new UnsuccessfulQueryException());
-                            myStore.setValue(null);
-                        }
-                    }
-                });
-    }
-
-    public void uploadStoreImage(Bitmap image, IOnCompleteCallback<String> callback) {
-        StorageReference reference = storesImagesStorage.child(UUID.randomUUID().toString());
-        uploadImage(reference, image, callback);
-    }
-
-    public LiveData<Resource<List<ItemModel>>> findItemByCode(String barcode) {
-        SingleLiveEvent<Resource<List<ItemModel>>> liveData = new SingleLiveEvent<>();
-        getItemsQuery(getMyStoreUid()).whereEqualTo("code", barcode)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot doc = task.getResult();
-                                liveData.setValue(Resource.success(doc.toObjects(ItemModel.class)));
-
-                        } else {
-                            liveData.setValue(Resource.error(new UnsuccessfulQueryException(), null));
-                        }
-                    }
-                });
-
-        return liveData;
-    }
-
-
-    public interface IOnSuccessCallback<T> {
-        void onSuccess(T data);
-    }
-
-    public interface IOnErrorCallback {
-        void onError(Throwable err);
-    }
-
-    public interface IOnCompleteCallback<T> extends IOnErrorCallback, IOnSuccessCallback<T> {
-    }
-
-    public interface IOnResourceChange<T> {
-        void OnResourceChange(Resource<T> resource);
-    }
-
-    public void updateItem(String uid, ItemModel model, IOnCompleteCallback<Void> callback) {
-        getItemsQuery(getMyStoreUid()).document(uid).set(model).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    callback.onSuccess(null);
-                } else {
-                    callback.onError(new UnsuccessfulQueryException());
-                }
-            }
-        });
-    }
-
-    public void createItem(ItemModel model, IOnCompleteCallback<ItemModel> callback) {
-        getItemsQuery(getMyStoreUid()).add(model).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentReference> task) {
-                if (task.isSuccessful()) {
-                    DocumentReference doc = task.getResult();
-                    model.setUid(doc.getId());
-                    callback.onSuccess(model);
-                } else {
-                    callback.onError(new UnsuccessfulQueryException());
-                }
-            }
-        });
-
-    }
-
-    public void createStore(StoreModel model, IOnCompleteCallback<StoreModel> callback){
+    public void createStore(StoreModel model, IOnCompleteCallback<StoreModel> callback) {
         storeCollection.add(model).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -198,45 +96,6 @@ public class StoreRepository {
                 } else {
                     callback.onError(new UnsuccessfulQueryException());
                 }
-            }
-        });
-    }
-
-    public void uploadItemImage(Bitmap image, IOnCompleteCallback<String> callback) {
-        StorageReference reference = itemsImagesStorage.child(UUID.randomUUID().toString());
-        uploadImage(reference, image, callback);
-    }
-
-    private void uploadImage(StorageReference reference, Bitmap image, IOnCompleteCallback<String> callback){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
-
-        UploadTask uploadTask = reference.putBytes(data);
-
-        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                double progress = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
-            }
-        }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (!task.isSuccessful()) {
-                    throw task.getException();
-                }
-                return reference.getDownloadUrl();
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        callback.onError(exception);
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                callback.onSuccess(uri.toString());
             }
         });
     }
@@ -305,5 +164,127 @@ public class StoreRepository {
             }
         });
     }
+
+
+    //------------------------------------STORE SPECIFIC-----------------------------------------
+    public void updateMyStore(IOnCompleteCallback<StoreModel> callback) {
+        storeCollection
+                .whereEqualTo("ownerId", auth.getCurrentUser().getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot snapshots = task.getResult();
+                            if (!snapshots.isEmpty()) {
+                                StoreModel store = snapshots.getDocuments().get(0).toObject(StoreModel.class);
+                                myStore.setValue(store);
+                                callback.onSuccess(store);
+                            } else {
+                                callback.onError(new NoDocumentException());
+                                myStore.setValue(null);
+                            }
+                        } else {
+                            callback.onError(new UnsuccessfulQueryException());
+                            myStore.setValue(null);
+                        }
+                    }
+                });
+    }
+
+    public LiveData<Resource<List<ItemModel>>> findItemByCode(String barcode) {
+        SingleLiveEvent<Resource<List<ItemModel>>> liveData = new SingleLiveEvent<>();
+        getItemsQuery(getMyStoreUid()).whereEqualTo("code", barcode)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot doc = task.getResult();
+                            liveData.setValue(Resource.success(doc.toObjects(ItemModel.class)));
+
+                        } else {
+                            liveData.setValue(Resource.error(new UnsuccessfulQueryException(), null));
+                        }
+                    }
+                });
+
+        return liveData;
+    }
+
+
+    public void updateItem(String uid, ItemModel model, IOnCompleteCallback<Void> callback) {
+        getItemsQuery(getMyStoreUid()).document(uid).set(model).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    callback.onSuccess(null);
+                } else {
+                    callback.onError(new UnsuccessfulQueryException());
+                }
+            }
+        });
+    }
+
+    public void createItem(ItemModel model, IOnCompleteCallback<ItemModel> callback) {
+        getItemsQuery(getMyStoreUid()).add(model).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if (task.isSuccessful()) {
+                    DocumentReference doc = task.getResult();
+                    model.setUid(doc.getId());
+                    callback.onSuccess(model);
+                } else {
+                    callback.onError(new UnsuccessfulQueryException());
+                }
+            }
+        });
+
+    }
+
+    public void uploadStoreImage(Bitmap image, IOnCompleteCallback<String> callback) {
+        StorageReference reference = storesImagesStorage.child(UUID.randomUUID().toString());
+        uploadImage(reference, image, callback);
+    }
+
+    public void uploadItemImage(Bitmap image, IOnCompleteCallback<String> callback) {
+        StorageReference reference = itemsImagesStorage.child(UUID.randomUUID().toString());
+        uploadImage(reference, image, callback);
+    }
+
+    private void uploadImage(StorageReference reference, Bitmap image, IOnCompleteCallback<String> callback) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = reference.putBytes(data);
+
+        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                double progress = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
+            }
+        }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+                return reference.getDownloadUrl();
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        callback.onError(exception);
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                callback.onSuccess(uri.toString());
+            }
+        });
+    }
+
 
 }

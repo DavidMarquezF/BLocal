@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
 
-import com.bteam.blocal.data.repository.StoreRepository;
+import com.bteam.blocal.data.IOnCompleteCallback;
 import com.google.mlkit.vision.barcode.Barcode;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
@@ -21,9 +21,9 @@ public class BarcodeScannerAnalyzer implements ImageAnalysis.Analyzer {
 
     private static final String TAG = "BARCODE_SCANNER";
     public final BarcodeScanner scanner;
-    private final StoreRepository.IOnCompleteCallback<String> callback;
+    private final IOnCompleteCallback<String> callback;
 
-    public BarcodeScannerAnalyzer(StoreRepository.IOnCompleteCallback<String> callback) {
+    public BarcodeScannerAnalyzer(IOnCompleteCallback<String> callback) {
         this.callback = callback;
         //Initialisation of scanner: standards used in Denmark, Europe are EAN and UPC
         BarcodeScannerOptions options =
