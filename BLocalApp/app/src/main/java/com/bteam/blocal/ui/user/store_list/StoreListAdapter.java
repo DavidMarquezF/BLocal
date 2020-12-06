@@ -19,11 +19,13 @@ import com.bteam.blocal.utility.FirebaseSwipeAdapter;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 
-public class StoreListAdapter extends FirebaseSwipeAdapter<StoreModel, StoreListAdapter.StoreListViewHolder> {
+public class StoreListAdapter extends
+        FirebaseSwipeAdapter<StoreModel, StoreListAdapter.StoreListViewHolder> {
     private Context context;
     private Location lastLocation;
 
-    public StoreListAdapter(FirebaseSwipeAdapter.IItemClickListener listener, @NonNull FirestorePagingOptions<StoreModel> options) {
+    public StoreListAdapter(FirebaseSwipeAdapter.IItemClickListener listener,
+                            @NonNull FirestorePagingOptions<StoreModel> options) {
         super(options, listener);
     }
 
@@ -47,10 +49,11 @@ public class StoreListAdapter extends FirebaseSwipeAdapter<StoreModel, StoreList
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull StoreListViewHolder storeListViewHolder, int i, @NonNull StoreModel storeModel) {
+    protected void onBindViewHolder(@NonNull StoreListViewHolder storeListViewHolder, int i,
+                                    @NonNull StoreModel storeModel) {
         storeListViewHolder.txtStoreName.setText(storeModel.getName());
-       // storeListViewHolder.txtStoreOwner.setText(storeModel.getOwnerId());
-        Glide.with(context).load(storeModel.getImageUrl()).apply(Constants.getStoreDefaultOptions()).into(storeListViewHolder.imgStoreIcon);
+        Glide.with(context).load(storeModel.getImageUrl())
+                .apply(Constants.getStoreDefaultOptions()).into(storeListViewHolder.imgStoreIcon);
 
         // Calculate distance to the stores
         Location storeLocation = new Location("store");
@@ -60,7 +63,9 @@ public class StoreListAdapter extends FirebaseSwipeAdapter<StoreModel, StoreList
         if (null != lastLocation) {
             // Gets distance in meters
             double distance = DistanceCalculator.getDistance(storeLocation, lastLocation);
-            storeListViewHolder.txtStoreDistance.setText(String.format(java.util.Locale.US,"%.1f", (distance / 1000)) + " km");
+            storeListViewHolder.txtStoreDistance
+                    .setText(String
+                            .format(java.util.Locale.US,"%.1f", (distance / 1000)) + " km");
         } else {
             storeListViewHolder.txtStoreDistance.setText("n/a");
         }

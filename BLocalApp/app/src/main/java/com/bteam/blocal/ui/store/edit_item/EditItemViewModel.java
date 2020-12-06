@@ -13,7 +13,6 @@ import com.bteam.blocal.data.repository.StoreRepository;
 import com.bteam.blocal.utility.SingleLiveEvent;
 
 public class EditItemViewModel extends ViewModel {
-
     private String imageUrl;
 
     public boolean getIsModeEdit(){
@@ -48,7 +47,8 @@ public class EditItemViewModel extends ViewModel {
         EditItemFragmentArgs args = EditItemFragmentArgs.fromBundle(savedInstanceState);
         if(args != null){
             String uid = args.getItemUid();
-            // this function is called when the screen rotates. We only want to get the data the first time
+            // this function is called when the screen rotates.
+            // We only want to get the data the first time
             if(itemDetail == null){
                 if(uid != null && !uid.equals(this.uid)){
                     itemDetail = repository.getStoreItem(repository.getMyStoreUid(), uid);
@@ -59,7 +59,6 @@ public class EditItemViewModel extends ViewModel {
                 }
             }
         }
-
     }
 
     public String getImageUrl() {

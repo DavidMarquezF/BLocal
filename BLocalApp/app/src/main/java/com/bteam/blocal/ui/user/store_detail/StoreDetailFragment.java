@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
 
 import com.bteam.blocal.R;
 import com.bteam.blocal.utility.Constants;
@@ -22,9 +21,6 @@ import com.bumptech.glide.Glide;
 public class StoreDetailFragment extends Fragment {
     private static final String TAG = "StoreDetailFragment";
     private StoreDetailViewModel storeDetailViewModel;
-
-    // REMOVE
-    private String storeUid;
 
     private TextView storeName, storeOwner;
     private Button btnItems;
@@ -54,27 +50,26 @@ public class StoreDetailFragment extends Fragment {
         imageStore = view.findViewById(R.id.img_store_detail_icon);
         btnItems.setOnClickListener(v -> navigateToItemList());
 
-
-        storeDetailViewModel.getStoreDetail().observe(getViewLifecycleOwner(), storeModelResource -> {
+        storeDetailViewModel.getStoreDetail().observe(getViewLifecycleOwner(),
+                storeModelResource -> {
             switch (storeModelResource.status) {
                 case SUCCESS:
                     storeName.setText(storeModelResource.data.getName());
                     storeOwner.setText(storeModelResource.data.getDescription());
-                    Glide.with(getContext()).load(storeModelResource.data.getImageUrl()).apply(Constants.getStoreDefaultOptions()).into(imageStore);
+                    Glide.with(getContext()).load(storeModelResource.data.getImageUrl())
+                            .apply(Constants.getStoreDefaultOptions()).into(imageStore);
                     btnItems.setEnabled(true);
                     break;
                 default:
                     btnItems.setEnabled(false);
                     break;
             }
-
         });
-
     }
 
-
     private void navigateToItemList() {
-        StoreDetailFragmentDirections.ShowStoreItems dir = StoreDetailFragmentDirections.showStoreItems(storeDetailViewModel.getStoreDetail().getValue().data.getUid());
+        StoreDetailFragmentDirections.ShowStoreItems dir = StoreDetailFragmentDirections
+                .showStoreItems(storeDetailViewModel.getStoreDetail().getValue().data.getUid());
         NavHostFragment.findNavController(this)
                 .navigate(dir);
     }

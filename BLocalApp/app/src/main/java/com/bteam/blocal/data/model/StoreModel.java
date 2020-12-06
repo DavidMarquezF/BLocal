@@ -17,7 +17,8 @@ public class StoreModel {
 
     }
 
-    public StoreModel(String name, String ownerId, GeoPoint location, String description, String imageUrl){
+    public StoreModel(String name, String ownerId, GeoPoint location, String description,
+                      String imageUrl){
         this.name = name;
         this.ownerId = ownerId;
         this.location = location;

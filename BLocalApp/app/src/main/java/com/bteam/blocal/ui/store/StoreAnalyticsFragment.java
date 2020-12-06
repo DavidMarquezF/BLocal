@@ -27,12 +27,9 @@ import java.util.List;
 import java.util.Random;
 
 public class StoreAnalyticsFragment extends Fragment {
-
-
     public StoreAnalyticsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,7 +55,7 @@ public class StoreAnalyticsFragment extends Fragment {
         for (int i = 0; i < 20; i++) {
             entries.add(new Entry(i, rnd.nextInt(upperbound)));
         }
-        LineDataSet dataSet = new LineDataSet(entries, "User Visits");
+        LineDataSet dataSet = new LineDataSet(entries, this.getResources().getString(R.string.user_visits));
         dataSet.setLineWidth(3);
         dataSet.setCircleRadius(5);
         dataSet.setCircleHoleRadius(2.5f);
@@ -98,10 +95,10 @@ public class StoreAnalyticsFragment extends Fragment {
         pieChart.setTransparentCircleRadius(61f);
 
         List<PieEntry> pieEntries = new ArrayList<>();
-        pieEntries.add(new PieEntry(34, "Necessities"));
-        pieEntries.add(new PieEntry(60, "Electronics"));
-        pieEntries.add(new PieEntry(34, "Presents"));
-        PieDataSet pieDataSet = new PieDataSet(pieEntries, "Outcome");
+        pieEntries.add(new PieEntry(34, this.getResources().getString(R.string.necessities)));
+        pieEntries.add(new PieEntry(60, this.getResources().getString(R.string.electronics)));
+        pieEntries.add(new PieEntry(34, this.getResources().getString(R.string.presents)));
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, this.getResources().getString(R.string.outcome));
 
         pieDataSet.setSliceSpace(3f);
         pieDataSet.setSelectionShift(5f);

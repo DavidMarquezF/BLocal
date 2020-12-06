@@ -1,20 +1,15 @@
 package com.bteam.blocal.ui.user.store_list;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -23,11 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bteam.blocal.R;
-import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.StoreModel;
-import com.bteam.blocal.ui.shared.item_list.ItemListAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -40,8 +32,6 @@ public class StoreListFragment extends Fragment implements StoreListAdapter.IIte
 
     private StoreListViewModel storeListViewModel;
     private StoreListAdapter storeListAdapter;
-
-    private MaterialButton btnAllowLocation;
 
     public StoreListFragment() {
         // Required empty public constructor
@@ -109,7 +99,8 @@ public class StoreListFragment extends Fragment implements StoreListAdapter.IIte
     @Override
     public void onItemClick(DocumentSnapshot document, int index) {
         StoreModel sm = document.toObject(StoreModel.class);
-        StoreListFragmentDirections.OpenStoreDetailFromList dir = StoreListFragmentDirections.openStoreDetailFromList(sm.getUid());
+        StoreListFragmentDirections.OpenStoreDetailFromList dir = StoreListFragmentDirections
+                .openStoreDetailFromList(sm.getUid());
         NavHostFragment.findNavController(this)
                 .navigate(dir);
     }
@@ -136,7 +127,8 @@ public class StoreListFragment extends Fragment implements StoreListAdapter.IIte
             if (grantResults.length == LOCATION_PERMISSIONS.length) {
                 for (final int grantResult : grantResults) {
                     if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                        if (shouldShowRequestPermissionRationale(Manifest
+                                .permission.ACCESS_FINE_LOCATION)) {
                             showLocationPermissionSnackbar();
                         }
                         return;
@@ -148,7 +140,7 @@ public class StoreListFragment extends Fragment implements StoreListAdapter.IIte
     }
 
     private void showLocationPermissionSnackbar() {
-        Snackbar.make(getView(), "Distance calculation cannot work without location permission!", Snackbar.LENGTH_LONG)
+        Snackbar.make(getView(), R.string.snackbar_calculation_location, Snackbar.LENGTH_LONG)
                 .setAction(R.string.snackbar_maps_location_try_again,
                         v -> checkLocationPermissions())
                 .show();

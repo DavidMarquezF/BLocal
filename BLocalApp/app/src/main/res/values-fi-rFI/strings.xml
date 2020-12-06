@@ -59,4 +59,12 @@
     <string name="title_barcode_scanner">Viivankoodinlukija</string>
     <string name="title_find_item">Etsi tavara</string>
     <string name="err_item_not_found">Tavaraa ei löytynyt</string>
+    <string name="lbl_connection_info">Yhteyden tiedot</string>
+    <string name="btn_check_connection">Tarkista yhteys</string>
+    <string name="snackbar_connection_info">Haetaan yhteyden tietoja.</string>
+    <string name="user_visits">Käyttäjien vierailut</string>
+    <string name="presents">Lahjatavarat</string>
+    <string name="necessities">Päivittäistavarat</string>
+    <string name="electronics">Elektroniikka</string>
+    <string name="outcome">Lopputulos</string>
 </resources>

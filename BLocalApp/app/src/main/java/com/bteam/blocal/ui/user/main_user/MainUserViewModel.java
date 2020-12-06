@@ -10,8 +10,4 @@ public class MainUserViewModel extends ViewModel {
     public LiveData<FirebaseUser> getCurrentUser(){
         return UserRepository.getInstance().getUser();
     }
-
-
-
-
 }

@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     }
 
     private void navigateToLogin() {
-        NavController navHostController = Navigation.findNavController(this, R.id.main_nav_host_fragment);
+        NavController navHostController = Navigation.findNavController(this,
+                R.id.main_nav_host_fragment);
         if (navHostController.getCurrentDestination().getId() != R.id.login) {
             navHostController.navigate(LoginFragmentDirections.actionGlobalLogin());
         }

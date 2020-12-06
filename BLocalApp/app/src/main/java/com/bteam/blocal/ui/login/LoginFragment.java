@@ -43,7 +43,8 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), _backNavCallback);
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
+                _backNavCallback);
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             navigateUserLoggedIn();
@@ -90,15 +91,19 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onSuccess(StoreModel data) {
-                NavController navHostController = Navigation.findNavController(getActivity(), R.id.main_nav_host_fragment);
-                navHostController.navigate(LoginFragmentDirections.actionLoginToMainStoreFragment());
+                NavController navHostController = Navigation.findNavController(getActivity(),
+                        R.id.main_nav_host_fragment);
+                navHostController.navigate(LoginFragmentDirections
+                        .actionLoginToMainStoreFragment());
             }
 
             @Override
             public void onError(Throwable err) {
                 if(err instanceof NoDocumentException){
-                    NavController navHostController = Navigation.findNavController(getActivity(), R.id.main_nav_host_fragment);
-                    navHostController.navigate(LoginFragmentDirections.actionLoginToMainUserFragment());
+                    NavController navHostController = Navigation.findNavController(getActivity(),
+                            R.id.main_nav_host_fragment);
+                    navHostController.navigate(LoginFragmentDirections
+                            .actionLoginToMainUserFragment());
                 }
                 else{
                     //TODO: Handle unexpected error

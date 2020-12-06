@@ -42,7 +42,8 @@ public class CameraFragment extends Fragment {
     private boolean allPermissionsGranted() {
 
         for (String permission : REQUIRED_PERMISSIONS) {
-            if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(getActivity(), permission) !=
+                    PackageManager.PERMISSION_GRANTED) {
                 return false;
             }
         }
@@ -78,7 +79,8 @@ public class CameraFragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
 
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
@@ -90,21 +92,18 @@ public class CameraFragment extends Fragment {
     }
 
     private void startCamera() {
+        final ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider
+                .getInstance(getContext());
 
-        final ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(getContext());
+        cameraProviderFuture.addListener(() -> {
+            try {
 
-        cameraProviderFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                bindPreview(cameraProvider);
 
-                    ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-                    bindPreview(cameraProvider);
-
-                } catch (ExecutionException | InterruptedException e) {
-                    // No errors need to be handled for this Future.
-                    // This should never be reached.
-                }
+            } catch (ExecutionException | InterruptedException e) {
+                // No errors need to be handled for this Future.
+                // This should never be reached.
             }
         }, ContextCompat.getMainExecutor(getContext()));
     }
@@ -121,7 +120,8 @@ public class CameraFragment extends Fragment {
         ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
                 .build();
 
-        imageAnalysis.setAnalyzer(executor, new BarcodeScannerAnalyzer(new IOnCompleteCallback<String>() {
+        imageAnalysis.setAnalyzer(executor,
+                new BarcodeScannerAnalyzer(new IOnCompleteCallback<String>() {
             @Override
             public void onError(Throwable err) {
 
@@ -133,8 +133,8 @@ public class CameraFragment extends Fragment {
             }
         }));
         preview.setSurfaceProvider(mPreviewView.getSurfaceProvider());
-        Camera camera = cameraProvider.bindToLifecycle(getViewLifecycleOwner(), cameraSelector, preview, imageAnalysis);
-
+        Camera camera = cameraProvider.bindToLifecycle(getViewLifecycleOwner(),
+                cameraSelector, preview, imageAnalysis);
     }
 
     protected void barCodeScanned(String data) {

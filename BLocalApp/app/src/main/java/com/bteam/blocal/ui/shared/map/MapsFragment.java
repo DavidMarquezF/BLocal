@@ -62,7 +62,6 @@ public abstract class MapsFragment extends Fragment {
         checkLocationPermissions();
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -72,7 +71,8 @@ public abstract class MapsFragment extends Fragment {
             if (grantResults.length == LOCATION_PERMISSIONS.length) {
                 for (final int grantResult : grantResults) {
                     if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                        if (shouldShowRequestPermissionRationale
+                                (Manifest.permission.ACCESS_FINE_LOCATION)) {
                             showLocationPermissionSnackbar();
                         }
                         return;
@@ -87,21 +87,22 @@ public abstract class MapsFragment extends Fragment {
     private void showCurrPosOnMap() {
         if (gMap != null) {
             gMap.setMyLocationEnabled(true);
-            FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplication());
+            FusedLocationProviderClient fusedLocationProviderClient = LocationServices
+                    .getFusedLocationProviderClient(getActivity().getApplication());
             fusedLocationProviderClient.getLastLocation()
                     .addOnSuccessListener(location -> {
                         if (null != location) {
-                            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
+                            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+                                    location.getLatitude(), location.getLongitude()), 15));
 
                         } else {
                             Log.d(TAG, "requestCurrentLocation: Last location was not obtained!");
                         }
                     })
-                    .addOnFailureListener(e -> Log.e(TAG, "requestCurrentLocation: " + e.getLocalizedMessage(), e)
+                    .addOnFailureListener(e -> Log.e(TAG, "requestCurrentLocation: " +
+                            e.getLocalizedMessage(), e)
                     );
-
         }
-
     }
 
 
@@ -122,14 +123,14 @@ public abstract class MapsFragment extends Fragment {
     }
 
     private void showLocationPermissionSnackbar() {
-        Snackbar.make(getView(), R.string.snackbar_maps_location_needed, Snackbar.LENGTH_LONG)
+        Snackbar.make(getView(), R.string.snackbar_maps_location_needed,
+                Snackbar.LENGTH_LONG)
                 .setAction(R.string.snackbar_maps_location_try_again,
                         v -> checkLocationPermissions())
                 .show();
     }
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
-
         /**
          * Manipulates the map once available.
          * This callback is triggered when the map is ready to be used.
@@ -151,6 +152,4 @@ public abstract class MapsFragment extends Fragment {
     };
 
     protected abstract void onMapReady(GoogleMap googleMap);
-
-
 }

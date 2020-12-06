@@ -23,11 +23,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 // and by https://proandroiddev.com/handle-complex-navigation-flow-with-single-activity-and-android-jetpacks-navigation-component-6ad988602902
 // https://stackoverflow.com/questions/50730494/new-navigation-component-from-arch-with-nested-navigation-graph
 public class MainStoreFragment extends Fragment {
-
     public MainStoreFragment() {
         // Required empty public constructor
     }
-
 
     private NavController _navController;
     private BottomNavigationView _bottomNavView;
@@ -44,35 +42,29 @@ public class MainStoreFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         _bottomNavView = view.findViewById(R.id.nav_view);
-        _navController = ((NavHostFragment) getChildFragmentManager().findFragmentById(R.id.nav_store_host_fragment)).getNavController();
+        _navController = ((NavHostFragment) getChildFragmentManager()
+                .findFragmentById(R.id.nav_store_host_fragment)).getNavController();
         _floatingActionButton = view.findViewById(R.id.flt_add_item);
 
         NavigationUI.setupWithNavController(_bottomNavView, _navController);
 
-        _floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-              _navController.navigate( ItemListStoreFragmentDirections.goToEdit(null));
-            }
-        });
+        _floatingActionButton.setOnClickListener(view1 -> _navController
+                .navigate( ItemListStoreFragmentDirections.goToEdit(null)));
         listenToBackStack();
 
-        _navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-            @Override
-            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                switch (destination.getId()) {
-                    case R.id.my_store_item_list:
-                        setMainUIVisibility(true, true);
-                        break;
-                    case R.id.navigation_store_settings:
-                    case R.id.navigation_store_analytics:
-                    case R.id.navigation_item_finder:
-                        setMainUIVisibility(true, false);
-                        break;
-                    default:
-                        setMainUIVisibility(false, false);
-                        break;
-                }
+        _navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            switch (destination.getId()) {
+                case R.id.my_store_item_list:
+                    setMainUIVisibility(true, true);
+                    break;
+                case R.id.navigation_store_settings:
+                case R.id.navigation_store_analytics:
+                case R.id.navigation_item_finder:
+                    setMainUIVisibility(true, false);
+                    break;
+                default:
+                    setMainUIVisibility(false, false);
+                    break;
             }
         });
     }
@@ -113,7 +105,8 @@ public class MainStoreFragment extends Fragment {
     private final OnBackPressedCallback _backNavCallback = new OnBackPressedCallback(false) {
         @Override
         public void handleOnBackPressed() {
-            if (_navController.getCurrentDestination().getId() == _navController.getGraph().getStartDestination()) {
+            if (_navController.getCurrentDestination().getId() == _navController.getGraph()
+                    .getStartDestination()) {
                 /*
                     Disable this callback because calls OnBackPressedDispatcher
                      gets invoked  calls this callback  gets stuck in a loop

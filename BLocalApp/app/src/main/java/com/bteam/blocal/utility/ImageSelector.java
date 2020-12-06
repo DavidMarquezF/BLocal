@@ -29,7 +29,9 @@ public class ImageSelector {
     public static final int PICK_PICTURE_REQUEST_CODE = 46;
     public static final int MY_CAMERA_REQUEST_CODE = 100;
 
-    public static Bitmap onActitityResultImageHandler(ContentResolver contentResolver, int requestCode, int resultCode, @Nullable Intent data) {
+    public static Bitmap onActitityResultImageHandler(ContentResolver contentResolver,
+                                                      int requestCode, int resultCode,
+                                                      @Nullable Intent data) {
         if (resultCode != RESULT_CANCELED) {
             Bitmap image = null;
             switch (requestCode) {
@@ -42,7 +44,8 @@ public class ImageSelector {
                         Uri selectedImage = data.getData();
                         if (selectedImage != null) {
                             try {
-                                image = BitmapFactory.decodeStream(contentResolver.openInputStream(selectedImage));
+                                image = BitmapFactory.decodeStream(contentResolver
+                                        .openInputStream(selectedImage));
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
@@ -55,51 +58,47 @@ public class ImageSelector {
         return null;
     }
 
-
     public static void requestImage(Fragment fragment) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(fragment.getContext());
         builder.setTitle(R.string.title_change_photo)
                 .setCancelable(true)
-                .setNegativeButton(R.string.lbl_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-        builder.setItems(R.array.array_choose_photo, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                switch (i) {
-                    case 0:
-                        Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                        try {
-                            if (ContextCompat.checkSelfPermission(fragment.getContext(), Manifest.permission.CAMERA)
-                                    == PackageManager.PERMISSION_DENIED){
-                                ActivityCompat.requestPermissions(fragment.getActivity(), new String[] {Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
-                                dialogInterface.dismiss();
-                            }
-                            else{
-                                fragment.startActivityForResult(takePicture, TAKE_PICUTRE_REQUEST_CODE);
-                            }
-
-                        } catch (ActivityNotFoundException err) {
-                            //TODO: Display to user error
+                .setNegativeButton(R.string.lbl_cancel, (dialogInterface, i) -> dialogInterface.dismiss());
+        builder.setItems(R.array.array_choose_photo, (dialogInterface, i) -> {
+            switch (i) {
+                case 0:
+                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    try {
+                        if (ContextCompat.checkSelfPermission(fragment.getContext(),
+                                Manifest.permission.CAMERA)
+                                == PackageManager.PERMISSION_DENIED){
+                            ActivityCompat.requestPermissions(fragment.getActivity(),
+                                    new String[] {Manifest.permission.CAMERA},
+                                    MY_CAMERA_REQUEST_CODE);
+                            dialogInterface.dismiss();
+                        }
+                        else{
+                            fragment.startActivityForResult(takePicture, TAKE_PICUTRE_REQUEST_CODE);
                         }
 
-                        break;
-                    case 1:
-                        Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        fragment.startActivityForResult(pickPhoto, PICK_PICTURE_REQUEST_CODE);
-                        break;
+                    } catch (ActivityNotFoundException err) {
+                        //TODO: Display to user error
+                    }
 
-                }
+                    break;
+                case 1:
+                    Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    fragment.startActivityForResult(pickPhoto, PICK_PICTURE_REQUEST_CODE);
+                    break;
             }
         });
 
         builder.show();
     }
 
-    public static boolean handleRequestPermission(Fragment fragment, int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+    public static boolean handleRequestPermission(Fragment fragment, int requestCode,
+                                                  @NonNull String[] permissions,
+                                                  @NonNull int[] grantResults){
         if (requestCode == MY_CAMERA_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);

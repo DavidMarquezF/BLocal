@@ -51,7 +51,8 @@ public class StoresMapFragment extends com.bteam.blocal.ui.shared.map.MapsFragme
 
                     // Add them again
                     for (StoreModel store : stores) {
-                        LatLng storePos = new LatLng(store.getLocation().getLatitude(), store.getLocation().getLongitude());
+                        LatLng storePos = new LatLng(store.getLocation().getLatitude(),
+                                store.getLocation().getLongitude());
                         Marker marker = googleMap.addMarker(new MarkerOptions().position(storePos)
                                 .title(store.getName()));
                         marker.setTag(store);
@@ -59,7 +60,8 @@ public class StoresMapFragment extends com.bteam.blocal.ui.shared.map.MapsFragme
                     }
                     break;
                 case ERROR:
-                    Snackbar.make(getView(), R.string.err_stores_load, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(getView(), R.string.err_stores_load,
+                            Snackbar.LENGTH_LONG).show();
                     break;
             }
         });
@@ -77,15 +79,19 @@ public class StoresMapFragment extends com.bteam.blocal.ui.shared.map.MapsFragme
                 .setNeutralButton(R.string.lbl_close, (dialog, which) -> {
                 })
                 .setPositiveButton(R.string.view_store, (dialog, which) -> {
-                    StoresMapFragmentDirections.OpenStoreDetailFromMaps dir = StoresMapFragmentDirections.openStoreDetailFromMaps(storeModel.getUid());
+                    StoresMapFragmentDirections.OpenStoreDetailFromMaps dir =
+                            StoresMapFragmentDirections
+                                    .openStoreDetailFromMaps(storeModel.getUid());
                     NavHostFragment.findNavController(this)
                             .navigate(dir);
                 });
 
-        Glide.with(getContext()).load(storeModel.getImageUrl()).apply(Constants.getStoreDefaultOptions())
+        Glide.with(getContext()).load(storeModel.getImageUrl()).apply(Constants
+                .getStoreDefaultOptions())
                 .into(new CustomTarget<Drawable>() {
                     @Override
-                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    public void onResourceReady(@NonNull Drawable resource,
+                                                @Nullable Transition<? super Drawable> transition) {
                         alert.setIcon(resource);
                         alert.show();
                     }
@@ -102,5 +108,4 @@ public class StoresMapFragment extends com.bteam.blocal.ui.shared.map.MapsFragme
                     }
                 });
     }
-
 }

@@ -9,10 +9,8 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.bteam.blocal.R;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class StoreSettingsFragment extends PreferenceFragmentCompat {
-
     private StoreSettingsViewModel vm;
 
     @Override
@@ -35,7 +33,8 @@ public class StoreSettingsFragment extends PreferenceFragmentCompat {
                 vm.logout();
                 return true;
             case "btn_connection_info":
-                NavHostFragment.findNavController(this).navigate(R.id.openStoreConnectionInfo);
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.openStoreConnectionInfo);
                 return true;
         }
         return super.onPreferenceTreeClick(preference);

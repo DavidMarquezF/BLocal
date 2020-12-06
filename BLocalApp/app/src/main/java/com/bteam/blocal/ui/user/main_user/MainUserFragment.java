@@ -57,18 +57,12 @@ public class MainUserFragment extends Fragment implements IToolbarHandler {
         mainUserViewModel =
                 new ViewModelProvider(this).get(MainUserViewModel.class);
 
-
         // Set up the toolbar for the whole user part of the app
         toolbar = view.findViewById(R.id.user_nav_toolbar_main);
         DrawerLayout drawer = view.findViewById(R.id.user_drawer_layout);
 
-
-        //mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //mainActivity.getSupportActionBar().setHomeButtonEnabled(true);
-
         navController = ((NavHostFragment) getChildFragmentManager()
                 .findFragmentById(R.id.user_nav_host_fragment)).getNavController();
-
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -93,9 +87,11 @@ public class MainUserFragment extends Fragment implements IToolbarHandler {
                     if (user != null) {
                         txtEmail.setText(user.getEmail());
                         txtCurrentUser.setText(user.getDisplayName());
-                        Glide.with(this).load(user.getPhotoUrl()).apply(new RequestOptions()
-                                .placeholder(R.drawable.ic_outline_account_circle_24)
-                                .error(R.drawable.ic_outline_account_circle_24)).into(userProfileImage);
+                        Glide.with(this).load(user.getPhotoUrl())
+                                .apply(new RequestOptions()
+                                        .placeholder(R.drawable.ic_outline_account_circle_24)
+                                        .error(R.drawable.ic_outline_account_circle_24))
+                                .into(userProfileImage);
                     }
 
                 });
@@ -115,8 +111,6 @@ public class MainUserFragment extends Fragment implements IToolbarHandler {
                 drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             }
         });
-
-
         listenToBackStack();
     }
 
@@ -135,7 +129,6 @@ public class MainUserFragment extends Fragment implements IToolbarHandler {
     void listenToBackStack() {
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
                 backNavCallback);
-
     }
 
     private final OnBackPressedCallback backNavCallback = new OnBackPressedCallback(false) {

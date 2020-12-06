@@ -3,18 +3,13 @@ package com.bteam.blocal.utility;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 
-
-// Inspired in the following blog: https://firebase.googleblog.com/2017/12/using-android-architecture-components_22.html
+// Inspired in the following blog:
+// https://firebase.googleblog.com/2017/12/using-android-architecture-components_22.html
 public class FirebaseAuthLiveData extends LiveData<FirebaseUser> {
     private final FirebaseAuth auth;
     private final FirebaseAuth.AuthStateListener listener = new MyValueEventListener();
@@ -49,7 +44,8 @@ public class FirebaseAuthLiveData extends LiveData<FirebaseUser> {
     @Override
     protected void onInactive() {
         super.onInactive();
-        // Remove 2 seconds after to not rethrow query when user changes orientation (onInactive is called)
+        // Remove 2 seconds after to not rethrow query when user changes orientation
+        // (onInactive is called)
         handler.postDelayed(removeListener, 2000);
         listenerRemovalPending = true;
     }

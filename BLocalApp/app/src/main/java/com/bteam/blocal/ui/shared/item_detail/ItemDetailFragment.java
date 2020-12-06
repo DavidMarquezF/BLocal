@@ -12,12 +12,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bteam.blocal.R;
 import com.bteam.blocal.data.model.ItemModel;
-import com.bteam.blocal.data.model.Resource;
 import com.bteam.blocal.utility.Constants;
 import com.bteam.blocal.utility.InStockText;
 import com.bteam.blocal.utility.SizeUtils;
@@ -55,12 +53,7 @@ public abstract class ItemDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view1 -> getActivity().onBackPressed());
 
         nameTxt = view.findViewById(R.id.txt_item_name);
         priceTxt = view.findViewById(R.id.txt_item_price);
@@ -77,7 +70,8 @@ public abstract class ItemDetailFragment extends Fragment {
             // Block appbarlayout from collapsing.
             // Inspired by https://code.luasoftware.com/tutorials/android/how-to-disable-or-lock-collapsingtoolbarlayout-collapse-or-expand/
             view.findViewById(R.id.nested_scroll_detail).setNestedScrollingEnabled(false);
-            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBar.getLayoutParams();
+            CoordinatorLayout.LayoutParams params =
+                    (CoordinatorLayout.LayoutParams) appBar.getLayoutParams();
             if(params.getBehavior() == null){
                 params.setBehavior(new AppBarLayout.Behavior());
             }
@@ -91,19 +85,17 @@ public abstract class ItemDetailFragment extends Fragment {
         }
 
 
-        vm.getItemDetail().observe(getViewLifecycleOwner(), new Observer<Resource<ItemModel>>() {
-            @Override
-            public void onChanged(Resource<ItemModel> itemModelResource) {
-                switch (itemModelResource.status) {
-                    case SUCCESS:
-                        ItemModel itemModel = itemModelResource.data;
-                        nameTxt.setText(itemModel.getName());
-                        priceTxt.setText("" + itemModel.getPrice());
-                        inStockTxt.setText(InStockText.isInStockText(itemModel.isInStock()));
-                        descriptionTxt.setText(itemModel.getDescription());
-                        Glide.with(getContext()).load(itemModel.getImageUrl()).apply(Constants.getItemDefaultOptions()).into(headerImg);
-                        break;
-                }
+        vm.getItemDetail().observe(getViewLifecycleOwner(), itemModelResource -> {
+            switch (itemModelResource.status) {
+                case SUCCESS:
+                    ItemModel itemModel = itemModelResource.data;
+                    nameTxt.setText(itemModel.getName());
+                    priceTxt.setText("" + itemModel.getPrice());
+                    inStockTxt.setText(InStockText.isInStockText(itemModel.isInStock()));
+                    descriptionTxt.setText(itemModel.getDescription());
+                    Glide.with(getContext()).load(itemModel.getImageUrl())
+                            .apply(Constants.getItemDefaultOptions()).into(headerImg);
+                    break;
             }
         });
     }

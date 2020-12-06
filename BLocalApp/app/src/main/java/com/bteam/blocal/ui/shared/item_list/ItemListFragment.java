@@ -12,10 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavArgs;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
-import androidx.navigation.NavHostController;
 import androidx.navigation.NavInflater;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,12 +22,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bteam.blocal.R;
 import com.bteam.blocal.data.model.ItemModel;
-import com.bteam.blocal.ui.store.ItemDetailStoreFragmentArgs;
 import com.bteam.blocal.utility.SizeUtils;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-public abstract class ItemListFragment extends Fragment implements ItemListAdapter.IItemClickListener {
+public abstract class ItemListFragment extends Fragment
+        implements ItemListAdapter.IItemClickListener {
 
     protected ItemListViewModel itemListViewModel;
     private ItemListAdapter adapter;
@@ -49,7 +47,8 @@ public abstract class ItemListFragment extends Fragment implements ItemListAdapt
 
         adapter = new ItemListAdapter(this, new FirestorePagingOptions.Builder<ItemModel>()
                 .setLifecycleOwner(this)
-                .setQuery(itemListViewModel.getQuery(), itemListViewModel.getPagingConfig(), ItemModel.class)
+                .setQuery(itemListViewModel.getQuery(), itemListViewModel.getPagingConfig(),
+                        ItemModel.class)
                 .build());
 
 
@@ -62,12 +61,9 @@ public abstract class ItemListFragment extends Fragment implements ItemListAdapt
         // Set the adapter
 
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swiperefresh_store);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Clear items and obtain data again
-                adapter.refresh();
-            }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            // Clear items and obtain data again
+            adapter.refresh();
         });
         RecyclerView recyclerView = view.findViewById(R.id.list_items);
         Context context = view.getContext();

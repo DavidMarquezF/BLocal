@@ -15,8 +15,6 @@ import android.widget.Button;
 import com.bteam.blocal.R;
 
 public class MyStoreFragment extends Fragment {
-
-
     public MyStoreFragment() {
         // Required empty public constructor
     }
@@ -33,15 +31,12 @@ public class MyStoreFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Button btnCreate = view.findViewById(R.id.btn_create_store);
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navigateCreateStore();
-            }
-        });
+        btnCreate.setOnClickListener(view1 -> navigateCreateStore());
     }
 
     private void navigateCreateStore() {
-        NavHostFragment.findNavController(this).navigate(MyStoreFragmentDirections.actionNavigationMyStoreFragmentToCreateStoreFragment());
+        NavHostFragment.findNavController(this)
+                .navigate(MyStoreFragmentDirections
+                        .actionNavigationMyStoreFragmentToCreateStoreFragment());
     }
 }

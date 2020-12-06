@@ -38,48 +38,12 @@ public class BarcodeScannerAnalyzer implements ImageAnalysis.Analyzer {
         scanner = BarcodeScanning.getClient(options);
     }
 
-    public String scanBarcode(InputImage image) {
-
-      /*  Task<List<Barcode>> result = scanner.process(image)
-                .addOnSuccessListener(new OnSuccessListener<List<Barcode>>() {
-                    @Override
-                    public void onSuccess(List<Barcode> barcodes) {
-                        Log.d(TAG, "onSuccess: ");
-                        for (Barcode barcode: barcodes) {
-                            Rect bounds = barcode.getBoundingBox();
-                            Point[] corners = barcode.getCornerPoints();
-
-                            String rawValue = barcode.getRawValue();
-
-                            int valueType = barcode.getValueType();
-
-                            switch (valueType) {
-                                case Barcode.FORMAT_EAN_8:
-                                case Barcode.FORMAT_EAN_13:
-                                case Barcode.FORMAT_UPC_A:
-                                case Barcode.FORMAT_UPC_E:
-                                    code = barcode.getRawValue();
-                                    break;
-                            }
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "onFailure: ");
-                    }
-                });
-        return code;*/
-        return null;
-    }
-
-
     @Override
     public void analyze(@NonNull ImageProxy image) {
         @SuppressLint("UnsafeExperimentalUsageError") Image mediaImg = image.getImage();
         if (mediaImg != null) {
-            InputImage img = InputImage.fromMediaImage(mediaImg, image.getImageInfo().getRotationDegrees());
+            InputImage img = InputImage.fromMediaImage(mediaImg,
+                    image.getImageInfo().getRotationDegrees());
 
             scanner.process(img)
                     .addOnSuccessListener(barcodes -> {
@@ -105,6 +69,4 @@ public class BarcodeScannerAnalyzer implements ImageAnalysis.Analyzer {
                     .addOnCompleteListener(results -> image.close());
         }
     }
-
-
 }

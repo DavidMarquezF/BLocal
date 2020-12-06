@@ -12,7 +12,6 @@ import java.util.List;
 public class StoresMapViewModel extends ViewModel {
     private LiveData<Resource<List<StoreModel>>> nearbyStores;
 
-
     public LiveData<Resource<List<StoreModel>>> getNearbyStores() {
         if (nearbyStores == null) {
             nearbyStores = StoreRepository.getInstance().getStores();
@@ -20,6 +19,4 @@ public class StoresMapViewModel extends ViewModel {
 
         return nearbyStores;
     }
-
-
 }
