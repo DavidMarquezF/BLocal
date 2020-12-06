@@ -126,6 +126,13 @@ public class MainUserFragment extends Fragment implements IToolbarHandler {
         backNavCallback.setEnabled(true);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        backNavCallback.setEnabled(false);
+        backNavCallback.remove();
+    }
+
     void listenToBackStack() {
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
                 backNavCallback);

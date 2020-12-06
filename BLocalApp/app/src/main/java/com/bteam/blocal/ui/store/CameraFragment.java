@@ -38,6 +38,7 @@ public class CameraFragment extends Fragment {
     private int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.CAMERA};
     protected Toolbar tlb;
+    private boolean scanFinished = false;
 
     private boolean allPermissionsGranted() {
 
@@ -124,12 +125,23 @@ public class CameraFragment extends Fragment {
                 new BarcodeScannerAnalyzer(new IOnCompleteCallback<String>() {
             @Override
             public void onError(Throwable err) {
+                if(!scanFinished){
+                    navigateBack();
+                    imageAnalysis.clearAnalyzer();
+                }
+                scanFinished = true;
+
 
             }
 
             @Override
             public void onSuccess(String data) {
-                barCodeScanned(data);
+                if(!scanFinished){
+                    barCodeScanned(data);
+                    imageAnalysis.clearAnalyzer();
+                }
+                scanFinished = true;
+
             }
         }));
         preview.setSurfaceProvider(mPreviewView.getSurfaceProvider());

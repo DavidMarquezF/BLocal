@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
@@ -95,6 +94,13 @@ public class MainStoreFragment extends Fragment {
     public void onResume() {
         super.onResume();
         _backNavCallback.setEnabled(true);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        _backNavCallback.setEnabled(false);
+        _backNavCallback.remove();
     }
 
     void listenToBackStack() {
