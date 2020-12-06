@@ -76,5 +76,11 @@
     <string name="electronics">Electronics</string>
     <string name="outcome">Outcome</string>
     <string name="snackbar_calculation_location">Distance calculation cannot work without location permission!</string>
+    <string name="no_connection">No internet connection!</string>
+    <string name="network_type">Network type: </string>
+    <string name="wifi_link_speed">WiFi Link Speed: </string>
+    <string name="wifi_frequency">WiFi Frequency: </string>
+    <string name="network_subtype">Network subtype: </string>
+
 
 </resources>

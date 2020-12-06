@@ -67,20 +67,20 @@ public class ConnectionInfoFragment extends Fragment {
         String connectionInfo = Calendar.getInstance().getTime().toString();
 
         if (null == info) {
-            connectionInfo += "\nNo internet connection!";
+            connectionInfo += "\n" + this.getResources().getString(R.string.no_connection);
         } else {
-            connectionInfo += "\nNetwork type: " + info.getTypeName();
+            connectionInfo += "\n" + this.getResources().getString(R.string.network_type) + info.getTypeName();
             if (info.getTypeName().equals("WIFI")) {
                 WifiManager mainWifi = (WifiManager) getContext().getApplicationContext()
                         .getSystemService(Context.WIFI_SERVICE);
                 WifiInfo currentWifi = mainWifi.getConnectionInfo();
                 connectionInfo += "\n\nWiFi SSID: " + currentWifi.getSSID() +
-                        "\nWiFi Link Speed: " + currentWifi.getLinkSpeed() +
+                        "\n" + this.getResources().getString(R.string.wifi_link_speed) + currentWifi.getLinkSpeed() +
                         " " + WifiInfo.LINK_SPEED_UNITS +
-                        "\nWiFi Frequency: " + currentWifi.getFrequency() +
+                        "\n" + this.getResources().getString(R.string.wifi_frequency) + currentWifi.getFrequency() +
                         " " + WifiInfo.FREQUENCY_UNITS;
             } else {
-                connectionInfo += "\nNetwork subtype: " + info.getSubtypeName();
+                connectionInfo += "\n" + this.getResources().getString(R.string.network_subtype) + info.getSubtypeName();
             }
         }
         viewModel.setConnectionInfo(connectionInfo);
