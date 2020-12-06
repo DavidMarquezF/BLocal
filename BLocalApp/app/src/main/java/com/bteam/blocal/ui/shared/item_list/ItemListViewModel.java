@@ -1,22 +1,18 @@
 package com.bteam.blocal.ui.shared.item_list;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.paging.PagedList;
 
-import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.repository.StoreRepository;
 import com.google.firebase.firestore.Query;
-
-import java.util.List;
 
 public class ItemListViewModel extends ViewModel {
 
     private String storeUid;
     public Query getQuery(){
         StoreRepository storeRepository = StoreRepository.getInstance();
-        return storeRepository.getItemsQuery(storeUid == null ? storeRepository.getMyStoreUid() : storeUid);
+        return storeRepository.getItemsQuery(
+                storeUid == null ? storeRepository.getMyStoreUid() : storeUid);
     }
 
     public PagedList.Config getPagingConfig(){

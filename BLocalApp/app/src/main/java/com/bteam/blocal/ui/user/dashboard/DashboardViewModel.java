@@ -11,10 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DashboardViewModel extends ViewModel {
-
-    // TODO: Use to get the user's role and create Dashboard buttons accordingly
-    private MutableLiveData<String> currentUser;
-
     private MutableLiveData<List<DashboardButtonModel>> buttons;
 
     public DashboardViewModel() {
@@ -35,9 +31,7 @@ public class DashboardViewModel extends ViewModel {
     // TODO: Move to the utility class or something like that
     private DashboardButtonModel[] items = {
             new DashboardButtonModel(R.string.title_maps, R.drawable.ic_baseline_map_24, R.id.openMaps),
-            new DashboardButtonModel(R.string.title_stores, R.drawable.ic_baseline_store_24, R.id.openStoreList),
-//            new DashboardButtonModel(R.string.title_search, R.drawable.ic_baseline_search_24, R.id.openItemList),
-//            new DashboardButtonModel(R.string.title_shopping_lists, R.drawable.ic_baseline_shopping_basket_24, R.id.openShoppingLists)
+            new DashboardButtonModel(R.string.title_stores, R.drawable.ic_baseline_store_24, R.id.openStoreList)
     };
 
 }

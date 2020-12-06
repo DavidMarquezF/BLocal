@@ -15,7 +15,8 @@ public class ItemModel {
     public ItemModel(){
 
     }
-    public ItemModel(String name, String imageUrl, float price, int stock, String description, String code){
+    public ItemModel(String name, String imageUrl, float price, int stock, String description,
+                     String code){
         this.price = price;
         this.name = name;
         this.imageUrl = imageUrl;

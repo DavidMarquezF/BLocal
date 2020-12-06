@@ -22,10 +22,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-
 //Based on tutorial https://www.youtube.com/watch?v=Z5hONYWa0b4
 public class ConfirmPlaceDialog extends DialogFragment implements OnMapReadyCallback {
-
     public static final String DIALOG_LOC_RESULT_KEY = "dialog_loc";
     private GoogleMap mMap;
     private LatLng pos;
@@ -39,17 +37,17 @@ public class ConfirmPlaceDialog extends DialogFragment implements OnMapReadyCall
         ConfirmPlaceDialogArgs args = ConfirmPlaceDialogArgs.fromBundle(getArguments());
         pos = args.getPos();
         address = args.getAddress();
-
     }
-
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        v = LayoutInflater.from(getContext()).inflate(R.layout.partial_confirm_location, null, false);
+        v = LayoutInflater.from(getContext()).inflate(R.layout.partial_confirm_location, null,
+                false);
         adressTxt = v.findViewById(R.id.myAddress);
 
-        mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.mapp);
+        mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
+                .findFragmentById(R.id.mapp);
         mapFragment.getMapAsync(this);
 
         return new MaterialAlertDialogBuilder(getContext())
@@ -58,16 +56,17 @@ public class ConfirmPlaceDialog extends DialogFragment implements OnMapReadyCall
                     NavigationResult.setNavigationResult(this, DIALOG_LOC_RESULT_KEY, true);
                     dialogInterface.dismiss();
                 })
-                .setNegativeButton(R.string.lbl_change_loc, (dialogInterface, i) -> dialogInterface.dismiss())
+                .setNegativeButton(R.string.lbl_change_loc, (dialogInterface, i) -> dialogInterface
+                        .dismiss())
                 .create();
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return v;
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

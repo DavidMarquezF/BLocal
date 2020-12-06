@@ -31,7 +31,8 @@ public class SingleLiveEvent<T> extends MutableLiveData<T> {
 
     @MainThread
     @Override
-    public void observe(@NonNull final LifecycleOwner owner, @NonNull final Observer<? super T> observer) {
+    public void observe(@NonNull final LifecycleOwner owner,
+                        @NonNull final Observer<? super T> observer) {
         if (hasActiveObservers()) {
             Log.w(TAG, "Multiple observers registered but only one will be notified of changes.");
         }

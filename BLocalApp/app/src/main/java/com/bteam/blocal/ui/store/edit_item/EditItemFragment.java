@@ -15,14 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bteam.blocal.R;
 import com.bteam.blocal.data.IOnCompleteCallback;
 import com.bteam.blocal.data.model.ItemModel;
-import com.bteam.blocal.data.model.Resource;
 import com.bteam.blocal.ui.store.CameraFragment;
 import com.bteam.blocal.utility.EditTextButton;
 import com.bteam.blocal.utility.ImageSelector;
@@ -31,9 +29,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
-
     private EditItemViewModel vm;
-    //private NavController _navController;
 
     private ImageButton itemImageBtn;
     private Toolbar toolbar;
@@ -69,44 +65,26 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
         priceTxtInp = view.findViewById(R.id.txt_inp_price);
         descrTxtInp = view.findViewById(R.id.txt_inp_description);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navigateBack();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view1 -> navigateBack());
 
         toolbar.setTitle("Edit item");
 
-        EditTextButton.setOnRightDrawableClicked(codeTxtInp.getEditText(), new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navigateCamera();
-            }
-        });
+        EditTextButton.setOnRightDrawableClicked(codeTxtInp.getEditText(),
+                view12 -> navigateCamera());
 
-        itemImageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectImage();
-            }
-        });
+        itemImageBtn.setOnClickListener(view13 -> selectImage());
 
         if (vm.getImageUrl() != null && !vm.getImageUrl().isEmpty()) {
             Glide.with(getContext()).load(vm.getImageUrl()).centerCrop()
                     .into(itemImageBtn);
         }
 
-
-        vm.getItemDetail().observe(getViewLifecycleOwner(), new Observer<Resource<ItemModel>>() {
-            @Override
-            public void onChanged(Resource<ItemModel> itemModelResource) {
-                switch (itemModelResource.status) {
-                    case SUCCESS:
-                        vm.setImageUrl(itemModelResource.data.getImageUrl());
-                        updateUi(itemModelResource.data);
-                        break;
-                }
+        vm.getItemDetail().observe(getViewLifecycleOwner(), itemModelResource -> {
+            switch (itemModelResource.status) {
+                case SUCCESS:
+                    vm.setImageUrl(itemModelResource.data.getImageUrl());
+                    updateUi(itemModelResource.data);
+                    break;
             }
         });
 
@@ -118,7 +96,6 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
                         codeTxtInp.getEditText().setText(r);
                     }
                 });
-
     }
 
     private void updateUi(ItemModel data) {
@@ -131,7 +108,6 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
                     .into(itemImageBtn);
         }
         codeTxtInp.getEditText().setText(data.getCode());
-
     }
 
     private void navigateBack() {
@@ -154,13 +130,13 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
             int stock = checkBox.isChecked() ? 1 : 0;
             String description = descrTxtInp.getEditText().getText().toString();
             String code = codeTxtInp.getEditText().getText().toString();
-            ItemModel itemModel = new ItemModel(name, vm.getImageUrl(), price, stock, description, code);
+            ItemModel itemModel = new ItemModel(name, vm.getImageUrl(), price, stock, description,
+                    code);
 
             if (vm.getIsModeEdit()) {
                 vm.updateItem(itemModel, new IOnCompleteCallback<Void>() {
                     @Override
                     public void onError(Throwable err) {
-
                     }
 
                     @Override
@@ -172,7 +148,6 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
                 vm.createItem(itemModel, new IOnCompleteCallback<ItemModel>() {
                     @Override
                     public void onError(Throwable err) {
-
                     }
 
                     @Override
@@ -192,7 +167,8 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap image = ImageSelector.onActitityResultImageHandler(getActivity().getContentResolver(), requestCode, resultCode, data);
+        Bitmap image = ImageSelector.onActitityResultImageHandler(
+                getActivity().getContentResolver(), requestCode, resultCode, data);
         if (image != null) {
             itemImageBtn.setImageBitmap(image);
             itemImageBtn.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -214,7 +190,7 @@ public class EditItemFragment extends Fragment implements Toolbar.OnMenuItemClic
     }
 
     private void navigateCamera(){
-        NavHostFragment.findNavController(this).navigate(EditItemFragmentDirections.actionEditItemFragmentToCameraView2());
+        NavHostFragment.findNavController(this).navigate(EditItemFragmentDirections
+                .actionEditItemFragmentToCameraView2());
     }
-
 }

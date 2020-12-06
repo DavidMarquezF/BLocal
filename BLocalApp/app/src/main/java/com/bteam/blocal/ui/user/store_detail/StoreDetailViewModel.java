@@ -6,12 +6,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.data.model.Resource;
 import com.bteam.blocal.data.model.StoreModel;
 import com.bteam.blocal.data.repository.StoreRepository;
-import com.bteam.blocal.ui.store.ItemDetailStoreFragmentArgs;
-
 
 public class StoreDetailViewModel extends ViewModel {
     private LiveData<Resource<StoreModel>> storeDetail;

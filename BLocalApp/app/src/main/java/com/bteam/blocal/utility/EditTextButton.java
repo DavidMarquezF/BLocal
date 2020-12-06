@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.EditText;
 
 public class EditTextButton {
-
     public static void setOnRightDrawableClicked(EditText edt, View.OnClickListener listener){
         // Obtained from https://stackoverflow.com/a/26269435
         edt.setOnTouchListener(new View.OnTouchListener() {
@@ -20,7 +19,8 @@ public class EditTextButton {
                 final int DRAWABLE_BOTTOM = 3;
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if(event.getRawX() >= (edt.getRight() - edt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                    if(event.getRawX() >= (edt.getRight() -
+                            edt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         // your action here
                         listener.onClick(v);
                         return true;
@@ -30,5 +30,4 @@ public class EditTextButton {
             }
         });
     }
-
 }

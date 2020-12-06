@@ -1,11 +1,7 @@
 package com.bteam.blocal.ui.user.user_settings;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
@@ -13,10 +9,6 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.bteam.blocal.R;
-import com.bteam.blocal.ui.store.ItemDetailStoreFragmentDirections;
-import com.bteam.blocal.ui.store.edit_item.EditItemViewModel;
-import com.bteam.blocal.ui.store.store_settings.StoreSettingsViewModel;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class UserSettingsFragment extends PreferenceFragmentCompat {
 
@@ -42,7 +34,8 @@ public class UserSettingsFragment extends PreferenceFragmentCompat {
                 vm.logout();
                 return true;
             case "btn_connection_info":
-                NavHostFragment.findNavController(this).navigate(R.id.openUserConnectionInfo);
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.openUserConnectionInfo);
                 return true;
         }
         return super.onPreferenceTreeClick(preference);

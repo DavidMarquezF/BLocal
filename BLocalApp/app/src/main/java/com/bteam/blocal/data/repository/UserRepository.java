@@ -1,7 +1,6 @@
 package com.bteam.blocal.data.repository;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.bteam.blocal.utility.FirebaseAuthLiveData;
 import com.google.firebase.auth.FirebaseAuth;

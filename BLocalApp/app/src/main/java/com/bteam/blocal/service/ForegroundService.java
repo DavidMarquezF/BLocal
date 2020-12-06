@@ -81,18 +81,15 @@ public class ForegroundService extends Service {
         if(currentTask != null && currentTask.isCancelled()){
             return;
         }
-        currentTask = execService.submit(new Runnable() {
-            @Override
-            public void run() {
-                while(started) {
-                    i++;
-                    Log.d(TAG, "Work done: " + i);
-                    try {
-                        Thread.sleep(sleepTime);
-                    } catch (InterruptedException e) {
-                        Log.e(TAG, "ERROR: ", e);
-                        return;
-                    }
+        currentTask = execService.submit(() -> {
+            while(started) {
+                i++;
+                Log.d(TAG, "Work done: " + i);
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "ERROR: ", e);
+                    return;
                 }
             }
         });

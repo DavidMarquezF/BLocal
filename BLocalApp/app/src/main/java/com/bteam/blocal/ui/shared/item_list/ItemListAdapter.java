@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bteam.blocal.utility.FirebaseSwipeAdapter;
 import com.bteam.blocal.utility.InStockText;
@@ -17,16 +16,15 @@ import com.bumptech.glide.Glide;
 import com.bteam.blocal.R;
 import com.bteam.blocal.data.model.ItemModel;
 import com.bteam.blocal.utility.Constants;
-import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
-import com.firebase.ui.firestore.paging.LoadingState;
-import com.google.firebase.firestore.DocumentSnapshot;
 
-public class ItemListAdapter extends FirebaseSwipeAdapter<ItemModel, ItemListAdapter.ItemViewHolder> {
+public class ItemListAdapter extends
+        FirebaseSwipeAdapter<ItemModel, ItemListAdapter.ItemViewHolder> {
 
     private Context context;
 
-    public ItemListAdapter(IItemClickListener listener, @NonNull FirestorePagingOptions<ItemModel> options) {
+    public ItemListAdapter(IItemClickListener listener,
+                           @NonNull FirestorePagingOptions<ItemModel> options) {
         super(options, listener);
     }
 
@@ -44,18 +42,21 @@ public class ItemListAdapter extends FirebaseSwipeAdapter<ItemModel, ItemListAda
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_item, parent,
+                false);
         ItemViewHolder vh = new ItemViewHolder(v, listener);
         return vh;
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int i, @NonNull ItemModel itemModel) {
+    protected void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int i,
+                                    @NonNull ItemModel itemModel) {
         itemViewHolder.name.setText(itemModel.getName());
         itemViewHolder.price.setText(String.format("%s", itemModel.getPrice()));
         itemViewHolder.itemImage.setImageResource(R.drawable.ic_baseline_shopping_basket_24);
         itemViewHolder.inStock.setText(InStockText.isInStockText(itemModel.isInStock()));
-        Glide.with(context).load(itemModel.getImageUrl()).apply(Constants.getItemDefaultOptions()).into(itemViewHolder.itemImage);
+        Glide.with(context).load(itemModel.getImageUrl()).apply(Constants.getItemDefaultOptions())
+                .into(itemViewHolder.itemImage);
     }
 
     @Override

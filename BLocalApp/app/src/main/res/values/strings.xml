@@ -75,5 +75,6 @@
     <string name="necessities">Necessities</string>
     <string name="electronics">Electronics</string>
     <string name="outcome">Outcome</string>
+    <string name="snackbar_calculation_location">Distance calculation cannot work without location permission!</string>
 
 </resources>

@@ -10,7 +10,8 @@ import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-public abstract class FirebaseSwipeAdapter<T,K extends RecyclerView.ViewHolder> extends FirestorePagingAdapter<T, K> {
+public abstract class FirebaseSwipeAdapter<T,K extends RecyclerView.ViewHolder>
+        extends FirestorePagingAdapter<T, K> {
     public interface IItemClickListener {
         void onItemClick(DocumentSnapshot document, int index);
     }
@@ -18,7 +19,8 @@ public abstract class FirebaseSwipeAdapter<T,K extends RecyclerView.ViewHolder> 
     private SwipeRefreshLayout _swipeRefreshLayout;
     protected ItemListAdapter.IItemClickListener listener;
 
-    public FirebaseSwipeAdapter(@NonNull FirestorePagingOptions<T> options,ItemListAdapter.IItemClickListener listener) {
+    public FirebaseSwipeAdapter(@NonNull FirestorePagingOptions<T> options,
+                                ItemListAdapter.IItemClickListener listener) {
         super(options);
         this.listener = listener;
 
@@ -50,5 +52,4 @@ public abstract class FirebaseSwipeAdapter<T,K extends RecyclerView.ViewHolder> 
             _swipeRefreshLayout.setRefreshing(isRefreshing);
         }
     }
-
 }

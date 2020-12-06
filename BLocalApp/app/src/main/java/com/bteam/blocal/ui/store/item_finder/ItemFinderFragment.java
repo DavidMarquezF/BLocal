@@ -40,19 +40,18 @@ public class ItemFinderFragment extends CameraFragment {
             switch (result.status) {
                 case SUCCESS:
                     if (result.data.size() > 0) {
-                        ItemFinderFragmentDirections.GoToItem dirs = ItemFinderFragmentDirections.goToItem(result.data.get(0).getUid());
+                        ItemFinderFragmentDirections.GoToItem dirs = ItemFinderFragmentDirections
+                                .goToItem(result.data.get(0).getUid());
                         controller.navigate(dirs);
                     } else {
                         noItemFound();
                     }
-
                     break;
                 case ERROR:
                     noItemFound();
                     break;
             }
         });
-
     }
 
     private void noItemFound() {

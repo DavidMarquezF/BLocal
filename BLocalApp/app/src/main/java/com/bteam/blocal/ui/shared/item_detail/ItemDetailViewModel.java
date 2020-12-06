@@ -1,7 +1,6 @@
 package com.bteam.blocal.ui.shared.item_detail;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.bteam.blocal.data.model.ItemModel;
@@ -18,7 +17,8 @@ public class ItemDetailViewModel extends ViewModel {
     public LiveData<Resource<ItemModel>> getItemDetail() {
         if (itemDetail == null) {
             StoreRepository repository = StoreRepository.getInstance();
-            itemDetail = repository.getStoreItemLive(storeUid == null ? repository.getMyStoreUid() : storeUid, itemUid);
+            itemDetail = repository.getStoreItemLive(
+                    storeUid == null ? repository.getMyStoreUid() : storeUid, itemUid);
         }
         return itemDetail;
     }

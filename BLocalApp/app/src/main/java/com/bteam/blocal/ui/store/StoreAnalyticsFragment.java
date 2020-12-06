@@ -27,12 +27,9 @@ import java.util.List;
 import java.util.Random;
 
 public class StoreAnalyticsFragment extends Fragment {
-
-
     public StoreAnalyticsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

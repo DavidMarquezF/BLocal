@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -12,7 +11,6 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -74,30 +72,10 @@ public class CreateStoreFragment extends Fragment {
         descrTxtInp = view.findViewById(R.id.txt_inp_description);
 
 
-        EditTextButton.setOnRightDrawableClicked(locTxtInp.getEditText(), new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navigatePlacePicker();
-            }
-        });
+        EditTextButton.setOnRightDrawableClicked(locTxtInp.getEditText(),
+                view1 -> navigatePlacePicker());
 
-        itemImageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectImage();
-            }
-        });
-
-       /* vm.getItemDetail().observe(getViewLifecycleOwner(), new Observer<Resource<ItemModel>>() {
-            @Override
-            public void onChanged(Resource<ItemModel> itemModelResource) {
-                switch (itemModelResource.status) {
-                    case SUCCESS:
-                        updateUi(itemModelResource.data);
-                        break;
-                }
-            }
-        });*/
+        itemImageBtn.setOnClickListener(view12 -> selectImage());
 
         // Set in config changes
         if (vm.getLocation() != null) {
@@ -108,35 +86,36 @@ public class CreateStoreFragment extends Fragment {
                     .into(itemImageBtn);
         }
 
-
-        Objects.requireNonNull(NavigationResult.<LatLng>getNavigationResult(this, null)).observe(getViewLifecycleOwner(), o -> {
+        Objects.requireNonNull(NavigationResult.<LatLng>getNavigationResult(this, null))
+                .observe(getViewLifecycleOwner(), o -> {
             if (o != null) {
                 setLocText(o);
                 vm.setLocation(o);
             }
         });
-        toolbarHandler.setMenuListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.btn_save) {
-                    saveItem();
-                }
 
-                return false;
+        toolbarHandler.setMenuListener(item -> {
+            if (item.getItemId() == R.id.btn_save) {
+                saveItem();
             }
+
+            return false;
         });
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        ImageSelector.handleRequestPermission(this, requestCode, permissions, grantResults);
+        ImageSelector.handleRequestPermission(this, requestCode, permissions,
+                grantResults);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap image = ImageSelector.onActitityResultImageHandler(getActivity().getContentResolver(), requestCode, resultCode, data);
+        Bitmap image = ImageSelector.onActitityResultImageHandler(getActivity()
+                .getContentResolver(), requestCode, resultCode, data);
         if (image != null) {
             itemImageBtn.setImageBitmap(image);
             itemImageBtn.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -193,8 +172,10 @@ public class CreateStoreFragment extends Fragment {
     }
 
     private void navigateToMyStore() {
-        NavController navHostController = Navigation.findNavController(getActivity(), R.id.main_nav_host_fragment);
-        navHostController.navigate(MainUserFragmentDirections.actionMainUserFragmentToMainStoreFragment());
+        NavController navHostController = Navigation.findNavController(getActivity(),
+                R.id.main_nav_host_fragment);
+        navHostController.navigate(MainUserFragmentDirections
+                .actionMainUserFragmentToMainStoreFragment());
     }
 
 
@@ -207,7 +188,8 @@ public class CreateStoreFragment extends Fragment {
     }
 
     private void navigatePlacePicker() {
-        NavHostFragment.findNavController(this).navigate(CreateStoreFragmentDirections.actionCreateStoreFragmentToPlacePickerFragment());
+        NavHostFragment.findNavController(this).navigate(CreateStoreFragmentDirections
+                .actionCreateStoreFragmentToPlacePickerFragment());
     }
 
     private void updateUi(ItemModel data) {
