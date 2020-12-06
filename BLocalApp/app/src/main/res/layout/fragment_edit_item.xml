@@ -65,7 +65,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_inp_name">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_location"
+                    android:id="@+id/edt_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_baseline_qr_code_scanner_24"
