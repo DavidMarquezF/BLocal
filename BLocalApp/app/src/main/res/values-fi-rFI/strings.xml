@@ -67,4 +67,10 @@
     <string name="necessities">Päivittäistavarat</string>
     <string name="electronics">Elektroniikka</string>
     <string name="outcome">Lopputulos</string>
+    <string name="snackbar_calculation_location">Etäisyyksien laskenta ei toimi ilman sijainnin käyttöoikeutta!</string>
+    <string name="no_connection">Ei internetyhteyttä!</string>
+    <string name="network_type">"Verkon tyyppi: "</string>
+    <string name="wifi_link_speed">"Lähiverkon linkin nopeus: "</string>
+    <string name="wifi_frequency">"Lähiverkon taajuus: "</string>
+    <string name="network_subtype">"Verkon alatyyppi: "</string>
 </resources>

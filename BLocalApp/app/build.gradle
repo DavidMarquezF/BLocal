@@ -11,7 +11,7 @@ android {
 //            storeFile file('C:\\Users\\VH\\AndroidStudioProjects\\Blocal\\BLocal\\keystore.jks')
             storeFile file('./../../keystore.jks')
             storePassword '123456'
-            keyAlias 'key1'
+            keyAlias 'key0'
             keyPassword '123456'
         }
     }
