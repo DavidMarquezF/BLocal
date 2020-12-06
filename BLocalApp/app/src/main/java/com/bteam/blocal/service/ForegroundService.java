@@ -1,9 +1,18 @@
 package com.bteam.blocal.service;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
+
+import com.bteam.blocal.R;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,6 +21,8 @@ import java.util.concurrent.Future;
 public class ForegroundService extends Service {
 
     private static final String TAG = "ForegroundService";
+    private static final String SERVICE_CHANNEL = "serviceChannel";
+    private static final int NOTIFICATION_ID = 42;
     private ExecutorService execService;
     private int i;
     private int sleepTime;
@@ -33,10 +44,22 @@ public class ForegroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(intent != null && !started){
-            doBackgroundWork();
-            started = true;
+            if(Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
+                NotificationChannel channel = new NotificationChannel(SERVICE_CHANNEL, "Foreground Service", NotificationManager.IMPORTANCE_LOW);
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.createNotificationChannel(channel);
+            }
+            Notification notification = new NotificationCompat.Builder(this, SERVICE_CHANNEL)
+                    .setContentTitle("Blocal is running")
+                    //.setContentText("")
+                    .setSmallIcon(R.mipmap.ic_launcher_round)
+                    //.setTicker("")
+                    .build();
+
+            startForeground(NOTIFICATION_ID, notification);
         }
 
+        doWork();
         return START_STICKY;
     }
 
@@ -50,7 +73,7 @@ public class ForegroundService extends Service {
     }
 
 
-    private void doBackgroundWork(){
+    private void doWork(){
         if(execService == null){
             execService = Executors.newSingleThreadExecutor();
         }
