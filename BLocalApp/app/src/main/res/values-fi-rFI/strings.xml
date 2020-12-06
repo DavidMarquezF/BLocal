@@ -73,4 +73,5 @@
     <string name="wifi_link_speed">"Lähiverkon linkin nopeus: "</string>
     <string name="wifi_frequency">"Lähiverkon taajuus: "</string>
     <string name="network_subtype">"Verkon alatyyppi: "</string>
+    <string name="blocal_is_running">Blocal on käynnissä</string>
 </resources>

@@ -50,7 +50,7 @@ public class ForegroundService extends Service {
                 notificationManager.createNotificationChannel(channel);
             }
             Notification notification = new NotificationCompat.Builder(this, SERVICE_CHANNEL)
-                    .setContentTitle("Blocal is running")
+                    .setContentTitle(this.getResources().getString(R.string.blocal_is_running))
                     //.setContentText("")
                     .setSmallIcon(R.mipmap.ic_launcher_round)
                     //.setTicker("")

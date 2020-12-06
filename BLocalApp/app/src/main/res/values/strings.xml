@@ -81,6 +81,7 @@
     <string name="wifi_link_speed">WiFi Link Speed: </string>
     <string name="wifi_frequency">WiFi Frequency: </string>
     <string name="network_subtype">Network subtype: </string>
+    <string name="blocal_is_running">Blocal is running</string>
 
 
 </resources>
