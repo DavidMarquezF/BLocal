@@ -68,6 +68,7 @@ public class ForegroundService extends Service {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
                         Log.e(TAG, "ERROR: ", e);
+                        return;
                     }
                 }
             }
