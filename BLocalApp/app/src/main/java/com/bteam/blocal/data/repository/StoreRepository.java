@@ -117,8 +117,9 @@ public class StoreRepository {
         return liveData;
     }
 
-    public SingleLiveEvent<Resource<List<StoreModel>>> getStores() {
-        SingleLiveEvent<Resource<List<StoreModel>>> liveData = new SingleLiveEvent<>();
+    public LiveData<Resource<List<StoreModel>>> getStores() {
+
+        MutableLiveData<Resource<List<StoreModel>>> liveData = new MutableLiveData<>();
         storeCollection.get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
