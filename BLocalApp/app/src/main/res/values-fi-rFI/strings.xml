@@ -49,4 +49,14 @@
     <string name="title_my_store">Minun kauppani</string>
     <string name="user_nav_drawer_open">Lipasto avautuu</string>
     <string name="user_nav_drawer_close">Lipasto sulkeutuu</string>
+    <string name="title_settings">Asetukset</string>
+    <string name="title_account">Tili</string>
+    <string name="lbl_show_items">Mitä tarjoamme?</string>
+    <string name="err_stores_load">Kaupat eivät latautuneet kunnolla</string>
+    <string name="lbl_close">Sulje</string>
+    <string name="view_store">Katso kauppa</string>
+    <string name="lbl_stub_data">Tynkädataa, ominaisuus tulossa pian</string>
+    <string name="title_barcode_scanner">Viivankoodinlukija</string>
+    <string name="title_find_item">Etsi tavara</string>
+    <string name="err_item_not_found">Tavaraa ei löytynyt</string>
 </resources>
