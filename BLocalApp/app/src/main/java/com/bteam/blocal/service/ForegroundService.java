@@ -57,9 +57,10 @@ public class ForegroundService extends Service {
                     .build();
 
             startForeground(NOTIFICATION_ID, notification);
+            doWork();
+            started = true;
         }
 
-        doWork();
         return START_STICKY;
     }
 
